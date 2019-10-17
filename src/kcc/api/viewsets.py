@@ -46,32 +46,32 @@ class KlantViewSet(viewsets.ModelViewSet):
 
 class ContactMomentViewSet(viewsets.ModelViewSet):
     """
-    Opvragen en bewerken van KLANTen.
+    Opvragen en bewerken van CONTACTMOMENTen.
 
     create:
-    Maak een KLANT aan.
+    Maak een CONTACTMOMENT aan.
 
-    Maak een KLANT aan.
+    Maak een CONTACTMOMENT aan.
 
     list:
-    Alle KLANTen opvragen.
+    Alle CONTACTMOMENTen opvragen.
 
-    Alle KLANTen opvragen.
+    Alle CONTACTMOMENTen opvragen.
 
     update:
-    Werk een KLANT in zijn geheel bij.
+    Werk een CONTACTMOMENT in zijn geheel bij.
 
-    Werk een KLANT in zijn geheel bij.
+    Werk een CONTACTMOMENT in zijn geheel bij.
 
     partial_update:
-    Werk een KLANT deels bij.
+    Werk een CONTACTMOMENT deels bij.
 
-    Werk een KLANT deels bij.
+    Werk een CONTACTMOMENT deels bij.
 
     destroy:
-    Verwijder een KLANT.
+    Verwijder een CONTACTMOMENT.
 
-    Verwijder een KLANT.
+    Verwijder een CONTACTMOMENT.
     """
 
     queryset = ContactMoment.objects.all()
