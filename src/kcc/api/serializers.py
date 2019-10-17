@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 class KlantSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Klant
-        fields = ("url",)
+        fields = ("url", 'voornaam', 'achternaam', 'adres', 'telefonnummer', 'emailadres')
         extra_kwarsg = {
             "url": {"lookup_field": "uuid"},
         }
@@ -19,7 +19,7 @@ class KlantSerializer(serializers.HyperlinkedModelSerializer):
 class ContactMomentSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = ContactMoment
-        fields = ("url", "klant")
+        fields = ("url", "klant", "zaak", "identificatie", "datumtijd", "kanaal", "text")
         extra_kwarg = {
             "url": {"lookup_field": "uuid"},
             "klant": {"lookup_field": "uuid"},

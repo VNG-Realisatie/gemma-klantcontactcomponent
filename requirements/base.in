@@ -6,12 +6,14 @@ pytz
 raven
 markdown
 uwsgi
+phonenumbers
 
 Django
 django-axes
 django-choices
 django-cors-middleware
 django-markup
+django-phonenumber-field
 
 djangorestframework
 vng-api-common
