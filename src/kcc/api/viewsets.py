@@ -3,39 +3,79 @@ import logging
 from rest_framework import viewsets
 from vng_api_common.permissions import BaseAuthRequired
 
-from .scopes import EXAMPLE_SCOPE
-from .serializers import ExampleSerializer
+from .serializers import KlantSerializer, ContactMomentSerializer
+from kcc.datamodel.models import Klant, ContactMoment
 
 logger = logging.getLogger(__name__)
 
 
-class ExampleViewSet(viewsets.ModelViewSet):
+class KlantViewSet(viewsets.ModelViewSet):
     """
-    Describe viewset.
+    Opvragen en bewerken van KLANTen.
 
     create:
-    Describe create operation.
+    Maak een KLANT aan.
+
+    Maak een KLANT aan.
 
     list:
-    Describe list operation.
+    Alle KLANTen opvragen.
+
+    Alle KLANTen opvragen.
+
+    update:
+    Werk een KLANT in zijn geheel bij.
+
+    Werk een KLANT in zijn geheel bij.
 
     partial_update:
-    Describe partial_update operation.
+    Werk een KLANT deels bij.
+
+    Werk een KLANT deels bij.
 
     destroy:
-    Describe destroy operation.
+    Verwijder een KLANT.
+
+    Verwijder een KLANT.
     """
 
-    queryset = ...
-    serializer_class = ExampleSerializer
+    queryset = Klant.objects.all()
+    serializer_class = KlantSerializer
     lookup_field = "uuid"
 
-    permission_classes = (BaseAuthRequired,)
-    required_scopes = {
-        "list": EXAMPLE_SCOPE,
-        "retrieve": EXAMPLE_SCOPE,
-        "create": EXAMPLE_SCOPE,
-        "update": EXAMPLE_SCOPE,
-        "partial_update": EXAMPLE_SCOPE,
-        "destroy": EXAMPLE_SCOPE,
-    }
+
+class ContactMomentViewSet(viewsets.ModelViewSet):
+    """
+    Opvragen en bewerken van KLANTen.
+
+    create:
+    Maak een KLANT aan.
+
+    Maak een KLANT aan.
+
+    list:
+    Alle KLANTen opvragen.
+
+    Alle KLANTen opvragen.
+
+    update:
+    Werk een KLANT in zijn geheel bij.
+
+    Werk een KLANT in zijn geheel bij.
+
+    partial_update:
+    Werk een KLANT deels bij.
+
+    Werk een KLANT deels bij.
+
+    destroy:
+    Verwijder een KLANT.
+
+    Verwijder een KLANT.
+    """
+
+    queryset = ContactMoment.objects.all()
+    serializer_class = ContactMomentSerializer
+    lookup_field = "uuid"
+
+
