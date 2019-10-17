@@ -1,2 +1,0 @@
-# gemma-klantcontactcomponent
-Referentieimplementatie van de klantcontactcomponent
