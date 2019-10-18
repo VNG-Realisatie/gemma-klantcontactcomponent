@@ -1,17 +1,42 @@
 """
-Defines the scopes used in the ZRC component.
-
-The Exxellence authorisation model is taken into consideration as well, see
-https://wiki.exxellence.nl/display/KPORT/2.+Zaaktype+autorisaties
+Defines the scopes used in the KCC component.
 """
 
 from vng_api_common.scopes import Scope
 
-EXAMPLE_SCOPE = Scope(
-    "zds.scopes.domain.example",
+SCOPE_KLANTEN_ALLES_VERWIJDEREN = Scope(
+    'klanten.verwijderen',
     description="""
 **Laat toe om**:
 
-* ...
-""",
+* klanten te verwijderen
+"""
+)
+
+SCOPE_KLANTEN_ALLES_LEZEN = Scope(
+    'klanten.lezen',
+    description="""
+**Laat toe om**:
+
+* klanten te lezen
+* klantdetails op te vragen
+"""
+)
+
+SCOPE_KLANTEN_BIJWERKEN = Scope(
+    'klanten.bijwerken',
+    description="""
+**Laat toe om**:
+
+* attributen van een klant te wijzingen
+"""
+)
+
+SCOPE_KLANTEN_AANMAKEN = Scope(
+    'klanten.aanmaken',
+    description="""
+**Laat toe om**:
+
+* klanten aan te maken
+"""
 )

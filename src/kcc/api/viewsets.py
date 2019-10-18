@@ -1,8 +1,10 @@
 import logging
 
 from rest_framework import viewsets
-from vng_api_common.permissions import BaseAuthRequired
+from vng_api_common.permissions import AuthScopesRequired
 
+from .scopes import SCOPE_KLANTEN_ALLES_VERWIJDEREN, SCOPE_KLANTEN_BIJWERKEN, SCOPE_KLANTEN_AANMAKEN, \
+    SCOPE_KLANTEN_ALLES_LEZEN
 from .serializers import KlantSerializer, ContactMomentSerializer
 from kcc.datamodel.models import Klant, ContactMoment
 
@@ -42,6 +44,15 @@ class KlantViewSet(viewsets.ModelViewSet):
     queryset = Klant.objects.all()
     serializer_class = KlantSerializer
     lookup_field = "uuid"
+    permission_classes = (AuthScopesRequired,)
+    required_scopes = {
+        "list": SCOPE_KLANTEN_ALLES_LEZEN,
+        "retrieve": SCOPE_KLANTEN_ALLES_LEZEN,
+        "create": SCOPE_KLANTEN_AANMAKEN,
+        "update": SCOPE_KLANTEN_BIJWERKEN,
+        "partial_update": SCOPE_KLANTEN_BIJWERKEN,
+        "destroy": SCOPE_KLANTEN_ALLES_VERWIJDEREN,
+    }
 
 
 class ContactMomentViewSet(viewsets.ModelViewSet):
@@ -77,5 +88,15 @@ class ContactMomentViewSet(viewsets.ModelViewSet):
     queryset = ContactMoment.objects.all()
     serializer_class = ContactMomentSerializer
     lookup_field = "uuid"
+    permission_classes = (AuthScopesRequired,)
+    required_scopes = {
+        "list": SCOPE_KLANTEN_ALLES_LEZEN,
+        "retrieve": SCOPE_KLANTEN_ALLES_LEZEN,
+        "create": SCOPE_KLANTEN_AANMAKEN,
+        "update": SCOPE_KLANTEN_BIJWERKEN,
+        "partial_update": SCOPE_KLANTEN_BIJWERKEN,
+        "destroy": SCOPE_KLANTEN_ALLES_VERWIJDEREN,
+    }
+
 
 
