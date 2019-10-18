@@ -4,7 +4,6 @@
 #
 #    pip-compile --no-index requirements/base.in
 #
-babel==2.7.0              # via django-phonenumber-field
 certifi==2019.9.11        # via requests
 chardet==3.0.4            # via requests
 click==7.0                # via pip-tools
@@ -17,7 +16,6 @@ django-cors-middleware==1.4.0
 django-filter==2.2.0      # via vng-api-common
 django-ipware==2.1.0      # via django-axes
 django-markup==1.4.1
-django-phonenumber-field==3.0.1
 django-rest-framework-condition==0.1.1  # via vng-api-common
 django-solo==1.1.3        # via vng-api-common
 django==2.2.6
@@ -35,7 +33,6 @@ jinja2==2.10.3            # via coreschema
 markdown==3.1.1
 markupsafe==1.1.1         # via jinja2
 oyaml==0.9                # via vng-api-common
-phonenumbers==8.10.21
 pip-tools==4.2.0
 psycopg2==2.8.3
 pyjwt==1.7.1              # via gemma-zds-client, vng-api-common

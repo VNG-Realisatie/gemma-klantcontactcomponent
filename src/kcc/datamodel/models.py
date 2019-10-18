@@ -1,9 +1,9 @@
 import uuid
 
+from datetime import datetime
 from django.utils.translation import ugettext_lazy as _
 from django.db import models
 from vng_api_common.models import APIMixin
-from phonenumber_field.modelfields import PhoneNumberField
 
 
 class Klant(APIMixin, models.Model):
@@ -12,9 +12,9 @@ class Klant(APIMixin, models.Model):
     )
     voornaam = models.CharField(max_length=200)
     achternaam = models.CharField(max_length=200)
-    adres = models.CharField(max_length=1000)
-    telefonnummer = PhoneNumberField()
-    emailadres = models.EmailField()
+    adres = models.CharField(max_length=1000, blank=True)
+    telefonnummer = models.CharField(max_length=20, blank=True)
+    emailadres = models.EmailField(blank=True)
 
 
 class ContactMoment(APIMixin, models.Model):
@@ -28,17 +28,13 @@ class ContactMoment(APIMixin, models.Model):
         'zaak', blank=True,  # een besluit kan niet bij een zaak horen (zoals raadsbesluit)
         help_text=_("URL-referentie naar de ZAAK (in de Zaken API)")
     )
-    identificatie = models.CharField(
-        max_length=14,
-        unique=True,
-        help_text=_("De unieke aanduiding van een CONTACTMOMENT"),
-    )
     datumtijd = models.DateTimeField(
+        default=datetime.now,
         help_text=_("De datum en het tijdstip waarop het CONTACTMOMENT begint")
     )
     kanaal = models.CharField(
         blank=True,
-        max_length=20,
+        max_length=50,
         help_text=_("Het communicatiekanaal waarlangs het CONTACTMOMENT gevoerd wordt"),
     )
     text = models.TextField(
