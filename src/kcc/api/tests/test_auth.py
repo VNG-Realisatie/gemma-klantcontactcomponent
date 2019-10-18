@@ -4,7 +4,7 @@ Guarantee that the proper authorization machinery is in place.
 from rest_framework.test import APITestCase
 from vng_api_common.tests import AuthCheckMixin, reverse
 
-from kcc.datamodel.tests.factories import KlantFactory, ContactMomentFactory
+from kcc.datamodel.tests.factories import ContactMomentFactory, KlantFactory
 
 
 class KlantScopeForbiddenTests(AuthCheckMixin, APITestCase):

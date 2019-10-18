@@ -11,33 +11,96 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Klant',
+            name="Klant",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('uuid', models.UUIDField(default=uuid.uuid4, help_text='Unieke resource identifier (UUID4)', unique=True)),
-                ('voornaam', models.CharField(max_length=200)),
-                ('achternaam', models.CharField(max_length=200)),
-                ('adres', models.CharField(blank=True, max_length=1000)),
-                ('telefonnummer', models.CharField(blank=True, max_length=20)),
-                ('emailadres', models.EmailField(blank=True, max_length=254)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "uuid",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        help_text="Unieke resource identifier (UUID4)",
+                        unique=True,
+                    ),
+                ),
+                ("voornaam", models.CharField(max_length=200)),
+                ("achternaam", models.CharField(max_length=200)),
+                ("adres", models.CharField(blank=True, max_length=1000)),
+                ("telefonnummer", models.CharField(blank=True, max_length=20)),
+                ("emailadres", models.EmailField(blank=True, max_length=254)),
             ],
             bases=(vng_api_common.models.APIMixin, models.Model),
         ),
         migrations.CreateModel(
-            name='ContactMoment',
+            name="ContactMoment",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('uuid', models.UUIDField(default=uuid.uuid4, help_text='Unieke resource identifier (UUID4)', unique=True)),
-                ('zaak', models.URLField(blank=True, help_text='URL-referentie naar de ZAAK (in de Zaken API)', verbose_name='zaak')),
-                ('datumtijd', models.DateTimeField(default=django.utils.timezone.now, help_text='De datum en het tijdstip waarop het CONTACTMOMENT begint')),
-                ('kanaal', models.CharField(blank=True, help_text='Het communicatiekanaal waarlangs het CONTACTMOMENT gevoerd wordt', max_length=50)),
-                ('text', models.TextField(blank=True, help_text='Een toelichting die inhoudelijk het contact met de klant beschrijft.')),
-                ('klant', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='datamodel.Klant')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "uuid",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        help_text="Unieke resource identifier (UUID4)",
+                        unique=True,
+                    ),
+                ),
+                (
+                    "zaak",
+                    models.URLField(
+                        blank=True,
+                        help_text="URL-referentie naar de ZAAK (in de Zaken API)",
+                        verbose_name="zaak",
+                    ),
+                ),
+                (
+                    "datumtijd",
+                    models.DateTimeField(
+                        default=django.utils.timezone.now,
+                        help_text="De datum en het tijdstip waarop het CONTACTMOMENT begint",
+                    ),
+                ),
+                (
+                    "kanaal",
+                    models.CharField(
+                        blank=True,
+                        help_text="Het communicatiekanaal waarlangs het CONTACTMOMENT gevoerd wordt",
+                        max_length=50,
+                    ),
+                ),
+                (
+                    "text",
+                    models.TextField(
+                        blank=True,
+                        help_text="Een toelichting die inhoudelijk het contact met de klant beschrijft.",
+                    ),
+                ),
+                (
+                    "klant",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="datamodel.Klant",
+                    ),
+                ),
             ],
             bases=(vng_api_common.models.APIMixin, models.Model),
         ),

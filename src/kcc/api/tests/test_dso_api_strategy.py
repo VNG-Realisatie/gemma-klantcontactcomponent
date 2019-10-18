@@ -1,8 +1,9 @@
 from django.test import override_settings
+from django.utils.translation import ugettext as _
 
 from rest_framework.test import APIRequestFactory, APITestCase
 from vng_api_common.tests import reverse
-from django.utils.translation import ugettext as _
+
 from . import views
 
 

@@ -33,21 +33,21 @@ class KlantTests(JWTAuthMixin, APITestCase):
         self.assertEqual(
             data,
             {
-                'url': f'http://testserver{detail_url}',
-                'voornaam': klant.voornaam,
-                'achternaam': klant.achternaam,
-                'adres': klant.adres,
-                'emailadres': klant.emailadres,
-                'telefonnummer': klant.telefonnummer,
-            }
+                "url": f"http://testserver{detail_url}",
+                "voornaam": klant.voornaam,
+                "achternaam": klant.achternaam,
+                "adres": klant.adres,
+                "emailadres": klant.emailadres,
+                "telefonnummer": klant.telefonnummer,
+            },
         )
 
     def test_create_klant(self):
         list_url = reverse(Klant)
         data = {
-            'voornaam': 'Xavier',
-            'achternaam': 'Jackson',
-            'emailadres': 'test@gmail.com'
+            "voornaam": "Xavier",
+            "achternaam": "Jackson",
+            "emailadres": "test@gmail.com",
         }
 
         response = self.client.post(list_url, data)
@@ -56,15 +56,15 @@ class KlantTests(JWTAuthMixin, APITestCase):
 
         klant = Klant.objects.get()
 
-        self.assertEqual(klant.voornaam, 'Xavier')
-        self.assertEqual(klant.achternaam, 'Jackson')
-        self.assertEqual(klant.emailadres, 'test@gmail.com')
+        self.assertEqual(klant.voornaam, "Xavier")
+        self.assertEqual(klant.achternaam, "Jackson")
+        self.assertEqual(klant.emailadres, "test@gmail.com")
 
     def test_update_klant(self):
         klant = KlantFactory.create()
         detail_url = reverse(klant)
 
-        response = self.client.patch(detail_url, {'voornaam': "new name"})
+        response = self.client.patch(detail_url, {"voornaam": "new name"})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 

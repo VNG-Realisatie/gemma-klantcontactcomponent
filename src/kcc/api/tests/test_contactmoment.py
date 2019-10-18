@@ -1,8 +1,11 @@
+from datetime import datetime
+
+from django.utils.timezone import make_aware
+
 from rest_framework import status
 from rest_framework.test import APITestCase
 from vng_api_common.tests import JWTAuthMixin, reverse
-from datetime import datetime
-from django.utils.timezone import make_aware
+
 from kcc.datamodel.models import ContactMoment
 from kcc.datamodel.tests.factories import ContactMomentFactory, KlantFactory
 
@@ -24,7 +27,9 @@ class ContactMomentTests(JWTAuthMixin, APITestCase):
     def test_read_contactmoment(self):
         klant = KlantFactory.create()
         klant_url = reverse(klant)
-        contactmoment = ContactMomentFactory.create(klant=klant, datumtijd=make_aware(datetime(2019, 1, 1)))
+        contactmoment = ContactMomentFactory.create(
+            klant=klant, datumtijd=make_aware(datetime(2019, 1, 1))
+        )
         detail_url = reverse(contactmoment)
 
         response = self.client.get(detail_url)
@@ -36,13 +41,13 @@ class ContactMomentTests(JWTAuthMixin, APITestCase):
         self.assertEqual(
             data,
             {
-                'url': f'http://testserver{detail_url}',
-                'klant': f'http://testserver{klant_url}',
-                'zaak': contactmoment.zaak,
-                'datumtijd': '2019-01-01T00:00:00Z',
-                'kanaal': contactmoment.kanaal,
-                'text': contactmoment.text
-            }
+                "url": f"http://testserver{detail_url}",
+                "klant": f"http://testserver{klant_url}",
+                "zaak": contactmoment.zaak,
+                "datumtijd": "2019-01-01T00:00:00Z",
+                "kanaal": contactmoment.kanaal,
+                "text": contactmoment.text,
+            },
         )
 
     def test_create_contactmoment(self):
@@ -50,10 +55,10 @@ class ContactMomentTests(JWTAuthMixin, APITestCase):
         klant_url = reverse(klant)
         list_url = reverse(ContactMoment)
         data = {
-            'klant': klant_url,
-            'zaak': 'http://www.example.com/zrc/api/v1/zaken/1',
-            'kanaal': 'telephone',
-            'text': 'some text'
+            "klant": klant_url,
+            "zaak": "http://www.example.com/zrc/api/v1/zaken/1",
+            "kanaal": "telephone",
+            "text": "some text",
         }
 
         response = self.client.post(list_url, data)
@@ -63,9 +68,11 @@ class ContactMomentTests(JWTAuthMixin, APITestCase):
         contactmoment = ContactMoment.objects.get()
 
         self.assertEqual(contactmoment.klant, klant)
-        self.assertEqual(contactmoment.zaak, 'http://www.example.com/zrc/api/v1/zaken/1')
-        self.assertEqual(contactmoment.kanaal, 'telephone')
-        self.assertEqual(contactmoment.text, 'some text')
+        self.assertEqual(
+            contactmoment.zaak, "http://www.example.com/zrc/api/v1/zaken/1"
+        )
+        self.assertEqual(contactmoment.kanaal, "telephone")
+        self.assertEqual(contactmoment.text, "some text")
 
     def test_update_contactmoment(self):
         klant = KlantFactory.create()
@@ -73,7 +80,7 @@ class ContactMomentTests(JWTAuthMixin, APITestCase):
         contactmoment = ContactMomentFactory.create()
         detail_url = reverse(contactmoment)
 
-        response = self.client.patch(detail_url, {'klant': klant_url})
+        response = self.client.patch(detail_url, {"klant": klant_url})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 

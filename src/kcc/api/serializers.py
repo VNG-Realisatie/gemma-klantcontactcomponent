@@ -1,8 +1,8 @@
 import logging
 
 from rest_framework import serializers
-from kcc.datamodel.models import Klant, ContactMoment
 
+from kcc.datamodel.models import ContactMoment, Klant
 
 logger = logging.getLogger(__name__)
 
@@ -10,10 +10,15 @@ logger = logging.getLogger(__name__)
 class KlantSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Klant
-        fields = ("url", 'voornaam', 'achternaam', 'adres', 'telefonnummer', 'emailadres')
-        extra_kwargs = {
-            "url": {"lookup_field": "uuid"},
-        }
+        fields = (
+            "url",
+            "voornaam",
+            "achternaam",
+            "adres",
+            "telefonnummer",
+            "emailadres",
+        )
+        extra_kwargs = {"url": {"lookup_field": "uuid"}}
 
 
 class ContactMomentSerializer(serializers.HyperlinkedModelSerializer):

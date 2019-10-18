@@ -3,10 +3,15 @@ import logging
 from rest_framework import viewsets
 from vng_api_common.permissions import AuthScopesRequired
 
-from .scopes import SCOPE_KLANTEN_ALLES_VERWIJDEREN, SCOPE_KLANTEN_BIJWERKEN, SCOPE_KLANTEN_AANMAKEN, \
-    SCOPE_KLANTEN_ALLES_LEZEN
-from .serializers import KlantSerializer, ContactMomentSerializer
-from kcc.datamodel.models import Klant, ContactMoment
+from kcc.datamodel.models import ContactMoment, Klant
+
+from .scopes import (
+    SCOPE_KLANTEN_AANMAKEN,
+    SCOPE_KLANTEN_ALLES_LEZEN,
+    SCOPE_KLANTEN_ALLES_VERWIJDEREN,
+    SCOPE_KLANTEN_BIJWERKEN,
+)
+from .serializers import ContactMomentSerializer, KlantSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -97,6 +102,3 @@ class ContactMomentViewSet(viewsets.ModelViewSet):
         "partial_update": SCOPE_KLANTEN_BIJWERKEN,
         "destroy": SCOPE_KLANTEN_ALLES_VERWIJDEREN,
     }
-
-
-

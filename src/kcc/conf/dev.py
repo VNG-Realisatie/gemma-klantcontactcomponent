@@ -1,7 +1,9 @@
 import os
 import warnings
 
-os.environ.setdefault("SECRET_KEY", "k#t$d32=lns_r3i#%rsw3l1sk267@01hvw9$$z1jm&0lbp$h_-")
+os.environ.setdefault(
+    "SECRET_KEY", "k#t$d32=lns_r3i#%rsw3l1sk267@01hvw9$$z1jm&0lbp$h_-"
+)
 os.environ.setdefault("DB_NAME", "kcc")
 os.environ.setdefault("DB_USER", "kcc")
 os.environ.setdefault("DB_PASSWORD", "kcc")
@@ -24,11 +26,7 @@ ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 
 LOGGING["loggers"].update(
     {
-        "kcc": {
-            "handlers": ["console"],
-            "level": "DEBUG",
-            "propagate": True,
-        },
+        "kcc": {"handlers": ["console"], "level": "DEBUG", "propagate": True},
         "django": {"handlers": ["console"], "level": "DEBUG", "propagate": True},
         "django.db.backends": {
             "handlers": ["django"],

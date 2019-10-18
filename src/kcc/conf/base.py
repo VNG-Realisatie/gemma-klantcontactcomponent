@@ -226,11 +226,7 @@ LOGGING = {
         },
     },
     "loggers": {
-        "kcc": {
-            "handlers": ["project"],
-            "level": "INFO",
-            "propagate": True,
-        },
+        "kcc": {"handlers": ["project"], "level": "INFO", "propagate": True},
         "django.request": {"handlers": ["django"], "level": "ERROR", "propagate": True},
         "django.template": {
             "handlers": ["console"],
