@@ -11,7 +11,7 @@ class KlantSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Klant
         fields = ("url", 'voornaam', 'achternaam', 'adres', 'telefonnummer', 'emailadres')
-        extra_kwarsg = {
+        extra_kwargs = {
             "url": {"lookup_field": "uuid"},
         }
 
@@ -20,7 +20,7 @@ class ContactMomentSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = ContactMoment
         fields = ("url", "klant", "zaak", "datumtijd", "kanaal", "text")
-        extra_kwarg = {
+        extra_kwargs = {
             "url": {"lookup_field": "uuid"},
             "klant": {"lookup_field": "uuid"},
         }

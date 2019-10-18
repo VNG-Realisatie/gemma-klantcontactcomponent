@@ -1,6 +1,6 @@
 import uuid
 
-from datetime import datetime
+from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from django.db import models
 from vng_api_common.models import APIMixin
@@ -29,7 +29,7 @@ class ContactMoment(APIMixin, models.Model):
         help_text=_("URL-referentie naar de ZAAK (in de Zaken API)")
     )
     datumtijd = models.DateTimeField(
-        default=datetime.now,
+        default=timezone.now,
         help_text=_("De datum en het tijdstip waarop het CONTACTMOMENT begint")
     )
     kanaal = models.CharField(
