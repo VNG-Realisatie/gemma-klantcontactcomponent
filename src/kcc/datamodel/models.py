@@ -6,6 +6,8 @@ from django.utils.translation import ugettext_lazy as _
 
 from vng_api_common.models import APIMixin
 
+from .constants import InitiatiefNemer
+
 
 class Klant(APIMixin, models.Model):
     uuid = models.UUIDField(
@@ -42,4 +44,7 @@ class ContactMoment(APIMixin, models.Model):
         help_text=_(
             "Een toelichting die inhoudelijk het contact met de klant beschrijft."
         ),
+    )
+    initiatiefnemer = models.CharField(
+        max_length=20, blank=True, choices=InitiatiefNemer.choices
     )

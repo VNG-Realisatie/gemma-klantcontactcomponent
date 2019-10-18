@@ -6,6 +6,7 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 from vng_api_common.tests import JWTAuthMixin, reverse
 
+from kcc.datamodel.constants import InitiatiefNemer
 from kcc.datamodel.models import ContactMoment
 from kcc.datamodel.tests.factories import ContactMomentFactory, KlantFactory
 
@@ -28,7 +29,9 @@ class ContactMomentTests(JWTAuthMixin, APITestCase):
         klant = KlantFactory.create()
         klant_url = reverse(klant)
         contactmoment = ContactMomentFactory.create(
-            klant=klant, datumtijd=make_aware(datetime(2019, 1, 1))
+            klant=klant,
+            datumtijd=make_aware(datetime(2019, 1, 1)),
+            initiatiefnemer=InitiatiefNemer.gemeente,
         )
         detail_url = reverse(contactmoment)
 
@@ -47,6 +50,7 @@ class ContactMomentTests(JWTAuthMixin, APITestCase):
                 "datumtijd": "2019-01-01T00:00:00Z",
                 "kanaal": contactmoment.kanaal,
                 "text": contactmoment.text,
+                "initiatiefnemer": InitiatiefNemer.gemeente,
             },
         )
 
@@ -59,6 +63,7 @@ class ContactMomentTests(JWTAuthMixin, APITestCase):
             "zaak": "http://www.example.com/zrc/api/v1/zaken/1",
             "kanaal": "telephone",
             "text": "some text",
+            "initiatiefnemer": InitiatiefNemer.gemeente,
         }
 
         response = self.client.post(list_url, data)
@@ -73,6 +78,7 @@ class ContactMomentTests(JWTAuthMixin, APITestCase):
         )
         self.assertEqual(contactmoment.kanaal, "telephone")
         self.assertEqual(contactmoment.text, "some text")
+        self.assertEqual(contactmoment.initiatiefnemer, InitiatiefNemer.gemeente)
 
     def test_update_contactmoment(self):
         klant = KlantFactory.create()
