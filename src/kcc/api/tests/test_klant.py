@@ -1,3 +1,5 @@
+from datetime import date
+
 from rest_framework import status
 from rest_framework.test import APITestCase
 from vng_api_common.tests import JWTAuthMixin, reverse
@@ -61,7 +63,10 @@ class KlantTests(JWTAuthMixin, APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         data = response.json()
-        expected_data = {
+
+        self.assertEqual(
+            data,
+            {
                 'url': f'http://testserver{detail_url}',
                 'voornaam': klant.voornaam,
                 'achternaam': klant.achternaam,
@@ -99,18 +104,64 @@ class KlantTests(JWTAuthMixin, APITestCase):
                     }
                 }
             }
+        )
+
+    def test_read_klant_vestiging(self):
+        klant = KlantFactory.create(betrokkene=BETROKKENE, betrokkene_type=KlantType.vestiging)
+        vestiging = VestigingFactory.create(klant=klant)
+        adres = AdresFactory.create(vestiging=vestiging)
+        buitenland = SubVerblijfBuitenlandFactory.create(vestiging=vestiging)
+        detail_url = reverse(klant)
+
+        response = self.client.get(detail_url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        data = response.json()
 
         self.assertEqual(
             data,
-            expected_data
+            {
+                'url': f'http://testserver{detail_url}',
+                'voornaam': klant.voornaam,
+                'achternaam': klant.achternaam,
+                'adres': klant.adres,
+                'telefonnummer': klant.telefonnummer,
+                'emailadres': klant.emailadres,
+                'betrokkene': BETROKKENE,
+                'betrokkeneType': KlantType.vestiging,
+                'betrokkeneIdentificatie': {
+                    'vestigingsNummer': vestiging.vestigings_nummer,
+                    'handelsnaam': vestiging.handelsnaam,
+                    'verblijfsadres': {
+                        'aoaIdentificatie': adres.aoa_identificatie,
+                        'wplWoonplaatsNaam': adres.wpl_woonplaats_naam,
+                        'gorOpenbareRuimteNaam': adres.gor_openbare_ruimte_naam,
+                        'aoaPostcode': adres.aoa_postcode,
+                        'aoaHuisnummer': adres.aoa_huisnummer,
+                        'aoaHuisletter': adres.aoa_huisletter,
+                        'aoaHuisnummertoevoeging': adres.aoa_huisnummertoevoeging,
+                        'inpLocatiebeschrijving': adres.inp_locatiebeschrijving,
+                    },
+                    'subVerblijfBuitenland': {
+                        'lndLandcode': buitenland.lnd_landcode,
+                        'lndLandnaam': buitenland.lnd_landnaam,
+                        'subAdresBuitenland1': buitenland.sub_adres_buitenland_1,
+                        'subAdresBuitenland2': buitenland.sub_adres_buitenland_2,
+                        'subAdresBuitenland3': buitenland.sub_adres_buitenland_3,
+                    }
+                }
+            }
         )
 
-    def test_create_klant(self):
+    def test_create_klant_url(self):
         list_url = reverse(Klant)
         data = {
             "voornaam": "Xavier",
             "achternaam": "Jackson",
             "emailadres": "test@gmail.com",
+            "betrokkeneType": KlantType.natuurlijk_persoon,
+            "betrokkene": BETROKKENE,
         }
 
         response = self.client.post(list_url, data)
@@ -122,6 +173,115 @@ class KlantTests(JWTAuthMixin, APITestCase):
         self.assertEqual(klant.voornaam, "Xavier")
         self.assertEqual(klant.achternaam, "Jackson")
         self.assertEqual(klant.emailadres, "test@gmail.com")
+        self.assertEqual(klant.betrokkene, BETROKKENE)
+
+    def test_create_klant_natuurlijkpersoon(self):
+        list_url = reverse(Klant)
+        data = {
+            'voornaam': 'Samuel',
+            'achternaam': 'Jackson',
+            'emailadres': 'samuel@jackson.com',
+            'betrokkeneType': KlantType.natuurlijk_persoon,
+            'betrokkeneIdentificatie': {
+                'anpIdentificatie': '123',
+                'geslachtsnaam': 'Jackson2',
+                'voornamen': 'Samuel2',
+                'geboortedatum': '1962-06-28',
+                'verblijfsadres': {
+                    'aoaIdentificatie': '1234',
+                    'wplWoonplaatsNaam': 'East Meaganchester',
+                    'gorOpenbareRuimteNaam': 'New Amsterdam',
+                    'aoaHuisnummer': 21,
+                },
+                'subVerblijfBuitenland': {
+                    'lndLandcode': 'ABCD',
+                    'lndLandnaam': 'Hollywood',
+                }
+            }
+        }
+
+        response = self.client.post(list_url, data)
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        klant = Klant.objects.get()
+
+        self.assertEqual(klant.voornaam, 'Samuel')
+        self.assertEqual(klant.achternaam, 'Jackson')
+        self.assertEqual(klant.emailadres, 'samuel@jackson.com')
+        self.assertEqual(klant.betrokkene, '')
+        self.assertEqual(klant.betrokkene_type, KlantType.natuurlijk_persoon)
+
+        natuurlijkpersoon = klant.natuurlijkpersoon
+
+        self.assertEqual(natuurlijkpersoon.anp_identificatie, '123')
+        self.assertEqual(natuurlijkpersoon.geslachtsnaam, 'Jackson2')
+        self.assertEqual(natuurlijkpersoon.voornamen, 'Samuel2')
+        self.assertEqual(natuurlijkpersoon.geboortedatum, '1962-06-28')
+
+        adres = natuurlijkpersoon.verblijfsadres
+
+        self.assertEqual(adres.aoa_identificatie, '1234')
+        self.assertEqual(adres.wpl_woonplaats_naam, 'East Meaganchester')
+        self.assertEqual(adres.gor_openbare_ruimte_naam, 'New Amsterdam')
+        self.assertEqual(adres.aoa_huisnummer, 21)
+
+        buitenland = natuurlijkpersoon.sub_verblijf_buitenland
+
+        self.assertEqual(buitenland.lnd_landcode, 'ABCD')
+        self.assertEqual(buitenland.lnd_landnaam, 'Hollywood')
+
+    def test_create_klant_vestiging(self):
+        list_url = reverse(Klant)
+        data = {
+            'voornaam': 'Samuel',
+            'achternaam': 'Jackson',
+            'emailadres': 'samuel@jackson.com',
+            'betrokkeneType': KlantType.vestiging,
+            'betrokkeneIdentificatie': {
+                'vestigingsNummer': '123',
+                'handelsnaam': ['WB'],
+                'verblijfsadres': {
+                    'aoaIdentificatie': '1234',
+                    'wplWoonplaatsNaam': 'East Meaganchester',
+                    'gorOpenbareRuimteNaam': 'New Amsterdam',
+                    'aoaHuisnummer': 21,
+                },
+                'subVerblijfBuitenland': {
+                    'lndLandcode': 'ABCD',
+                    'lndLandnaam': 'Hollywood',
+                }
+            }
+        }
+
+        response = self.client.post(list_url, data)
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        klant = Klant.objects.get()
+
+        self.assertEqual(klant.voornaam, 'Samuel')
+        self.assertEqual(klant.achternaam, 'Jackson')
+        self.assertEqual(klant.emailadres, 'samuel@jackson.com')
+        self.assertEqual(klant.betrokkene, '')
+        self.assertEqual(klant.betrokkene_type, KlantType.vestiging)
+
+        vestiging = klant.vestiging
+
+        self.assertEqual(vestiging.vestigings_nummer, '123')
+        self.assertEqual(vestiging.handelsnaam, ['WB'])
+
+        adres = vestiging.verblijfsadres
+
+        self.assertEqual(adres.aoa_identificatie, '1234')
+        self.assertEqual(adres.wpl_woonplaats_naam, 'East Meaganchester')
+        self.assertEqual(adres.gor_openbare_ruimte_naam, 'New Amsterdam')
+        self.assertEqual(adres.aoa_huisnummer, 21)
+
+        buitenland = vestiging.sub_verblijf_buitenland
+
+        self.assertEqual(buitenland.lnd_landcode, 'ABCD')
+        self.assertEqual(buitenland.lnd_landnaam, 'Hollywood')
 
     def test_update_klant(self):
         klant = KlantFactory.create()
