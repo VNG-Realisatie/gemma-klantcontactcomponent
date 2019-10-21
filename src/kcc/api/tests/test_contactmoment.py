@@ -49,7 +49,7 @@ class ContactMomentTests(JWTAuthMixin, APITestCase):
                 "zaak": contactmoment.zaak,
                 "datumtijd": "2019-01-01T00:00:00Z",
                 "kanaal": contactmoment.kanaal,
-                "text": contactmoment.text,
+                "tekst": contactmoment.tekst,
                 "initiatiefnemer": InitiatiefNemer.gemeente,
             },
         )
@@ -62,7 +62,7 @@ class ContactMomentTests(JWTAuthMixin, APITestCase):
             "klant": klant_url,
             "zaak": "http://www.example.com/zrc/api/v1/zaken/1",
             "kanaal": "telephone",
-            "text": "some text",
+            "tekst": "some text",
             "initiatiefnemer": InitiatiefNemer.gemeente,
         }
 
@@ -77,7 +77,7 @@ class ContactMomentTests(JWTAuthMixin, APITestCase):
             contactmoment.zaak, "http://www.example.com/zrc/api/v1/zaken/1"
         )
         self.assertEqual(contactmoment.kanaal, "telephone")
-        self.assertEqual(contactmoment.text, "some text")
+        self.assertEqual(contactmoment.tekst, "some text")
         self.assertEqual(contactmoment.initiatiefnemer, InitiatiefNemer.gemeente)
 
     def test_update_contactmoment(self):

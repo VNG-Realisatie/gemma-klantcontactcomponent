@@ -305,7 +305,8 @@ paths:
   /contactmomenten/{uuid}:
     get:
       operationId: contactmoment_read
-      description: Opvragen en bewerken van CONTACTMOMENTen.
+      summary: Een specifiek CONTACTMOMENT opvragen.
+      description: Een specifiek CONTACTMOMENT opvragen.
       parameters:
       - name: If-None-Match
         in: header
@@ -1141,7 +1142,8 @@ paths:
   /klanten/{uuid}:
     get:
       operationId: klant_read
-      description: Opvragen en bewerken van KLANTen.
+      summary: Een specifiek KLANT opvragen.
+      description: Een specifiek KLANT opvragen.
       parameters:
       - name: If-None-Match
         in: header
@@ -1751,6 +1753,7 @@ components:
           minLength: 1
         klant:
           title: Klant
+          description: URL-referentie naar een KLANT (in de KCC API)
           type: string
           format: uri
           nullable: true
@@ -1771,10 +1774,17 @@ components:
             wordt
           type: string
           maxLength: 50
-        text:
-          title: Text
+        tekst:
+          title: Tekst
           description: Een toelichting die inhoudelijk het contact met de klant beschrijft.
           type: string
+        initiatiefnemer:
+          title: Initiatiefnemer
+          description: "De partij die het contact heeft ge\xEFnitieerd."
+          type: string
+          enum:
+          - gemeente
+          - klant
     Fout:
       required:
       - code

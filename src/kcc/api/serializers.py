@@ -30,7 +30,7 @@ class ContactMomentSerializer(serializers.HyperlinkedModelSerializer):
             "zaak",
             "datumtijd",
             "kanaal",
-            "text",
+            "tekst",
             "initiatiefnemer",
         )
         extra_kwargs = {

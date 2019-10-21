@@ -11,11 +11,12 @@ Objecttype op [GEMMA Online](https://www.gemmaonline.nl/index.php/Rgbz_1.0/doc/o
 | Attribuut | Omschrijving | Type | Verplicht | CRUD* |
 | --- | --- | --- | --- | --- |
 | url | URL-referentie naar dit object. Dit is de unieke identificatie en locatie van dit object. | string | nee | ~~C~~​R​~~U~~​~~D~~ |
-| klant |  | string | nee | C​R​U​D |
+| klant | URL-referentie naar een KLANT (in de KCC API) | string | nee | C​R​U​D |
 | zaak | URL-referentie naar de ZAAK (in de Zaken API) | string | nee | C​R​U​D |
 | datumtijd | De datum en het tijdstip waarop het CONTACTMOMENT begint | string | nee | C​R​U​D |
 | kanaal | Het communicatiekanaal waarlangs het CONTACTMOMENT gevoerd wordt | string | nee | C​R​U​D |
-| text | Een toelichting die inhoudelijk het contact met de klant beschrijft. | string | nee | C​R​U​D |
+| tekst | Een toelichting die inhoudelijk het contact met de klant beschrijft. | string | nee | C​R​U​D |
+| initiatiefnemer | De partij die het contact heeft geïnitieerd. | string | nee | C​R​U​D |
 
 ## Klant
 

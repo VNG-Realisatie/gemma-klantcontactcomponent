@@ -30,6 +30,11 @@ class KlantViewSet(viewsets.ModelViewSet):
 
     Alle KLANTen opvragen.
 
+    retrieve:
+    Een specifiek KLANT opvragen.
+
+    Een specifiek KLANT opvragen.
+
     update:
     Werk een KLANT in zijn geheel bij.
 
@@ -73,6 +78,11 @@ class ContactMomentViewSet(viewsets.ModelViewSet):
     Alle CONTACTMOMENTen opvragen.
 
     Alle CONTACTMOMENTen opvragen.
+
+    retrieve:
+    Een specifiek CONTACTMOMENT opvragen.
+
+    Een specifiek CONTACTMOMENT opvragen.
 
     update:
     Werk een CONTACTMOMENT in zijn geheel bij.

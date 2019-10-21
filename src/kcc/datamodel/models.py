@@ -24,7 +24,13 @@ class ContactMoment(APIMixin, models.Model):
     uuid = models.UUIDField(
         unique=True, default=uuid.uuid4, help_text="Unieke resource identifier (UUID4)"
     )
-    klant = models.ForeignKey(Klant, on_delete=models.CASCADE, null=True, blank=True)
+    klant = models.ForeignKey(
+        Klant,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        help_text=_("URL-referentie naar een KLANT (in de KCC API)"),
+    )
     zaak = models.URLField(
         "zaak",
         blank=True,  # een besluit kan niet bij een zaak horen (zoals raadsbesluit)
@@ -39,12 +45,15 @@ class ContactMoment(APIMixin, models.Model):
         max_length=50,
         help_text=_("Het communicatiekanaal waarlangs het CONTACTMOMENT gevoerd wordt"),
     )
-    text = models.TextField(
+    tekst = models.TextField(
         blank=True,
         help_text=_(
             "Een toelichting die inhoudelijk het contact met de klant beschrijft."
         ),
     )
     initiatiefnemer = models.CharField(
-        max_length=20, blank=True, choices=InitiatiefNemer.choices
+        max_length=20,
+        blank=True,
+        choices=InitiatiefNemer.choices,
+        help_text=_("De partij die het contact heeft geïnitieerd."),
     )

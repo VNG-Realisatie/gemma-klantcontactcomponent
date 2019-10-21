@@ -360,7 +360,8 @@
         "/contactmomenten/{uuid}": {
             "get": {
                 "operationId": "contactmoment_read",
-                "description": "Opvragen en bewerken van CONTACTMOMENTen.",
+                "summary": "Een specifiek CONTACTMOMENT opvragen.",
+                "description": "Een specifiek CONTACTMOMENT opvragen.",
                 "parameters": [
                     {
                         "name": "If-None-Match",
@@ -1392,7 +1393,8 @@
         "/klanten/{uuid}": {
             "get": {
                 "operationId": "klant_read",
-                "description": "Opvragen en bewerken van KLANTen.",
+                "summary": "Een specifiek KLANT opvragen.",
+                "description": "Een specifiek KLANT opvragen.",
                 "parameters": [
                     {
                         "name": "If-None-Match",
@@ -2113,6 +2115,7 @@
                 },
                 "klant": {
                     "title": "Klant",
+                    "description": "URL-referentie naar een KLANT (in de KCC API)",
                     "type": "string",
                     "format": "uri",
                     "x-nullable": true
@@ -2136,10 +2139,19 @@
                     "type": "string",
                     "maxLength": 50
                 },
-                "text": {
-                    "title": "Text",
+                "tekst": {
+                    "title": "Tekst",
                     "description": "Een toelichting die inhoudelijk het contact met de klant beschrijft.",
                     "type": "string"
+                },
+                "initiatiefnemer": {
+                    "title": "Initiatiefnemer",
+                    "description": "De partij die het contact heeft ge\u00efnitieerd.",
+                    "type": "string",
+                    "enum": [
+                        "gemeente",
+                        "klant"
+                    ]
                 }
             }
         },
