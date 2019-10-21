@@ -1,9 +1,13 @@
 import logging
 
+from django.db import transaction
+from django.utils.translation import ugettext_lazy as _
+
 from rest_framework import serializers
 from vng_api_common.serializers import add_choice_values_help_text
+from vng_api_common.polymorphism import Discriminator, PolymorphicSerializer
 
-from kcc.datamodel.constants import GeslachtsAanduiding
+from kcc.datamodel.constants import GeslachtsAanduiding, KlantType
 from kcc.datamodel.models import (
     Adres,
     ContactMoment,
@@ -89,7 +93,7 @@ class NatuurlijkPersoonSerializer(serializers.ModelSerializer):
         return natuurlijkpersoon
 
 
-class RolVestigingSerializer(serializers.ModelSerializer):
+class VestigingSerializer(serializers.ModelSerializer):
     verblijfsadres = VerblijfsAdresSerializer(required=False, allow_null=True)
     sub_verblijf_buitenland = SubVerblijfBuitenlandSerializer(
         required=False, allow_null=True
@@ -122,7 +126,17 @@ class RolVestigingSerializer(serializers.ModelSerializer):
 
 
 # main models
-class KlantSerializer(serializers.HyperlinkedModelSerializer):
+class KlantSerializer(PolymorphicSerializer):
+    discriminator = Discriminator(
+        discriminator_field="betrokkene_type",
+        mapping={
+            KlantType.natuurlijk_persoon: NatuurlijkPersoonSerializer(),
+            KlantType.vestiging: VestigingSerializer(),
+        },
+        group_field="betrokkene_identificatie",
+        same_model=False,
+    )
+
     class Meta:
         model = Klant
         fields = (
@@ -132,8 +146,47 @@ class KlantSerializer(serializers.HyperlinkedModelSerializer):
             "adres",
             "telefonnummer",
             "emailadres",
+            "betrokkene",
+            "betrokkene_type",
         )
-        extra_kwargs = {"url": {"lookup_field": "uuid"}}
+        extra_kwargs = {
+            "url": {"lookup_field": "uuid"},
+            "betrokkene": {"required": False},
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        value_display_mapping = add_choice_values_help_text(KlantType)
+        self.fields["betrokkene_type"].help_text += f"\n\n{value_display_mapping}"
+
+    def validate(self, attrs):
+        validated_attrs = super().validate(attrs)
+        betrokkene = validated_attrs.get("betrokkene", None)
+        betrokkene_identificatie = validated_attrs.get("betrokkene_identificatie", None)
+
+        if not betrokkene and not betrokkene_identificatie:
+            raise serializers.ValidationError(
+                _("betrokkene or betrokkeneIdentificatie must be provided"),
+                code="invalid-betrokkene",
+            )
+
+        return validated_attrs
+
+    @transaction.atomic
+    def create(self, validated_data):
+        group_data = validated_data.pop("betrokkene_identificatie", None)
+        klant = super().create(validated_data)
+
+        if group_data:
+            group_serializer = self.discriminator.mapping[
+                validated_data["betrokkene_type"]
+            ]
+            serializer = group_serializer.get_fields()["betrokkene_identificatie"]
+            group_data["klant"] = klant
+            serializer.create(group_data)
+
+        return klant
 
 
 class ContactMomentSerializer(serializers.HyperlinkedModelSerializer):
