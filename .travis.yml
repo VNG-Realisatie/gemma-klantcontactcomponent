@@ -1,31 +1,31 @@
 language: python
 cache: pip
 
-services:
-  - postgresql
-
 python:
   - "3.6"
 
+services:
+  - postgresql
+
+addons:
+  postgresql: "10"
+
 env:
   global:
+    - DJANGO_SETTINGS_MODULE=forms_ui.conf.dev
+    - SECRET_KEY=dummy
     - PGUSER=postgres
-    - PGDATABASE=postgres
     - PGPASSWORD=
 
-  matrix:
-    - TOXENV=django_tests
-    - TOXENV=black
-
 install:
-  - pip install tox-travis
+  - pip install -r requirements/ci.txt
+  - pip install codecov
+  - npm ci
+  - npm run build
 
 script:
-  - tox
+  - python src/manage.py collectstatic --noinput --link
+  - coverage run src/manage.py test src
 
 after_success:
-  - pip install codecov
-  - codecov -e TOXENV
-
-notifications:
-  email: false
+  - codecov
