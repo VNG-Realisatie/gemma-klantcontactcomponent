@@ -2,29 +2,36 @@ from django.conf import settings
 
 from drf_yasg import openapi
 
-description = """Een API om een kcc te benaderen.
+description = """Een API om een klantcontactcomponent (KCC) te benaderen.
 
-DESCRIBE API HERE
+**Afhankelijkheden**
+
+Deze API is afhankelijk van:
+
+* Zaken API *(optioneel)*
+* Autorisaties API *(optioneel)*
 
 **Autorisatie**
 
 Deze API vereist autorisatie. Je kan de
-[token-tool](https://ref.tst.vng.cloud/tokens/) gebruiken om JWT-tokens te
+[token-tool](https://zaken-auth.vng.cloud/) gebruiken om JWT-tokens te
 genereren.
 
 **Handige links**
 
-* [Aan de slag](https://ref.tst.vng.cloud/ontwikkelaars/)
-* ["Papieren" standaard](https://ref.tst.vng.cloud/standaard/)
+* [Documentatie](https://zaakgerichtwerken.vng.cloud/standaard)
+* [Zaakgericht werken](https://zaakgerichtwerken.vng.cloud)
 """
 
 info = openapi.Info(
-    title="kcc (ABBREVIATION) API",
+    title=f"{settings.PROJECT_NAME} API",
     default_version=settings.API_VERSION,
     description=description,
     contact=openapi.Contact(
-        email="support@maykinmedia.nl",
-        url="https://github.com/VNG-Realisatie/gemma-zaken",
+        email="standaarden.ondersteuning@vng.nl",
+        url="https://zaakgerichtwerken.vng.cloud",
     ),
-    license=openapi.License(name="EUPL 1.2"),
+    license=openapi.License(
+        name="EUPL 1.2", url="https://opensource.org/licenses/EUPL-1.2"
+    ),
 )

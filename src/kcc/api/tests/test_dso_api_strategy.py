@@ -1,4 +1,5 @@
 from django.test import override_settings
+from django.utils.translation import ugettext as _
 
 from rest_framework.test import APIRequestFactory, APITestCase
 from vng_api_common.tests import reverse
@@ -26,7 +27,7 @@ class DSOApiStrategyTests(APITestCase):
     @override_settings(ROOT_URLCONF="kcc.api.tests.test_urls")
     def test_api_24_version_header(self):
         response = self.client.get("/test-view")
-        self.assertEqual(response["API-version"], "1.0.0-alpha")
+        self.assertEqual(response["API-version"], "1.0.0-rc1")
 
 
 class DSOApi50Tests(APITestCase):
@@ -64,7 +65,7 @@ class DSOApi50Tests(APITestCase):
                 "title": "Invalid input.",
                 "status": 400,
                 "detail": "",
-                "invalid-params": [
+                "invalid_params": [
                     {
                         "name": "foo",
                         "code": "validation-error",
@@ -145,7 +146,7 @@ class DSOApi50Tests(APITestCase):
             views.GoneView,
             {
                 "code": "gone",
-                "title": "The resource is gone",
+                "title": _("The resource is gone"),
                 "status": 410,
                 "detail": "The resource was destroyed",
             },
@@ -156,7 +157,7 @@ class DSOApi50Tests(APITestCase):
             views.PreconditionFailed,
             {
                 "code": "precondition_failed",
-                "title": "Precondition failed",
+                "title": _("Precondition failed"),
                 "status": 412,
                 "detail": "Something about CRS",
             },

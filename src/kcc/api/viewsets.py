@@ -1,41 +1,114 @@
 import logging
 
 from rest_framework import viewsets
-from vng_api_common.permissions import BaseAuthRequired
+from vng_api_common.permissions import AuthScopesRequired
 
-from .scopes import EXAMPLE_SCOPE
-from .serializers import ExampleSerializer
+from kcc.datamodel.models import ContactMoment, Klant
+
+from .scopes import (
+    SCOPE_KLANTEN_AANMAKEN,
+    SCOPE_KLANTEN_ALLES_LEZEN,
+    SCOPE_KLANTEN_ALLES_VERWIJDEREN,
+    SCOPE_KLANTEN_BIJWERKEN,
+)
+from .serializers import ContactMomentSerializer, KlantSerializer
 
 logger = logging.getLogger(__name__)
 
 
-class ExampleViewSet(viewsets.ModelViewSet):
+class KlantViewSet(viewsets.ModelViewSet):
     """
-    Describe viewset.
+    Opvragen en bewerken van KLANTen.
 
     create:
-    Describe create operation.
+    Maak een KLANT aan.
+
+    Maak een KLANT aan.
 
     list:
-    Describe list operation.
+    Alle KLANTen opvragen.
+
+    Alle KLANTen opvragen.
+
+    retrieve:
+    Een specifiek KLANT opvragen.
+
+    Een specifiek KLANT opvragen.
+
+    update:
+    Werk een KLANT in zijn geheel bij.
+
+    Werk een KLANT in zijn geheel bij.
 
     partial_update:
-    Describe partial_update operation.
+    Werk een KLANT deels bij.
+
+    Werk een KLANT deels bij.
 
     destroy:
-    Describe destroy operation.
+    Verwijder een KLANT.
+
+    Verwijder een KLANT.
     """
 
-    queryset = ...
-    serializer_class = ExampleSerializer
+    queryset = Klant.objects.all()
+    serializer_class = KlantSerializer
     lookup_field = "uuid"
-
-    permission_classes = (BaseAuthRequired,)
+    permission_classes = (AuthScopesRequired,)
     required_scopes = {
-        "list": EXAMPLE_SCOPE,
-        "retrieve": EXAMPLE_SCOPE,
-        "create": EXAMPLE_SCOPE,
-        "update": EXAMPLE_SCOPE,
-        "partial_update": EXAMPLE_SCOPE,
-        "destroy": EXAMPLE_SCOPE,
+        "list": SCOPE_KLANTEN_ALLES_LEZEN,
+        "retrieve": SCOPE_KLANTEN_ALLES_LEZEN,
+        "create": SCOPE_KLANTEN_AANMAKEN,
+        "update": SCOPE_KLANTEN_BIJWERKEN,
+        "partial_update": SCOPE_KLANTEN_BIJWERKEN,
+        "destroy": SCOPE_KLANTEN_ALLES_VERWIJDEREN,
+    }
+
+
+class ContactMomentViewSet(viewsets.ModelViewSet):
+    """
+    Opvragen en bewerken van CONTACTMOMENTen.
+
+    create:
+    Maak een CONTACTMOMENT aan.
+
+    Maak een CONTACTMOMENT aan.
+
+    list:
+    Alle CONTACTMOMENTen opvragen.
+
+    Alle CONTACTMOMENTen opvragen.
+
+    retrieve:
+    Een specifiek CONTACTMOMENT opvragen.
+
+    Een specifiek CONTACTMOMENT opvragen.
+
+    update:
+    Werk een CONTACTMOMENT in zijn geheel bij.
+
+    Werk een CONTACTMOMENT in zijn geheel bij.
+
+    partial_update:
+    Werk een CONTACTMOMENT deels bij.
+
+    Werk een CONTACTMOMENT deels bij.
+
+    destroy:
+    Verwijder een CONTACTMOMENT.
+
+    Verwijder een CONTACTMOMENT.
+    """
+
+    queryset = ContactMoment.objects.all()
+    serializer_class = ContactMomentSerializer
+    lookup_field = "uuid"
+    permission_classes = (AuthScopesRequired,)
+    required_scopes = {
+        "list": SCOPE_KLANTEN_ALLES_LEZEN,
+        "retrieve": SCOPE_KLANTEN_ALLES_LEZEN,
+        "create": SCOPE_KLANTEN_AANMAKEN,
+        "update": SCOPE_KLANTEN_BIJWERKEN,
+        "partial_update": SCOPE_KLANTEN_BIJWERKEN,
+        "destroy": SCOPE_KLANTEN_ALLES_VERWIJDEREN,
     }

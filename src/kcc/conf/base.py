@@ -226,11 +226,7 @@ LOGGING = {
         },
     },
     "loggers": {
-        "kcc": {
-            "handlers": ["project"],
-            "level": "INFO",
-            "propagate": True,
-        },
+        "kcc": {"handlers": ["project"], "level": "INFO", "propagate": True},
         "django.request": {"handlers": ["django"], "level": "ERROR", "propagate": True},
         "django.template": {
             "handlers": ["console"],
@@ -258,7 +254,9 @@ SESSION_COOKIE_NAME = "kcc_sessionid"
 #
 # Custom settings
 #
-PROJECT_NAME = "kcc"
+PROJECT_NAME = "Klanten"
+SITE_TITLE = "Klant Contact Component (KCC)"
+
 ENVIRONMENT = None
 SHOW_ALERT = True
 

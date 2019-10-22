@@ -41,8 +41,6 @@ AXES_CACHE = "axes_cache"
 # Jenkins settings
 #
 INSTALLED_APPS += ["kcc.tests", "django_jenkins"]
-PROJECT_APPS = [
-    app for app in INSTALLED_APPS if app.startswith("kcc.")
-]
+PROJECT_APPS = [app for app in INSTALLED_APPS if app.startswith("kcc.")]
 
 JENKINS_TASKS = ("django_jenkins.tasks.run_pylint", "django_jenkins.tasks.run_pep8")
