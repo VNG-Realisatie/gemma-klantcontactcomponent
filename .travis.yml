@@ -14,8 +14,8 @@ env:
   global:
     - DJANGO_SETTINGS_MODULE=kcc.conf.dev
     - SECRET_KEY=dummy
-    - PGUSER=postgres
-    - PGPASSWORD=
+    - DB_USER=postgres
+    - DB_PASSWORD=
 
 install:
   - pip install -r requirements/dev.txt
