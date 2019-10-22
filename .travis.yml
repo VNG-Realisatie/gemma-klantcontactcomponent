@@ -12,7 +12,7 @@ addons:
 
 env:
   global:
-    - DJANGO_SETTINGS_MODULE=forms_ui.conf.dev
+    - DJANGO_SETTINGS_MODULE=kcc.conf.dev
     - SECRET_KEY=dummy
     - PGUSER=postgres
     - PGPASSWORD=
