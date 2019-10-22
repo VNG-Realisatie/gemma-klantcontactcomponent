@@ -49,7 +49,7 @@ class VestigingFactory(factory.django.DjangoModelFactory):
 # factories for nested objects
 class SubVerblijfBuitenlandFactory(factory.django.DjangoModelFactory):
     natuurlijkpersoon = factory.SubFactory(NatuurlijkPersoonFactory)
-    vestiging = factory.SubFactory(VestigingFactory)
+    # vestiging = factory.SubFactory(VestigingFactory)
     lnd_landcode = factory.fuzzy.FuzzyText(length=4)
     lnd_landnaam = factory.Faker("word")
 
@@ -59,7 +59,7 @@ class SubVerblijfBuitenlandFactory(factory.django.DjangoModelFactory):
 
 class AdresFactory(factory.django.DjangoModelFactory):
     natuurlijkpersoon = factory.SubFactory(NatuurlijkPersoonFactory)
-    vestiging = factory.SubFactory(VestigingFactory)
+    # vestiging = factory.SubFactory(VestigingFactory)
     aoa_identificatie = factory.Sequence(lambda n: f"{n}")
     wpl_woonplaats_naam = factory.Faker("city")
     gor_openbare_ruimte_naam = factory.Faker("word")

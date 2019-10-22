@@ -29,6 +29,12 @@ class Klant(APIMixin, models.Model):
         max_length=100, choices=KlantType.choices, help_text="Type van de `betrokkene`."
     )
 
+    @property
+    def betrokkene_identificatie(self):
+        if hasattr(self, self.betrokkene_type):
+            return getattr(self, self.betrokkene_type)
+        return None
+
 
 class ContactMoment(APIMixin, models.Model):
     uuid = models.UUIDField(
@@ -71,7 +77,9 @@ class ContactMoment(APIMixin, models.Model):
 
 # Klant models
 class NatuurlijkPersoon(models.Model):
-    klant = models.OneToOneField(Klant, on_delete=models.CASCADE)
+    klant = models.OneToOneField(
+        Klant, on_delete=models.CASCADE, related_name="natuurlijk_persoon"
+    )
 
     inp_bsn = BSNField(
         blank=True,

@@ -4,8 +4,9 @@ from django.db import transaction
 from django.utils.translation import ugettext_lazy as _
 
 from rest_framework import serializers
-from vng_api_common.serializers import add_choice_values_help_text
 from vng_api_common.polymorphism import Discriminator, PolymorphicSerializer
+from vng_api_common.serializers import add_choice_values_help_text
+from vng_api_common.validators import IsImmutableValidator
 
 from kcc.datamodel.constants import GeslachtsAanduiding, KlantType
 from kcc.datamodel.models import (
@@ -90,6 +91,35 @@ class NatuurlijkPersoonSerializer(serializers.ModelSerializer):
         if sub_verblijf_buitenland_data:
             sub_verblijf_buitenland_data["natuurlijkpersoon"] = natuurlijkpersoon
             SubVerblijfBuitenlandSerializer().create(sub_verblijf_buitenland_data)
+
+        return natuurlijkpersoon
+
+    def update(self, instance, validated_data):
+        verblijfsadres_data = validated_data.pop("verblijfsadres", None)
+        sub_verblijf_buitenland_data = validated_data.pop(
+            "sub_verblijf_buitenland", None
+        )
+        natuurlijkpersoon = super().update(instance, validated_data)
+
+        if verblijfsadres_data:
+            if hasattr(natuurlijkpersoon, "verblijfsadres"):
+                VerblijfsAdresSerializer().update(
+                    natuurlijkpersoon.verblijfsadres, verblijfsadres_data
+                )
+            else:
+                verblijfsadres_data["natuurlijkpersoon"] = natuurlijkpersoon
+                VerblijfsAdresSerializer().create(verblijfsadres_data)
+
+        if sub_verblijf_buitenland_data:
+            if hasattr(natuurlijkpersoon, "sub_verblijf_buitenland"):
+                SubVerblijfBuitenlandSerializer().update(
+                    natuurlijkpersoon.sub_verblijf_buitenland,
+                    sub_verblijf_buitenland_data,
+                )
+            else:
+                sub_verblijf_buitenland_data["natuurlijkpersoon"] = natuurlijkpersoon
+                SubVerblijfBuitenlandSerializer().create(sub_verblijf_buitenland_data)
+
         return natuurlijkpersoon
 
 
@@ -124,6 +154,33 @@ class VestigingSerializer(serializers.ModelSerializer):
             SubVerblijfBuitenlandSerializer().create(sub_verblijf_buitenland_data)
         return vestiging
 
+    def update(self, instance, validated_data):
+        verblijfsadres_data = validated_data.pop("verblijfsadres", None)
+        sub_verblijf_buitenland_data = validated_data.pop(
+            "sub_verblijf_buitenland", None
+        )
+        vestiging = super().update(instance, validated_data)
+
+        if verblijfsadres_data:
+            if hasattr(vestiging, "verblijfsadres"):
+                VerblijfsAdresSerializer().update(
+                    vestiging.verblijfsadres, verblijfsadres_data
+                )
+            else:
+                verblijfsadres_data["vestiging"] = vestiging
+                VerblijfsAdresSerializer().create(verblijfsadres_data)
+
+        if sub_verblijf_buitenland_data:
+            if hasattr(vestiging, "sub_verblijf_buitenland"):
+                SubVerblijfBuitenlandSerializer().update(
+                    vestiging.sub_verblijf_buitenland, sub_verblijf_buitenland_data
+                )
+            else:
+                sub_verblijf_buitenland_data["vestiging"] = vestiging
+                SubVerblijfBuitenlandSerializer().create(sub_verblijf_buitenland_data)
+
+        return vestiging
+
 
 # main models
 class KlantSerializer(PolymorphicSerializer):
@@ -152,6 +209,7 @@ class KlantSerializer(PolymorphicSerializer):
         extra_kwargs = {
             "url": {"lookup_field": "uuid"},
             "betrokkene": {"required": False},
+            "betrokkene_type": {"validators": [IsImmutableValidator()]},
         }
 
     def __init__(self, *args, **kwargs):
@@ -165,6 +223,12 @@ class KlantSerializer(PolymorphicSerializer):
         betrokkene = validated_attrs.get("betrokkene", None)
         betrokkene_identificatie = validated_attrs.get("betrokkene_identificatie", None)
 
+        if self.instance:
+            betrokkene = betrokkene or self.instance.betrokkene
+            betrokkene_identificatie = (
+                betrokkene_identificatie or self.instance.betrokkene_identificatie
+            )
+
         if not betrokkene and not betrokkene_identificatie:
             raise serializers.ValidationError(
                 _("betrokkene or betrokkeneIdentificatie must be provided"),
@@ -172,6 +236,15 @@ class KlantSerializer(PolymorphicSerializer):
             )
 
         return validated_attrs
+
+    def to_internal_value(self, data):
+        """rewrite method to support update"""
+        if self.discriminator.discriminator_field not in data and self.instance:
+            data[self.discriminator.discriminator_field] = getattr(
+                self.instance, self.discriminator.discriminator_field
+            )
+
+        return super().to_internal_value(data)
 
     @transaction.atomic
     def create(self, validated_data):
@@ -185,6 +258,24 @@ class KlantSerializer(PolymorphicSerializer):
             serializer = group_serializer.get_fields()["betrokkene_identificatie"]
             group_data["klant"] = klant
             serializer.create(group_data)
+
+        return klant
+
+    @transaction.atomic
+    def update(self, instance, validated_data):
+        group_data = validated_data.pop("betrokkene_identificatie", None)
+        klant = super().update(instance, validated_data)
+        betrokkene_type = validated_data.get("betrokkene_type", klant.betrokkene_type)
+
+        if group_data:
+            group_serializer = self.discriminator.mapping[betrokkene_type]
+            serializer = group_serializer.get_fields()["betrokkene_identificatie"]
+            group_instance = klant.betrokkene_identificatie
+            if group_instance:
+                serializer.update(group_instance, group_data)
+            else:
+                group_data["klant"] = klant
+                serializer.create(group_data)
 
         return klant
 
