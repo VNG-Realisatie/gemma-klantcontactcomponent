@@ -313,3 +313,5 @@ if SENTRY_DSN:
             }
         }
     )
+
+IS_HTTPS = os.getenv('IS_HTTPS', '1').lower() in ['true', '1', 'yes']

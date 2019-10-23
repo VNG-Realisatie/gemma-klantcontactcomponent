@@ -85,6 +85,7 @@ warnings.filterwarnings(
     r"django\.db\.models\.fields",
 )
 
+IS_HTTPS = False
 
 # Override settings with local settings.
 try:
