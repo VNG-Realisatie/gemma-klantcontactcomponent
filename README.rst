@@ -7,7 +7,7 @@ Klantcontactcomponent
 :Keywords: zaken, zaakgericht werken, GEMMA, KCC
 :PythonVersion: 3.6
 
-|build-status|
+|build-status| |black|
 
 Referentieimplementatie van de klantcontactcomponent (KCC).
 
@@ -22,9 +22,6 @@ Deze referentieimplementatie toont aan dat de API specificatie voor de
 klantcontactcomponent (hierna KCC) implementeerbaar is, en vormt een
 voorbeeld voor andere implementaties indien ergens twijfel bestaat.
 
-Deze component heeft ook een `testomgeving`_ waar leveranciers tegenaan kunnen
-testen.
-
 Documentatie
 ============
 
@@ -35,23 +32,6 @@ Indien je actief gaat ontwikkelen aan deze component raden we aan om niet van
 Docker gebruik te maken. Indien je deze component als black-box wil gebruiken,
 raden we aan om net wel van Docker gebruik te maken.
 
-Referenties
-===========
-
-* `Issues <https://github.com/VNG-Realisatie/gemma-klantcontactcomponent/issues>`_
-* `Code <https://github.com/VNG-Realisatie/gemma-klantcontactcomponent>`_
-
-
-.. |build-status| image:: http://jenkins.nlx.io/buildStatus/icon?job=gemma-klantcontactcomponent-stable
-    :alt: Build status
-    :target: http://jenkins.nlx.io/job/gemma-klantcontactcomponent-stable
-
-.. |requirements| image:: https://requires.io/github/VNG-Realisatie/gemma-klantcontactcomponent/requirements.svg?branch=master
-     :target: https://requires.io/github/VNG-Realisatie/gemma-klantcontactcomponent/requirements/?branch=master
-     :alt: Requirements status
-
-.. _testomgeving: https://ref.tst.vng.cloud/ABBREVIATION/
-
 Licentie
 ========
 
@@ -60,3 +40,11 @@ Copyright © VNG Realisatie 2019
 Licensed under the EUPL_
 
 .. _EUPL: LICENCE.md
+.. _Maykin Media B.V.: https://www.maykinmedia.nl
+
+.. |build-status| image:: https://travis-ci.org/VNG-Realisatie/gemma-klantcontactcomponent.svg?branch=master
+    :alt: Build status
+    :target: https://travis-ci.org/VNG-Realisatie/gemma-klantcontactcomponent
+
+.. |black| image:: https://img.shields.io/badge/code%20style-black-000000.svg
+    :target: https://github.com/psf/black
