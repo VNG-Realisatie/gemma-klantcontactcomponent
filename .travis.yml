@@ -23,9 +23,24 @@ install:
   - npm ci
   - npm run build
 
-script:
-  - python src/manage.py collectstatic --noinput --link
-  - coverage run src/manage.py test src
+jobs:
+  include:
+    # Run jobs in parallel in stage Tests
+    - stage: Tests
+      name: "Django tests"
+      script:
+        - python src/manage.py collectstatic --noinput --link
+        - coverage run src/manage.py test src
+
+    - name: isort
+      install:
+        - pip install isort
+      script: isort --recursive --check-only --diff .
+
+    - name: black
+      install:
+        - pip install black
+      script: black --check src
 
 after_success:
   - codecov
