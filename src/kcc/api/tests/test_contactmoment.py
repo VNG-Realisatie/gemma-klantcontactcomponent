@@ -10,8 +10,10 @@ from kcc.datamodel.constants import InitiatiefNemer
 from kcc.datamodel.models import ContactMoment
 from kcc.datamodel.tests.factories import ContactMomentFactory, KlantFactory
 
+from .mixins import ContactMomentSyncMixin
 
-class ContactMomentTests(JWTAuthMixin, APITestCase):
+
+class ContactMomentTests(ContactMomentSyncMixin, JWTAuthMixin, APITestCase):
     heeft_alle_autorisaties = True
 
     def test_list_contactmomenten(self):
@@ -102,3 +104,45 @@ class ContactMomentTests(JWTAuthMixin, APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(ContactMoment.objects.count(), 0)
+
+
+# from vng_api_common.models import APICredential
+# from django.contrib.sites.models import Site
+#
+#
+# class SignalsTests(JWTAuthMixin, APITestCase):
+#     heeft_alle_autorisaties = True
+#
+#     def test_create_contactmoment(self):
+#         APICredential.objects.create(
+#             api_root='http://127.0.0.1:8000/api/v1/',
+#             label='zrc',
+#             client_id='demo',
+#             secret='demo',
+#             user_id='demo',
+#             user_representation='demo',
+#         )
+#         site = Site.objects.get_current()
+#         site.domain='testserver'
+#         site.save()
+#
+#         klant = KlantFactory.create()
+#         klant_url = reverse(klant)
+#         list_url = reverse(ContactMoment)
+#         data = {
+#             "klant": klant_url,
+#             "zaak": "http://127.0.0.1:8000/api/v1/zaken/982bf995-2ce7-4b28-bf99-7bfddcfbb280",
+#             "kanaal": "telephone",
+#             "tekst": "some text",
+#             "initiatiefnemer": InitiatiefNemer.gemeente,
+#         }
+#
+#         response = self.client.post(list_url, data)
+#
+#         print(response)
+#         print('data=', response.json())
+#
+#         contactmoment = ContactMoment.objects.get()
+#
+#         print('zaakcontactmoment=', contactmoment._zaakcontactmoment)
+#

@@ -6,8 +6,10 @@ from vng_api_common.tests import AuthCheckMixin, reverse
 
 from kcc.datamodel.tests.factories import ContactMomentFactory, KlantFactory
 
+from .mixins import ContactMomentSyncMixin
 
-class KlantScopeForbiddenTests(AuthCheckMixin, APITestCase):
+
+class KlantScopeForbiddenTests(ContactMomentSyncMixin, AuthCheckMixin, APITestCase):
     def test_cannot_create_klant_without_correct_scope(self):
         url = reverse("klant-list")
         self.assertForbidden(url, method="post")
