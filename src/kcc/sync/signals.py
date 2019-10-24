@@ -8,7 +8,7 @@ from django.dispatch import receiver
 from django.urls import reverse
 
 from vng_api_common.models import APICredential
-from zds_client import Client, extract_params, get_operation_url
+from zds_client import Client
 
 from kcc.datamodel.models import ContactMoment
 
@@ -29,10 +29,10 @@ def sync_create_contactmoment(contactmoment: ContactMoment):
     })
     domain = Site.objects.get_current().domain
     protocol = 'https' if settings.IS_HTTPS else 'http'
-    contact_url = f'{protocol}://{domain}{path}'
+    contactmoment_url = f'{protocol}://{domain}{path}'
 
     logger.info("Zaak object: %s", contactmoment.zaak)
-    logger.info("ContactMoment object: %s", contact_url)
+    logger.info("ContactMoment object: %s", contactmoment_url)
 
     # figure out which remote resource we need to interact with
     client = Client.from_url(contactmoment.zaak)
@@ -41,7 +41,7 @@ def sync_create_contactmoment(contactmoment: ContactMoment):
     try:
         response = client.create(
             "zaakcontactmoment",
-            {'contactmoment': contactmoment, 'zaak': contactmoment.zaak}
+            {'contactmoment': contactmoment_url, 'zaak': contactmoment.zaak}
         )
     except Exception as exc:
         logger.error(f"Could not create ZaakContactMoment", exc_info=1)
