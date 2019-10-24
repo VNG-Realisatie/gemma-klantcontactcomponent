@@ -20,7 +20,7 @@ class Klant(APIMixin, models.Model):
     voornaam = models.CharField(max_length=200)
     achternaam = models.CharField(max_length=200)
     adres = models.CharField(max_length=1000, blank=True)
-    telefonnummer = models.CharField(max_length=20, blank=True)
+    telefoonnummer = models.CharField(max_length=20, blank=True)
     emailadres = models.EmailField(blank=True)
     betrokkene = models.URLField(
         help_text="URL-referentie naar een betrokkene", max_length=1000, blank=True
