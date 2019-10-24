@@ -2,7 +2,7 @@ from django.apps import AppConfig
 
 
 class SyncConfig(AppConfig):
-    name = 'kcc.sync'
+    name = "kcc.sync"
 
     def ready(self):
         from . import signals  # noqa

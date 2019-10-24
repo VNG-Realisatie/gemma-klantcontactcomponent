@@ -58,7 +58,7 @@ class ContactMoment(APIMixin, models.Model):
         help_text=_("De partij die het contact heeft geïnitieerd."),
     )
     _zaakcontactmoment = models.URLField(
-        'zaakcontactmoment', blank=True,
-        help_text="Link to the related object in the ZRC API"
+        "zaakcontactmoment",
+        blank=True,
+        help_text="Link to the related object in the ZRC API",
     )
-

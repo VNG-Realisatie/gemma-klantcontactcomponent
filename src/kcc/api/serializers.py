@@ -41,7 +41,7 @@ class ContactMomentSerializer(serializers.HyperlinkedModelSerializer):
         }
 
     def create(self, validated_data):
-        zaak = validated_data.pop('zaak', '')
+        zaak = validated_data.pop("zaak", "")
         contactmoment = super().create(validated_data)
         try:
             contactmoment.zaak = zaak
@@ -50,8 +50,7 @@ class ContactMomentSerializer(serializers.HyperlinkedModelSerializer):
             contactmoment.delete()
             raise serializers.ValidationError(
                 {api_settings.NON_FIELD_ERRORS_KEY: sync_error.args[0]},
-                code='sync-with-zrc'
+                code="sync-with-zrc",
             ) from sync_error
         else:
             return contactmoment
-
