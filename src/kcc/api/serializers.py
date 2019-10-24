@@ -201,7 +201,7 @@ class KlantSerializer(PolymorphicSerializer):
             "voornaam",
             "achternaam",
             "adres",
-            "telefonnummer",
+            "telefoonnummer",
             "emailadres",
             "betrokkene",
             "betrokkene_type",

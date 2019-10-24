@@ -28,7 +28,7 @@ Objecttype op [GEMMA Online](https://www.gemmaonline.nl/index.php/Rgbz_1.0/doc/o
 | voornaam |  | string | ja | C​R​U​D |
 | achternaam |  | string | ja | C​R​U​D |
 | adres |  | string | nee | C​R​U​D |
-| telefonnummer |  | string | nee | C​R​U​D |
+| telefoonnummer |  | string | nee | C​R​U​D |
 | emailadres |  | string | nee | C​R​U​D |
 | betrokkene | URL-referentie naar een betrokkene | string | nee | C​R​U​D |
 | betrokkeneType | Type van de `betrokkene`.

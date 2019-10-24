@@ -1918,8 +1918,8 @@ components:
           title: Adres
           type: string
           maxLength: 1000
-        telefonnummer:
-          title: Telefonnummer
+        telefoonnummer:
+          title: Telefoonnummer
           type: string
           maxLength: 20
         emailadres:
