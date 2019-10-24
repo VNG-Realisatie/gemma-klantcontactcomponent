@@ -296,7 +296,7 @@ class KlantTests(JWTAuthMixin, APITestCase):
         self.assertEqual(buitenland.lnd_landcode, "ABCD")
         self.assertEqual(buitenland.lnd_landnaam, "Hollywood")
 
-    def test_update_klant_url(self):
+    def test_partial_update_klant_url(self):
         klant = KlantFactory.create(betrokkene=BETROKKENE, voornaam="old name")
         detail_url = reverse(klant)
 
@@ -308,7 +308,7 @@ class KlantTests(JWTAuthMixin, APITestCase):
 
         self.assertEqual(klant.voornaam, "new name")
 
-    def test_update_klant_naturlijkpersoon(self):
+    def test_partial_update_klant_naturlijkpersoon(self):
         klant = KlantFactory.create(
             betrokkene_type=KlantType.natuurlijk_persoon, betrokkene=BETROKKENE
         )
@@ -354,7 +354,7 @@ class KlantTests(JWTAuthMixin, APITestCase):
         buitenland.refresh_from_db()
         self.assertEqual(buitenland.lnd_landnaam, "New land")
 
-    def test_update_klant_vestiging(self):
+    def test_partial_update_klant_vestiging(self):
         klant = KlantFactory.create(betrokkene_type=KlantType.vestiging)
         detail_url = reverse(klant)
 
@@ -402,7 +402,7 @@ class KlantTests(JWTAuthMixin, APITestCase):
         self.assertEqual(buitenland.lnd_landcode, "ABCD")
         self.assertEqual(buitenland.lnd_landnaam, "Hollywood")
 
-    def test_update_klant_betrokkene_type_fail(self):
+    def test_partial_update_klant_betrokkene_type_fail(self):
         klant = KlantFactory.create(
             betrokkene=BETROKKENE, betrokkene_type=KlantType.natuurlijk_persoon
         )
@@ -416,6 +416,121 @@ class KlantTests(JWTAuthMixin, APITestCase):
 
         validation_error = get_validation_errors(response, "betrokkeneType")
         self.assertEqual(validation_error["code"], "wijzigen-niet-toegelaten")
+
+    def test_update_klant_url(self):
+        klant = KlantFactory.create(betrokkene=BETROKKENE, voornaam="old name")
+        detail_url = reverse(klant)
+        data = self.client.get(detail_url).json()
+        del data["url"]
+        del data["betrokkeneIdentificatie"]
+        data["voornaam"] = "new name"
+
+        response = self.client.put(detail_url, data)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        klant.refresh_from_db()
+
+        self.assertEqual(klant.voornaam, "new name")
+
+    def test_update_klant_naturlijkpersoon(self):
+        klant = KlantFactory.create(
+            betrokkene_type=KlantType.natuurlijk_persoon, betrokkene=BETROKKENE
+        )
+        natuurlijkpersoon = NatuurlijkPersoonFactory.create(klant=klant)
+        adres = AdresFactory.create(natuurlijkpersoon=natuurlijkpersoon)
+        buitenland = SubVerblijfBuitenlandFactory.create(
+            natuurlijkpersoon=natuurlijkpersoon
+        )
+        detail_url = reverse(klant)
+        data = self.client.get(detail_url).json()
+        del data["url"]
+        data.update(
+            {
+                "voornaam": "New name",
+                "betrokkene": "",
+                "betrokkeneIdentificatie": {
+                    "geslachtsnaam": "New name2",
+                    "verblijfsadres": {
+                        "aoaIdentificatie": "1234",
+                        "wplWoonplaatsNaam": "New place",
+                        "gorOpenbareRuimteNaam": "New place2",
+                        "aoaHuisnummer": 1,
+                    },
+                    "subVerblijfBuitenland": {
+                        "lndLandcode": "XXXX",
+                        "lndLandnaam": "New land",
+                    },
+                },
+            }
+        )
+
+        response = self.client.put(detail_url, data)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        klant.refresh_from_db()
+        self.assertEqual(klant.voornaam, "New name")
+        self.assertEqual(klant.betrokkene, "")
+
+        natuurlijkpersoon.refresh_from_db()
+        self.assertEqual(natuurlijkpersoon.geslachtsnaam, "New name2")
+
+        adres.refresh_from_db()
+        self.assertEqual(adres.wpl_woonplaats_naam, "New place")
+
+        buitenland.refresh_from_db()
+        self.assertEqual(buitenland.lnd_landnaam, "New land")
+
+    def test_update_klant_vestiging(self):
+        klant = KlantFactory.create(betrokkene_type=KlantType.vestiging)
+        detail_url = reverse(klant)
+        data = self.client.get(detail_url).json()
+        del data["url"]
+        data.update(
+            {
+                "betrokkene": "",
+                "betrokkeneIdentificatie": {
+                    "vestigingsNummer": "123",
+                    "handelsnaam": ["WB"],
+                    "verblijfsadres": {
+                        "aoaIdentificatie": "1234",
+                        "wplWoonplaatsNaam": "East Meaganchester",
+                        "gorOpenbareRuimteNaam": "New Amsterdam",
+                        "aoaHuisnummer": 21,
+                    },
+                    "subVerblijfBuitenland": {
+                        "lndLandcode": "ABCD",
+                        "lndLandnaam": "Hollywood",
+                    },
+                },
+            }
+        )
+
+        response = self.client.put(detail_url, data)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        klant.refresh_from_db()
+
+        self.assertEqual(klant.betrokkene, "")
+
+        vestiging = klant.vestiging
+
+        self.assertEqual(vestiging.vestigings_nummer, "123")
+        self.assertEqual(vestiging.handelsnaam, ["WB"])
+
+        adres = vestiging.verblijfsadres
+
+        self.assertEqual(adres.aoa_identificatie, "1234")
+        self.assertEqual(adres.wpl_woonplaats_naam, "East Meaganchester")
+        self.assertEqual(adres.gor_openbare_ruimte_naam, "New Amsterdam")
+        self.assertEqual(adres.aoa_huisnummer, 21)
+
+        buitenland = vestiging.sub_verblijf_buitenland
+
+        self.assertEqual(buitenland.lnd_landcode, "ABCD")
+        self.assertEqual(buitenland.lnd_landnaam, "Hollywood")
 
     def test_destroy_klant(self):
         klant = KlantFactory.create()
