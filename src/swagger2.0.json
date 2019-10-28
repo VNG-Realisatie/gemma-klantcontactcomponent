@@ -2285,7 +2285,8 @@
         "Klant": {
             "required": [
                 "voornaam",
-                "achternaam"
+                "achternaam",
+                "betrokkeneType"
             ],
             "type": "object",
             "properties": {
@@ -2315,8 +2316,8 @@
                     "type": "string",
                     "maxLength": 1000
                 },
-                "telefonnummer": {
-                    "title": "Telefonnummer",
+                "telefoonnummer": {
+                    "title": "Telefoonnummer",
                     "type": "string",
                     "maxLength": 20
                 },
@@ -2325,8 +2326,256 @@
                     "type": "string",
                     "format": "email",
                     "maxLength": 254
+                },
+                "betrokkene": {
+                    "title": "Betrokkene",
+                    "description": "URL-referentie naar een betrokkene",
+                    "type": "string",
+                    "format": "uri",
+                    "maxLength": 1000
+                },
+                "betrokkeneType": {
+                    "title": "Betrokkene type",
+                    "description": "Type van de `betrokkene`.\n\nUitleg bij mogelijke waarden:\n\n* `natuurlijk_persoon` - Natuurlijk persoon\n* `vestiging` - Vestiging",
+                    "type": "string",
+                    "enum": [
+                        "natuurlijk_persoon",
+                        "vestiging"
+                    ]
+                }
+            },
+            "discriminator": "betrokkeneType"
+        },
+        "VerblijfsAdres": {
+            "title": "Verblijfsadres",
+            "required": [
+                "aoaIdentificatie",
+                "wplWoonplaatsNaam",
+                "gorOpenbareRuimteNaam",
+                "aoaHuisnummer"
+            ],
+            "type": "object",
+            "properties": {
+                "aoaIdentificatie": {
+                    "title": "Aoa identificatie",
+                    "description": "De unieke identificatie van het OBJECT",
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 1
+                },
+                "wplWoonplaatsNaam": {
+                    "title": "Wpl woonplaats naam",
+                    "type": "string",
+                    "maxLength": 80,
+                    "minLength": 1
+                },
+                "gorOpenbareRuimteNaam": {
+                    "title": "Gor openbare ruimte naam",
+                    "description": "Een door het bevoegde gemeentelijke orgaan aan een OPENBARE RUIMTE toegekende benaming",
+                    "type": "string",
+                    "maxLength": 80,
+                    "minLength": 1
+                },
+                "aoaPostcode": {
+                    "title": "Aoa postcode",
+                    "type": "string",
+                    "maxLength": 7
+                },
+                "aoaHuisnummer": {
+                    "title": "Aoa huisnummer",
+                    "type": "integer",
+                    "maximum": 99999,
+                    "minimum": 0
+                },
+                "aoaHuisletter": {
+                    "title": "Aoa huisletter",
+                    "type": "string",
+                    "maxLength": 1
+                },
+                "aoaHuisnummertoevoeging": {
+                    "title": "Aoa huisnummertoevoeging",
+                    "type": "string",
+                    "maxLength": 4
+                },
+                "inpLocatiebeschrijving": {
+                    "title": "Inp locatiebeschrijving",
+                    "type": "string",
+                    "maxLength": 1000
                 }
             }
+        },
+        "SubVerblijfBuitenland": {
+            "title": "Sub verblijf buitenland",
+            "required": [
+                "lndLandcode",
+                "lndLandnaam"
+            ],
+            "type": "object",
+            "properties": {
+                "lndLandcode": {
+                    "title": "Lnd landcode",
+                    "description": "De code, behorende bij de landnaam, zoals opgenomen in de Land/Gebied-tabel van de BRP.",
+                    "type": "string",
+                    "maxLength": 4,
+                    "minLength": 1
+                },
+                "lndLandnaam": {
+                    "title": "Lnd landnaam",
+                    "description": "De naam van het land, zoals opgenomen in de Land/Gebied-tabel van de BRP.",
+                    "type": "string",
+                    "maxLength": 40,
+                    "minLength": 1
+                },
+                "subAdresBuitenland1": {
+                    "title": "Sub adres buitenland 1",
+                    "type": "string",
+                    "maxLength": 35
+                },
+                "subAdresBuitenland2": {
+                    "title": "Sub adres buitenland 2",
+                    "type": "string",
+                    "maxLength": 35
+                },
+                "subAdresBuitenland3": {
+                    "title": "Sub adres buitenland 3",
+                    "type": "string",
+                    "maxLength": 35
+                }
+            }
+        },
+        "NatuurlijkPersoon": {
+            "title": "betrokkene_identificatie",
+            "type": "object",
+            "properties": {
+                "inpBsn": {
+                    "title": "Inp bsn",
+                    "description": "Het burgerservicenummer, bedoeld in artikel 1.1 van de Wet algemene bepalingen burgerservicenummer.",
+                    "type": "string",
+                    "maxLength": 9
+                },
+                "anpIdentificatie": {
+                    "title": "Anp identificatie",
+                    "description": "Het door de gemeente uitgegeven unieke nummer voor een ANDER NATUURLIJK PERSOON",
+                    "type": "string",
+                    "maxLength": 17
+                },
+                "inpANummer": {
+                    "title": "Inp a nummer",
+                    "description": "Het administratienummer van de persoon, bedoeld in de Wet BRP",
+                    "type": "string",
+                    "pattern": "^[1-9][0-9]{9}$",
+                    "maxLength": 10
+                },
+                "geslachtsnaam": {
+                    "title": "Geslachtsnaam",
+                    "description": "De stam van de geslachtsnaam.",
+                    "type": "string",
+                    "maxLength": 200
+                },
+                "voorvoegselGeslachtsnaam": {
+                    "title": "Voorvoegsel geslachtsnaam",
+                    "type": "string",
+                    "maxLength": 80
+                },
+                "voorletters": {
+                    "title": "Voorletters",
+                    "description": "De verzameling letters die gevormd wordt door de eerste letter van alle in volgorde voorkomende voornamen.",
+                    "type": "string",
+                    "maxLength": 20
+                },
+                "voornamen": {
+                    "title": "Voornamen",
+                    "description": "Voornamen bij de naam die de persoon wenst te voeren.",
+                    "type": "string",
+                    "maxLength": 200
+                },
+                "geslachtsaanduiding": {
+                    "title": "Geslachtsaanduiding",
+                    "description": "Een aanduiding die aangeeft of de persoon een man of een vrouw is, of dat het geslacht nog onbekend is.\n\nUitleg bij mogelijke waarden:\n\n* `m` - Man\n* `v` - Vrouw\n* `o` - Onbekend",
+                    "type": "string",
+                    "enum": [
+                        "m",
+                        "v",
+                        "o"
+                    ]
+                },
+                "geboortedatum": {
+                    "title": "Geboortedatum",
+                    "type": "string",
+                    "maxLength": 18
+                },
+                "verblijfsadres": {
+                    "$ref": "#/definitions/VerblijfsAdres"
+                },
+                "subVerblijfBuitenland": {
+                    "$ref": "#/definitions/SubVerblijfBuitenland"
+                }
+            }
+        },
+        "betrokkene_identificatie_NatuurlijkPersoon": {
+            "type": "object",
+            "properties": {
+                "betrokkeneIdentificatie": {
+                    "$ref": "#/definitions/NatuurlijkPersoon"
+                }
+            }
+        },
+        "natuurlijk_persoon": {
+            "type": "object",
+            "allOf": [
+                {
+                    "$ref": "#/definitions/Klant"
+                },
+                {
+                    "$ref": "#/definitions/betrokkene_identificatie_NatuurlijkPersoon"
+                }
+            ]
+        },
+        "Vestiging": {
+            "title": "betrokkene_identificatie",
+            "type": "object",
+            "properties": {
+                "vestigingsNummer": {
+                    "title": "Vestigings nummer",
+                    "description": "Een korte unieke aanduiding van de Vestiging.",
+                    "type": "string",
+                    "maxLength": 24
+                },
+                "handelsnaam": {
+                    "description": "De naam van de vestiging waaronder gehandeld wordt.",
+                    "type": "array",
+                    "items": {
+                        "title": "Handelsnaam",
+                        "type": "string",
+                        "maxLength": 625
+                    }
+                },
+                "verblijfsadres": {
+                    "$ref": "#/definitions/VerblijfsAdres"
+                },
+                "subVerblijfBuitenland": {
+                    "$ref": "#/definitions/SubVerblijfBuitenland"
+                }
+            }
+        },
+        "betrokkene_identificatie_Vestiging": {
+            "type": "object",
+            "properties": {
+                "betrokkeneIdentificatie": {
+                    "$ref": "#/definitions/Vestiging"
+                }
+            }
+        },
+        "vestiging": {
+            "type": "object",
+            "allOf": [
+                {
+                    "$ref": "#/definitions/Klant"
+                },
+                {
+                    "$ref": "#/definitions/betrokkene_identificatie_Vestiging"
+                }
+            ]
         }
     }
 }
