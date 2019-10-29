@@ -1,6 +1,8 @@
 import logging
 
 from rest_framework import mixins, viewsets
+from rest_framework.serializers import ValidationError
+from rest_framework.settings import api_settings
 from vng_api_common.permissions import AuthScopesRequired
 from vng_api_common.viewsets import CheckQueryParamsMixin
 
@@ -18,6 +20,7 @@ from .serializers import (
     KlantSerializer,
     ObjectContactMomentSerializer,
 )
+from .validators import ObjectContactMomentDestroyValidator
 
 logger = logging.getLogger(__name__)
 
@@ -174,3 +177,16 @@ class ObjectContactMomentViewSet(
         "create": SCOPE_KLANTEN_AANMAKEN,
         "destroy": SCOPE_KLANTEN_ALLES_VERWIJDEREN,
     }
+
+    def perform_destroy(self, instance):
+        # destroy is only allowed if the remote relation does no longer exist, so check for that
+        validator = ObjectContactMomentDestroyValidator()
+
+        try:
+            validator(instance)
+        except ValidationError as exc:
+            raise ValidationError(
+                {api_settings.NON_FIELD_ERRORS_KEY: exc}, code=exc.detail[0].code
+            )
+        else:
+            super().perform_destroy(instance)
