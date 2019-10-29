@@ -283,15 +283,7 @@ class KlantSerializer(PolymorphicSerializer):
 class ContactMomentSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = ContactMoment
-        fields = (
-            "url",
-            "klant",
-            "zaak",
-            "datumtijd",
-            "kanaal",
-            "tekst",
-            "initiatiefnemer",
-        )
+        fields = ("url", "klant", "datumtijd", "kanaal", "tekst", "initiatiefnemer")
         extra_kwargs = {
             "url": {"lookup_field": "uuid"},
             "klant": {"lookup_field": "uuid"},

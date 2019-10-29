@@ -17,7 +17,7 @@ class KlantAdmin(admin.ModelAdmin):
 
 @admin.register(ContactMoment)
 class ContactMomentAdmin(admin.ModelAdmin):
-    list_display = ["klant", "zaak", "kanaal"]
+    list_display = ["klant", "kanaal"]
 
 
 # klant models

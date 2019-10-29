@@ -46,7 +46,6 @@ class ContactMomentTests(JWTAuthMixin, APITestCase):
             {
                 "url": f"http://testserver{detail_url}",
                 "klant": f"http://testserver{klant_url}",
-                "zaak": contactmoment.zaak,
                 "datumtijd": "2019-01-01T00:00:00Z",
                 "kanaal": contactmoment.kanaal,
                 "tekst": contactmoment.tekst,
@@ -60,7 +59,6 @@ class ContactMomentTests(JWTAuthMixin, APITestCase):
         list_url = reverse(ContactMoment)
         data = {
             "klant": klant_url,
-            "zaak": "http://www.example.com/zrc/api/v1/zaken/1",
             "kanaal": "telephone",
             "tekst": "some text",
             "initiatiefnemer": InitiatiefNemer.gemeente,
@@ -73,9 +71,6 @@ class ContactMomentTests(JWTAuthMixin, APITestCase):
         contactmoment = ContactMoment.objects.get()
 
         self.assertEqual(contactmoment.klant, klant)
-        self.assertEqual(
-            contactmoment.zaak, "http://www.example.com/zrc/api/v1/zaken/1"
-        )
         self.assertEqual(contactmoment.kanaal, "telephone")
         self.assertEqual(contactmoment.tekst, "some text")
         self.assertEqual(contactmoment.initiatiefnemer, InitiatiefNemer.gemeente)

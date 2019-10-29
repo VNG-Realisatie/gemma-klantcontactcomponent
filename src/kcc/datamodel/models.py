@@ -47,11 +47,6 @@ class ContactMoment(APIMixin, models.Model):
         blank=True,
         help_text=_("URL-referentie naar een KLANT (in de KCC API)"),
     )
-    zaak = models.URLField(
-        "zaak",
-        blank=True,  # een besluit kan niet bij een zaak horen (zoals raadsbesluit)
-        help_text=_("URL-referentie naar de ZAAK (in de Zaken API)"),
-    )
     datumtijd = models.DateTimeField(
         default=timezone.now,
         help_text=_("De datum en het tijdstip waarop het CONTACTMOMENT begint"),

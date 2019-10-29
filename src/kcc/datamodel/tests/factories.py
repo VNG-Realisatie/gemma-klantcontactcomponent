@@ -17,7 +17,6 @@ class KlantFactory(factory.django.DjangoModelFactory):
 
 class ContactMomentFactory(factory.django.DjangoModelFactory):
     klant = factory.SubFactory(KlantFactory)
-    zaak = factory.Faker("url")
     kanaal = factory.Faker("word")
     initiatiefnemer = factory.fuzzy.FuzzyChoice(InitiatiefNemer.values)
 
