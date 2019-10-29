@@ -14,6 +14,7 @@ from kcc.datamodel.models import (
     ContactMoment,
     Klant,
     NatuurlijkPersoon,
+    ObjectContactMoment,
     SubVerblijfBuitenland,
     Vestiging,
 )
@@ -287,4 +288,14 @@ class ContactMomentSerializer(serializers.HyperlinkedModelSerializer):
         extra_kwargs = {
             "url": {"lookup_field": "uuid"},
             "klant": {"lookup_field": "uuid"},
+        }
+
+
+class ObjectContactMomentSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = ObjectContactMoment
+        fields = ("url", "contactmoment", "object", "object_type")
+        extra_kwargs = {
+            "url": {"lookup_field": "uuid"},
+            "contactmoment": {"lookup_field": "uuid"},
         }

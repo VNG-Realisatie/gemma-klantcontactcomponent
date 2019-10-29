@@ -17,3 +17,7 @@ class GeslachtsAanduiding(DjangoChoices):
 class KlantType(DjangoChoices):
     natuurlijk_persoon = ChoiceItem("natuurlijk_persoon", "Natuurlijk persoon")
     vestiging = ChoiceItem("vestiging", "Vestiging")
+
+
+class ObjectTypes(DjangoChoices):
+    zaak = ChoiceItem("zaak", _("Zaak"))
