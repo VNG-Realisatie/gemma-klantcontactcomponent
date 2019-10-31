@@ -19,7 +19,7 @@ from kcc.datamodel.models import (
     Vestiging,
 )
 
-from .validators import ObjectInformatieObjectCreateValidator
+from .validators import ObjectContactMomentCreateValidator
 
 logger = logging.getLogger(__name__)
 
@@ -306,7 +306,7 @@ class ObjectContactMomentSerializer(serializers.HyperlinkedModelSerializer):
             "object": {"validators": [IsImmutableValidator()],},
             "object_type": {"validators": [IsImmutableValidator()]},
         }
-        validators = [ObjectInformatieObjectCreateValidator()]
+        validators = [ObjectContactMomentCreateValidator()]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
