@@ -50,7 +50,7 @@ class ObjectContactMomentDestroyValidator:
             raise serializers.ValidationError(self.message, code=self.code)
 
 
-class ObjectInformatieObjectCreateValidator:
+class ObjectContactMomentCreateValidator:
     """
     Validate that the CONTACTMOMENT is already linked to the OBJECT in the remote component.
     """
