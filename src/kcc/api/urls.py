@@ -4,11 +4,12 @@ from django.urls import include, path
 from vng_api_common import routers
 from vng_api_common.schema import SchemaView
 
-from .viewsets import ContactMomentViewSet, KlantViewSet
+from .viewsets import ContactMomentViewSet, KlantViewSet, ObjectContactMomentViewSet
 
 router = routers.DefaultRouter()
 router.register("klanten", KlantViewSet)
 router.register("contactmomenten", ContactMomentViewSet)
+router.register("objectcontactmomenten", ObjectContactMomentViewSet)
 
 
 # TODO: the EndpointEnumerator seems to choke on path and re_path

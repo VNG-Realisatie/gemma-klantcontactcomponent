@@ -5,6 +5,7 @@ from .models import (
     ContactMoment,
     Klant,
     NatuurlijkPersoon,
+    ObjectContactMoment,
     SubVerblijfBuitenland,
     Vestiging,
 )
@@ -17,7 +18,12 @@ class KlantAdmin(admin.ModelAdmin):
 
 @admin.register(ContactMoment)
 class ContactMomentAdmin(admin.ModelAdmin):
-    list_display = ["klant", "zaak", "kanaal"]
+    list_display = ["klant", "kanaal"]
+
+
+@admin.register(ObjectContactMoment)
+class ObjectContactMomentAdmin(admin.ModelAdmin):
+    list_display = ["contactmoment", "object"]
 
 
 # klant models

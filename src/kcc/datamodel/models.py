@@ -10,7 +10,7 @@ from django.utils.translation import ugettext_lazy as _
 from vng_api_common.fields import BSNField
 from vng_api_common.models import APIMixin
 
-from .constants import GeslachtsAanduiding, InitiatiefNemer, KlantType
+from .constants import GeslachtsAanduiding, InitiatiefNemer, KlantType, ObjectTypes
 
 
 class Klant(APIMixin, models.Model):
@@ -29,6 +29,10 @@ class Klant(APIMixin, models.Model):
         max_length=100, choices=KlantType.choices, help_text="Type van de `betrokkene`."
     )
 
+    class Meta:
+        verbose_name = "klant"
+        verbose_name_plural = "klanten"
+
     @property
     def betrokkene_identificatie(self):
         if hasattr(self, self.betrokkene_type):
@@ -46,11 +50,6 @@ class ContactMoment(APIMixin, models.Model):
         null=True,
         blank=True,
         help_text=_("URL-referentie naar een KLANT (in de KCC API)"),
-    )
-    zaak = models.URLField(
-        "zaak",
-        blank=True,  # een besluit kan niet bij een zaak horen (zoals raadsbesluit)
-        help_text=_("URL-referentie naar de ZAAK (in de Zaken API)"),
     )
     datumtijd = models.DateTimeField(
         default=timezone.now,
@@ -73,6 +72,39 @@ class ContactMoment(APIMixin, models.Model):
         choices=InitiatiefNemer.choices,
         help_text=_("De partij die het contact heeft geïnitieerd."),
     )
+
+    class Meta:
+        verbose_name = "contactmoment"
+        verbose_name_plural = "contactmomenten"
+
+
+class ObjectContactMoment(APIMixin, models.Model):
+    """
+    Modelleer een CONTACTMOMENT horend bij een OBJECT.
+    """
+
+    uuid = models.UUIDField(
+        unique=True, default=uuid.uuid4, help_text="Unieke resource identifier (UUID4)"
+    )
+    contactmoment = models.ForeignKey(
+        ContactMoment,
+        on_delete=models.CASCADE,
+        help_text="URL-referentie naar het CONTACTMOMENT.",
+    )
+    object = models.URLField(
+        help_text="URL-referentie naar het gerelateerde OBJECT (in een andere API)."
+    )
+    object_type = models.CharField(
+        "objecttype",
+        max_length=100,
+        choices=ObjectTypes.choices,
+        help_text="Het type van het gerelateerde OBJECT.",
+    )
+
+    class Meta:
+        verbose_name = "object-contactmoment"
+        verbose_name_plural = "object-contactmomenten"
+        unique_together = ("contactmoment", "object")
 
 
 # Klant models

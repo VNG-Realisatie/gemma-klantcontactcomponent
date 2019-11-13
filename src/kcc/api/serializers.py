@@ -8,15 +8,18 @@ from vng_api_common.polymorphism import Discriminator, PolymorphicSerializer
 from vng_api_common.serializers import add_choice_values_help_text
 from vng_api_common.validators import IsImmutableValidator
 
-from kcc.datamodel.constants import GeslachtsAanduiding, KlantType
+from kcc.datamodel.constants import GeslachtsAanduiding, KlantType, ObjectTypes
 from kcc.datamodel.models import (
     Adres,
     ContactMoment,
     Klant,
     NatuurlijkPersoon,
+    ObjectContactMoment,
     SubVerblijfBuitenland,
     Vestiging,
 )
+
+from .validators import ObjectContactMomentCreateValidator
 
 logger = logging.getLogger(__name__)
 
@@ -283,16 +286,33 @@ class KlantSerializer(PolymorphicSerializer):
 class ContactMomentSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = ContactMoment
-        fields = (
-            "url",
-            "klant",
-            "zaak",
-            "datumtijd",
-            "kanaal",
-            "tekst",
-            "initiatiefnemer",
-        )
+        fields = ("url", "klant", "datumtijd", "kanaal", "tekst", "initiatiefnemer")
         extra_kwargs = {
             "url": {"lookup_field": "uuid"},
             "klant": {"lookup_field": "uuid"},
         }
+
+
+class ObjectContactMomentSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = ObjectContactMoment
+        fields = ("url", "contactmoment", "object", "object_type")
+        extra_kwargs = {
+            "url": {"lookup_field": "uuid"},
+            "contactmoment": {
+                "lookup_field": "uuid",
+                "validators": [IsImmutableValidator()],
+            },
+            "object": {"validators": [IsImmutableValidator()],},
+            "object_type": {"validators": [IsImmutableValidator()]},
+        }
+        validators = [ObjectContactMomentCreateValidator()]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        value_display_mapping = add_choice_values_help_text(ObjectTypes)
+        self.fields["object_type"].help_text += f"\n\n{value_display_mapping}"
+
+        if not hasattr(self, "initial_data"):
+            return

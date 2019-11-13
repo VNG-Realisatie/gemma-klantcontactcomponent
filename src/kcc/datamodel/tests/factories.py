@@ -1,6 +1,6 @@
 import factory.fuzzy
 
-from ..constants import InitiatiefNemer, KlantType
+from ..constants import InitiatiefNemer, KlantType, ObjectTypes
 
 
 class KlantFactory(factory.django.DjangoModelFactory):
@@ -17,12 +17,20 @@ class KlantFactory(factory.django.DjangoModelFactory):
 
 class ContactMomentFactory(factory.django.DjangoModelFactory):
     klant = factory.SubFactory(KlantFactory)
-    zaak = factory.Faker("url")
     kanaal = factory.Faker("word")
     initiatiefnemer = factory.fuzzy.FuzzyChoice(InitiatiefNemer.values)
 
     class Meta:
         model = "datamodel.ContactMoment"
+
+
+class ObjectContactMomentFactory(factory.django.DjangoModelFactory):
+    contactmoment = factory.SubFactory(ContactMomentFactory)
+    object_type = factory.fuzzy.FuzzyChoice(ObjectTypes.values)
+    object = factory.Faker("url")
+
+    class Meta:
+        model = "datamodel.ObjectContactMoment"
 
 
 # klant factories
