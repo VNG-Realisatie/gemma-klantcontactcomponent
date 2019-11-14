@@ -316,9 +316,9 @@ class ContactMomentSerializer(serializers.HyperlinkedModelSerializer):
         medewerker_identificatie = validated_attrs.get("medewerker_identificatie", None)
 
         if self.instance:
-            medewerker = medewerker or self.instance.betrokkene
+            medewerker = medewerker or self.instance.medewerker
             medewerker_identificatie = (
-                medewerker_identificatie or self.instance.medewerker_identificatie
+                medewerker_identificatie or getattr(self.instance, 'medewerker_identificatie', None)
             )
 
         if not medewerker and not medewerker_identificatie:
@@ -349,7 +349,7 @@ class ContactMomentSerializer(serializers.HyperlinkedModelSerializer):
                     contactmoment.medewerker_identificatie, medewerker_identificatie_data
                 )
             else:
-                medewerker_identificatie_data["vestiging"] = contactmoment
+                medewerker_identificatie_data["contactmoment"] = contactmoment
                 MedewerkerSerializer().create(medewerker_identificatie_data)
 
         return contactmoment
