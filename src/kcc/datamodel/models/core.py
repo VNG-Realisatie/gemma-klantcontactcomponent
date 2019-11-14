@@ -71,6 +71,9 @@ class ContactMoment(APIMixin, models.Model):
         choices=InitiatiefNemer.choices,
         help_text=_("De partij die het contact heeft geïnitieerd."),
     )
+    medewerker = models.URLField(
+        help_text="URL-referentie naar een medewerker", max_length=1000, blank=True
+    )
 
     class Meta:
         verbose_name = "contactmoment"
