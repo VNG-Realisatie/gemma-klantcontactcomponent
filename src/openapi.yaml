@@ -1,38 +1,15 @@
 openapi: 3.0.0
 info:
-  title: Klanten API
-  description: 'Een API om een klantcontactcomponent (KCC) te benaderen.
-
-
-    **Afhankelijkheden**
-
-
-    Deze API is afhankelijk van:
-
-
-    * Zaken API *(optioneel)*
-
-    * Autorisaties API *(optioneel)*
-
-
-    **Autorisatie**
-
-
-    Deze API vereist autorisatie. Je kan de
-
-    [token-tool](https://zaken-auth.vng.cloud/) gebruiken om JWT-tokens te
-
-    genereren.
-
-
-    **Handige links**
-
-
-    * [Documentatie](https://zaakgerichtwerken.vng.cloud/standaard)
-
-    * [Zaakgericht werken](https://zaakgerichtwerken.vng.cloud)
-
-    '
+  title: Contactmomenten API
+  description: "Een API om een contactmoment component (CMC) te benaderen.\n\nHet\
+    \ CONTACTMOMENT is het kernobject in deze API, waaraan verschillende andere\n\
+    resources gerelateerd zijn. De Contactmomenten API kan zelfstandig of met \nandere\
+    \ API's samen werken om tot volledige functionaliteit te komen.\n\n**Afhankelijkheden**\n\
+    \nDeze API is afhankelijk van:\n\n* Zaken API *(optioneel)*\n* Autorisaties API\
+    \ *(optioneel)*\n\n**Autorisatie**\n\nDeze API vereist autorisatie. Je kan de\n\
+    [token-tool](https://zaken-auth.vng.cloud/) gebruiken om JWT-tokens te\ngenereren.\n\
+    \n**Handige links**\n\n* [Documentatie](https://zaakgerichtwerken.vng.cloud/standaard)\n\
+    * [Zaakgericht werken](https://zaakgerichtwerken.vng.cloud)\n"
   contact:
     url: https://zaakgerichtwerken.vng.cloud
     email: standaarden.ondersteuning@vng.nl
@@ -2377,7 +2354,8 @@ components:
           minLength: 1
         klant:
           title: Klant
-          description: URL-referentie naar een KLANT (in de KCC API)
+          description: URL-referentie naar een KLANT (in de Contactmomenten API) indien
+            het contactmoment niet anoniem is.
           type: string
           format: uri
           nullable: true
@@ -2515,10 +2493,6 @@ components:
           items:
             $ref: '#/components/schemas/FieldValidationError'
     Klant:
-      required:
-      - voornaam
-      - achternaam
-      - betrokkeneType
       type: object
       properties:
         url:
@@ -2532,36 +2506,39 @@ components:
           minLength: 1
         voornaam:
           title: Voornaam
+          description: De voornaam, voorletters of roepnaam van de klant.
           type: string
           maxLength: 200
-          minLength: 1
         achternaam:
           title: Achternaam
+          description: De achternaam van de klant.
           type: string
           maxLength: 200
-          minLength: 1
         adres:
           title: Adres
+          description: Het adres van de klant.
           type: string
           maxLength: 1000
         telefoonnummer:
           title: Telefoonnummer
+          description: Het mobiele of vaste telefoonnummer van de klant.
           type: string
           maxLength: 20
         emailadres:
           title: Emailadres
+          description: Het e-mail adres van de klant.
           type: string
           format: email
           maxLength: 254
-        betrokkene:
-          title: Betrokkene
-          description: URL-referentie naar een betrokkene
+        subject:
+          title: Subject
+          description: URL-referentie naar een subject
           type: string
           format: uri
           maxLength: 1000
-        betrokkeneType:
-          title: Betrokkene type
-          description: 'Type van de `betrokkene`.
+        subjectType:
+          title: Subject type
+          description: 'Type van de `subject`.
 
 
             Uitleg bij mogelijke waarden:
@@ -2574,8 +2551,9 @@ components:
           enum:
           - natuurlijk_persoon
           - vestiging
+          nullable: true
       discriminator:
-        propertyName: betrokkeneType
+        propertyName: subjectType
     VerblijfsAdres:
       title: Verblijfsadres
       required:
@@ -2658,7 +2636,7 @@ components:
           type: string
           maxLength: 35
     NatuurlijkPersoon:
-      title: betrokkene_identificatie
+      title: subject_identificatie
       type: object
       properties:
         inpBsn:
@@ -2726,18 +2704,18 @@ components:
           $ref: '#/components/schemas/VerblijfsAdres'
         subVerblijfBuitenland:
           $ref: '#/components/schemas/SubVerblijfBuitenland'
-    betrokkene_identificatie_NatuurlijkPersoon:
+    subject_identificatie_NatuurlijkPersoon:
       type: object
       properties:
-        betrokkeneIdentificatie:
+        subjectIdentificatie:
           $ref: '#/components/schemas/NatuurlijkPersoon'
     natuurlijk_persoon:
       type: object
       allOf:
       - $ref: '#/components/schemas/Klant'
-      - $ref: '#/components/schemas/betrokkene_identificatie_NatuurlijkPersoon'
+      - $ref: '#/components/schemas/subject_identificatie_NatuurlijkPersoon'
     Vestiging:
-      title: betrokkene_identificatie
+      title: subject_identificatie
       type: object
       properties:
         vestigingsNummer:
@@ -2756,16 +2734,16 @@ components:
           $ref: '#/components/schemas/VerblijfsAdres'
         subVerblijfBuitenland:
           $ref: '#/components/schemas/SubVerblijfBuitenland'
-    betrokkene_identificatie_Vestiging:
+    subject_identificatie_Vestiging:
       type: object
       properties:
-        betrokkeneIdentificatie:
+        subjectIdentificatie:
           $ref: '#/components/schemas/Vestiging'
     vestiging:
       type: object
       allOf:
       - $ref: '#/components/schemas/Klant'
-      - $ref: '#/components/schemas/betrokkene_identificatie_Vestiging'
+      - $ref: '#/components/schemas/subject_identificatie_Vestiging'
     ObjectContactMoment:
       required:
       - contactmoment

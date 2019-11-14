@@ -201,12 +201,12 @@ class MedewerkerSerializer(serializers.ModelSerializer):
 # main models
 class KlantSerializer(PolymorphicSerializer):
     discriminator = Discriminator(
-        discriminator_field="betrokkene_type",
+        discriminator_field="subject_type",
         mapping={
             KlantType.natuurlijk_persoon: NatuurlijkPersoonSerializer(),
             KlantType.vestiging: VestigingSerializer(),
         },
-        group_field="betrokkene_identificatie",
+        group_field="subject_identificatie",
         same_model=False,
     )
 
@@ -219,36 +219,36 @@ class KlantSerializer(PolymorphicSerializer):
             "adres",
             "telefoonnummer",
             "emailadres",
-            "betrokkene",
-            "betrokkene_type",
+            "subject",
+            "subject_type",
         )
         extra_kwargs = {
             "url": {"lookup_field": "uuid"},
-            "betrokkene": {"required": False},
-            "betrokkene_type": {"validators": [IsImmutableValidator()]},
+            "subject": {"required": False},
+            "subject_type": {"validators": [IsImmutableValidator()]},
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         value_display_mapping = add_choice_values_help_text(KlantType)
-        self.fields["betrokkene_type"].help_text += f"\n\n{value_display_mapping}"
+        self.fields["subject_type"].help_text += f"\n\n{value_display_mapping}"
 
     def validate(self, attrs):
         validated_attrs = super().validate(attrs)
-        betrokkene = validated_attrs.get("betrokkene", None)
-        betrokkene_identificatie = validated_attrs.get("betrokkene_identificatie", None)
+        subject = validated_attrs.get("subject", None)
+        subject_identificatie = validated_attrs.get("subject_identificatie", None)
 
         if self.instance:
-            betrokkene = betrokkene or self.instance.betrokkene
-            betrokkene_identificatie = (
-                betrokkene_identificatie or self.instance.betrokkene_identificatie
+            subject = subject or self.instance.subject
+            subject_identificatie = (
+                subject_identificatie or self.instance.subject_identificatie
             )
 
-        if not betrokkene and not betrokkene_identificatie:
+        if not subject and not subject_identificatie:
             raise serializers.ValidationError(
-                _("betrokkene or betrokkeneIdentificatie must be provided"),
-                code="invalid-betrokkene",
+                _("subject or subjectIdentificatie must be provided"),
+                code="invalid-subject",
             )
 
         return validated_attrs
@@ -264,14 +264,14 @@ class KlantSerializer(PolymorphicSerializer):
 
     @transaction.atomic
     def create(self, validated_data):
-        group_data = validated_data.pop("betrokkene_identificatie", None)
+        group_data = validated_data.pop("subject_identificatie", None)
         klant = super().create(validated_data)
 
         if group_data:
             group_serializer = self.discriminator.mapping[
-                validated_data["betrokkene_type"]
+                validated_data["subject_type"]
             ]
-            serializer = group_serializer.get_fields()["betrokkene_identificatie"]
+            serializer = group_serializer.get_fields()["subject_identificatie"]
             group_data["klant"] = klant
             serializer.create(group_data)
 
@@ -279,14 +279,14 @@ class KlantSerializer(PolymorphicSerializer):
 
     @transaction.atomic
     def update(self, instance, validated_data):
-        group_data = validated_data.pop("betrokkene_identificatie", None)
+        group_data = validated_data.pop("subject_identificatie", None)
         klant = super().update(instance, validated_data)
-        betrokkene_type = validated_data.get("betrokkene_type", klant.betrokkene_type)
+        subject_type = validated_data.get("subject_type", klant.subject_type)
 
         if group_data:
-            group_serializer = self.discriminator.mapping[betrokkene_type]
-            serializer = group_serializer.get_fields()["betrokkene_identificatie"]
-            group_instance = klant.betrokkene_identificatie
+            group_serializer = self.discriminator.mapping[subject_type]
+            serializer = group_serializer.get_fields()["subject_identificatie"]
+            group_instance = klant.subject_identificatie
             if group_instance:
                 serializer.update(group_instance, group_data)
             else:

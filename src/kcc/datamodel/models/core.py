@@ -15,16 +15,34 @@ class Klant(APIMixin, models.Model):
     uuid = models.UUIDField(
         unique=True, default=uuid.uuid4, help_text="Unieke resource identifier (UUID4)"
     )
-    voornaam = models.CharField(max_length=200)
-    achternaam = models.CharField(max_length=200)
-    adres = models.CharField(max_length=1000, blank=True)
-    telefoonnummer = models.CharField(max_length=20, blank=True)
-    emailadres = models.EmailField(blank=True)
-    betrokkene = models.URLField(
-        help_text="URL-referentie naar een betrokkene", max_length=1000, blank=True
+    voornaam = models.CharField(
+        max_length=200,
+        blank=True,
+        help_text="De voornaam, voorletters of roepnaam van de klant.",
     )
-    betrokkene_type = models.CharField(
-        max_length=100, choices=KlantType.choices, help_text="Type van de `betrokkene`."
+    achternaam = models.CharField(
+        max_length=200, blank=True, help_text="De achternaam van de klant."
+    )
+    adres = models.CharField(
+        max_length=1000, blank=True, help_text="Het adres van de klant."
+    )
+    telefoonnummer = models.CharField(
+        max_length=20,
+        blank=True,
+        help_text="Het mobiele of vaste telefoonnummer van de klant.",
+    )
+    emailadres = models.EmailField(
+        blank=True, help_text="Het e-mail adres van de klant."
+    )
+    subject = models.URLField(
+        help_text="URL-referentie naar een subject", max_length=1000, blank=True
+    )
+    subject_type = models.CharField(
+        max_length=100,
+        null=True,
+        blank=True,
+        choices=KlantType.choices,
+        help_text="Type van de `subject`.",
     )
 
     class Meta:
@@ -32,9 +50,9 @@ class Klant(APIMixin, models.Model):
         verbose_name_plural = "klanten"
 
     @property
-    def betrokkene_identificatie(self):
-        if hasattr(self, self.betrokkene_type):
-            return getattr(self, self.betrokkene_type)
+    def subject_identificatie(self):
+        if hasattr(self, self.subject_type):
+            return getattr(self, self.subject_type)
         return None
 
 
@@ -47,7 +65,9 @@ class ContactMoment(APIMixin, models.Model):
         on_delete=models.CASCADE,
         null=True,
         blank=True,
-        help_text=_("URL-referentie naar een KLANT (in de KCC API)"),
+        help_text=_(
+            "URL-referentie naar een KLANT (in de Contactmomenten API) indien het contactmoment niet anoniem is."
+        ),
     )
     datumtijd = models.DateTimeField(
         default=timezone.now,
@@ -88,7 +108,7 @@ class ObjectContactMoment(APIMixin, models.Model):
         unique=True, default=uuid.uuid4, help_text="Unieke resource identifier (UUID4)"
     )
     contactmoment = models.ForeignKey(
-        ContactMoment,
+        "datamodel.ContactMoment",
         on_delete=models.CASCADE,
         help_text="URL-referentie naar het CONTACTMOMENT.",
     )

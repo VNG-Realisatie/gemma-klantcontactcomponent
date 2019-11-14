@@ -1,8 +1,8 @@
 {
     "swagger": "2.0",
     "info": {
-        "title": "Klanten API",
-        "description": "Een API om een klantcontactcomponent (KCC) te benaderen.\n\n**Afhankelijkheden**\n\nDeze API is afhankelijk van:\n\n* Zaken API *(optioneel)*\n* Autorisaties API *(optioneel)*\n\n**Autorisatie**\n\nDeze API vereist autorisatie. Je kan de\n[token-tool](https://zaken-auth.vng.cloud/) gebruiken om JWT-tokens te\ngenereren.\n\n**Handige links**\n\n* [Documentatie](https://zaakgerichtwerken.vng.cloud/standaard)\n* [Zaakgericht werken](https://zaakgerichtwerken.vng.cloud)\n",
+        "title": "Contactmomenten API",
+        "description": "Een API om een contactmoment component (CMC) te benaderen.\n\nHet CONTACTMOMENT is het kernobject in deze API, waaraan verschillende andere\nresources gerelateerd zijn. De Contactmomenten API kan zelfstandig of met \nandere API's samen werken om tot volledige functionaliteit te komen.\n\n**Afhankelijkheden**\n\nDeze API is afhankelijk van:\n\n* Zaken API *(optioneel)*\n* Autorisaties API *(optioneel)*\n\n**Autorisatie**\n\nDeze API vereist autorisatie. Je kan de\n[token-tool](https://zaken-auth.vng.cloud/) gebruiken om JWT-tokens te\ngenereren.\n\n**Handige links**\n\n* [Documentatie](https://zaakgerichtwerken.vng.cloud/standaard)\n* [Zaakgericht werken](https://zaakgerichtwerken.vng.cloud)\n",
         "contact": {
             "url": "https://zaakgerichtwerken.vng.cloud",
             "email": "standaarden.ondersteuning@vng.nl"
@@ -2848,7 +2848,7 @@
                 },
                 "klant": {
                     "title": "Klant",
-                    "description": "URL-referentie naar een KLANT (in de KCC API)",
+                    "description": "URL-referentie naar een KLANT (in de Contactmomenten API) indien het contactmoment niet anoniem is.",
                     "type": "string",
                     "format": "uri",
                     "x-nullable": true
@@ -3019,11 +3019,6 @@
             }
         },
         "Klant": {
-            "required": [
-                "voornaam",
-                "achternaam",
-                "betrokkeneType"
-            ],
             "type": "object",
             "properties": {
                 "url": {
@@ -3037,50 +3032,54 @@
                 },
                 "voornaam": {
                     "title": "Voornaam",
+                    "description": "De voornaam, voorletters of roepnaam van de klant.",
                     "type": "string",
-                    "maxLength": 200,
-                    "minLength": 1
+                    "maxLength": 200
                 },
                 "achternaam": {
                     "title": "Achternaam",
+                    "description": "De achternaam van de klant.",
                     "type": "string",
-                    "maxLength": 200,
-                    "minLength": 1
+                    "maxLength": 200
                 },
                 "adres": {
                     "title": "Adres",
+                    "description": "Het adres van de klant.",
                     "type": "string",
                     "maxLength": 1000
                 },
                 "telefoonnummer": {
                     "title": "Telefoonnummer",
+                    "description": "Het mobiele of vaste telefoonnummer van de klant.",
                     "type": "string",
                     "maxLength": 20
                 },
                 "emailadres": {
                     "title": "Emailadres",
+                    "description": "Het e-mail adres van de klant.",
                     "type": "string",
                     "format": "email",
                     "maxLength": 254
                 },
-                "betrokkene": {
-                    "title": "Betrokkene",
-                    "description": "URL-referentie naar een betrokkene",
+                "subject": {
+                    "title": "Subject",
+                    "description": "URL-referentie naar een subject",
                     "type": "string",
                     "format": "uri",
                     "maxLength": 1000
                 },
-                "betrokkeneType": {
-                    "title": "Betrokkene type",
-                    "description": "Type van de `betrokkene`.\n\nUitleg bij mogelijke waarden:\n\n* `natuurlijk_persoon` - Natuurlijk persoon\n* `vestiging` - Vestiging",
+                "subjectType": {
+                    "title": "Subject type",
+                    "description": "Type van de `subject`.\n\nUitleg bij mogelijke waarden:\n\n* `natuurlijk_persoon` - Natuurlijk persoon\n* `vestiging` - Vestiging",
                     "type": "string",
                     "enum": [
                         "natuurlijk_persoon",
                         "vestiging"
-                    ]
+                    ],
+                    "x-nullable": true
                 }
             },
-            "discriminator": "betrokkeneType"
+            "discriminator": "subjectType"
         },
         "VerblijfsAdres": {
             "title": "Verblijfsadres",
@@ -3180,7 +3179,7 @@
             }
         },
         "NatuurlijkPersoon": {
-            "title": "betrokkene_identificatie",
+            "title": "subject_identificatie",
             "type": "object",
             "properties": {
                 "inpBsn": {
@@ -3248,10 +3247,10 @@
                 }
             }
         },
-        "betrokkene_identificatie_NatuurlijkPersoon": {
+        "subject_identificatie_NatuurlijkPersoon": {
             "type": "object",
             "properties": {
-                "betrokkeneIdentificatie": {
+                "subjectIdentificatie": {
                     "$ref": "#/definitions/NatuurlijkPersoon"
                 }
             }
@@ -3263,12 +3262,12 @@
                     "$ref": "#/definitions/Klant"
                 },
                 {
-                    "$ref": "#/definitions/betrokkene_identificatie_NatuurlijkPersoon"
+                    "$ref": "#/definitions/subject_identificatie_NatuurlijkPersoon"
                 }
             ]
         },
         "Vestiging": {
-            "title": "betrokkene_identificatie",
+            "title": "subject_identificatie",
             "type": "object",
             "properties": {
                 "vestigingsNummer": {
@@ -3294,10 +3293,10 @@
                 }
             }
         },
-        "betrokkene_identificatie_Vestiging": {
+        "subject_identificatie_Vestiging": {
             "type": "object",
             "properties": {
-                "betrokkeneIdentificatie": {
+                "subjectIdentificatie": {
                     "$ref": "#/definitions/Vestiging"
                 }
             }
@@ -3309,7 +3308,7 @@
                     "$ref": "#/definitions/Klant"
                 },
                 {
-                    "$ref": "#/definitions/betrokkene_identificatie_Vestiging"
+                    "$ref": "#/definitions/subject_identificatie_Vestiging"
                 }
             ]
         },

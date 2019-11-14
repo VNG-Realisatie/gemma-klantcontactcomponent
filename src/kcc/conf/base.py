@@ -252,8 +252,8 @@ SESSION_COOKIE_NAME = "kcc_sessionid"
 #
 # Custom settings
 #
-PROJECT_NAME = "Klanten"
-SITE_TITLE = "Klant Contact Component (KCC)"
+PROJECT_NAME = "Contactmomenten"
+SITE_TITLE = "Contactmoment component (CMC)"
 
 ENVIRONMENT = None
 SHOW_ALERT = True

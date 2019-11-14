@@ -1,5 +1,5 @@
 """
-Defines the scopes used in the KCC component.
+Defines the scopes used in the CMC component.
 """
 
 from vng_api_common.scopes import Scope

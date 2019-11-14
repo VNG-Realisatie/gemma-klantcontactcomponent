@@ -8,8 +8,8 @@ class KlantFactory(factory.django.DjangoModelFactory):
     achternaam = factory.Faker("last_name")
     adres = factory.Faker("address")
     emailadres = factory.Faker("email")
-    betrokkene = factory.Faker("url")
-    betrokkene_type = factory.fuzzy.FuzzyChoice(KlantType.values)
+    subject = factory.Faker("url")
+    subject_type = factory.fuzzy.FuzzyChoice(KlantType.values)
 
     class Meta:
         model = "datamodel.Klant"
