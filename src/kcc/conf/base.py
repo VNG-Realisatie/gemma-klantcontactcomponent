@@ -50,7 +50,6 @@ INSTALLED_APPS = [
     # 'django.contrib.admindocs',
     # 'django.contrib.humanize',
     # External applications.
-    "axes",
     "django_filters",
     "corsheaders",
     "vng_api_common",  # before drf_yasg to override the management command
@@ -262,21 +261,6 @@ SHOW_ALERT = True
 #
 # Library settings
 #
-
-# Django-axes
-AXES_LOGIN_FAILURE_LIMIT = 30  # Default: 3
-AXES_LOCK_OUT_AT_FAILURE = True  # Default: True
-AXES_USE_USER_AGENT = False  # Default: False
-AXES_COOLOFF_TIME = 1  # One hour
-AXES_BEHIND_REVERSE_PROXY = (
-    True  # Default: False (we are typically using Nginx as reverse proxy)
-)
-AXES_ONLY_USER_FAILURES = (
-    False  # Default: False (you might want to block on username rather than IP)
-)
-AXES_LOCK_OUT_BY_COMBINATION_USER_AND_IP = (
-    False  # Default: False (you might want to block on username and IP)
-)
 
 # Django-CORS-middleware
 CORS_ORIGIN_ALLOW_ALL = True
