@@ -2803,6 +2803,37 @@
         }
     },
     "definitions": {
+        "Medewerker": {
+            "title": "Medewerker identificatie",
+            "type": "object",
+            "properties": {
+                "identificatie": {
+                    "title": "Identificatie",
+                    "description": "Een korte unieke aanduiding van de MEDEWERKER.",
+                    "type": "string",
+                    "maxLength": 24
+                },
+                "achternaam": {
+                    "title": "Achternaam",
+                    "description": "De achternaam zoals de MEDEWERKER die in het dagelijkse verkeer gebruikt.",
+                    "type": "string",
+                    "maxLength": 200
+                },
+                "voorletters": {
+                    "title": "Voorletters",
+                    "description": "De verzameling letters die gevormd wordt door de eerste letter van alle in volgorde voorkomende voornamen.",
+                    "type": "string",
+                    "maxLength": 20
+                },
+                "voorvoegselAchternaam": {
+                    "title": "Voorvoegsel achternaam",
+                    "description": "Dat deel van de geslachtsnaam dat voorkomt in Tabel 36 (GBA), voorvoegseltabel, en door een spatie van de geslachtsnaam is",
+                    "type": "string",
+                    "maxLength": 10
+                }
+            },
+            "x-nullable": true
+        },
         "ContactMoment": {
             "type": "object",
             "properties": {
@@ -2847,6 +2878,16 @@
                         "gemeente",
                         "klant"
                     ]
+                },
+                "medewerker": {
+                    "title": "Medewerker",
+                    "description": "URL-referentie naar een medewerker",
+                    "type": "string",
+                    "format": "uri",
+                    "maxLength": 1000
+                },
+                "medewerkerIdentificatie": {
+                    "$ref": "#/definitions/Medewerker"
                 }
             }
         },

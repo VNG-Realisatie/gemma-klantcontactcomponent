@@ -4,6 +4,7 @@ from .models import (
     Adres,
     ContactMoment,
     Klant,
+    Medewerker,
     NatuurlijkPersoon,
     ObjectContactMoment,
     SubVerblijfBuitenland,
@@ -45,3 +46,9 @@ class SubVerblijfBuitenlandAdmin(admin.ModelAdmin):
 @admin.register(Adres)
 class AdresAdmin(admin.ModelAdmin):
     list_display = ["natuurlijkpersoon", "vestiging", "aoa_identificatie"]
+
+
+# ContactMoment models
+@admin.register(Medewerker)
+class MedewerkerAdmin(admin.ModelAdmin):
+    list_display = ["contactmoment", "identificatie"]

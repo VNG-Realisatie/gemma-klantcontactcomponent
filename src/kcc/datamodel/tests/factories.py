@@ -19,6 +19,7 @@ class ContactMomentFactory(factory.django.DjangoModelFactory):
     klant = factory.SubFactory(KlantFactory)
     kanaal = factory.Faker("word")
     initiatiefnemer = factory.fuzzy.FuzzyChoice(InitiatiefNemer.values)
+    medewerker = factory.Faker("url")
 
     class Meta:
         model = "datamodel.ContactMoment"
@@ -75,3 +76,13 @@ class AdresFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = "datamodel.Adres"
+
+
+# ContactMoment Factories
+class MedewerkerFactory(factory.django.DjangoModelFactory):
+    contactmoment = factory.SubFactory(ContactMomentFactory)
+    identificatie = factory.Sequence(lambda n: f"{n}")
+    achternaam = factory.Faker("last_name")
+
+    class Meta:
+        model = "datamodel.Medewerker"
