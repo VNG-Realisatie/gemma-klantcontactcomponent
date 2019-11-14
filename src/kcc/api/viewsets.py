@@ -29,6 +29,15 @@ class KlantViewSet(viewsets.ModelViewSet):
     """
     Opvragen en bewerken van KLANTen.
 
+    Een KLANT is een eenvoudige weergave van een NATUURLIJK PERSOON of
+    VESTIGING waarbij het gaat om niet geverifieerde gegevens. Om deze reden
+    zijn ook alle attributen optioneel.
+
+    Indien de KLANT geverifieerd is mag een relatie gelegd worden met een
+    NATUURLIJK PERSOON of VESTIGING  middels het attribuut `subject` of, indien
+    er geen API beschikbaar is voor deze objecten, middels
+    `subjectIdentificatie`.
+
     create:
     Maak een KLANT aan.
 

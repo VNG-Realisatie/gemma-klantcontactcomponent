@@ -14,7 +14,7 @@ from kcc.datamodel.tests.factories import (
     VestigingFactory,
 )
 
-BETROKKENE = "http://example.com/betrokkene/1"
+SUBJECT = "http://example.com/subject/1"
 
 
 class KlantTests(JWTAuthMixin, APITestCase):
@@ -33,7 +33,7 @@ class KlantTests(JWTAuthMixin, APITestCase):
 
     def test_read_klant_url(self):
         klant = KlantFactory.create(
-            betrokkene=BETROKKENE, betrokkene_type=KlantType.natuurlijk_persoon
+            subject=SUBJECT, subject_type=KlantType.natuurlijk_persoon
         )
         detail_url = reverse(klant)
 
@@ -52,15 +52,15 @@ class KlantTests(JWTAuthMixin, APITestCase):
                 "adres": klant.adres,
                 "emailadres": klant.emailadres,
                 "telefoonnummer": klant.telefoonnummer,
-                "betrokkene": BETROKKENE,
-                "betrokkeneType": KlantType.natuurlijk_persoon,
-                "betrokkeneIdentificatie": None,
+                "subject": SUBJECT,
+                "subjectType": KlantType.natuurlijk_persoon,
+                "subjectIdentificatie": None,
             },
         )
 
     def test_read_klant_natuurlijkpersoon(self):
         klant = KlantFactory.create(
-            betrokkene=BETROKKENE, betrokkene_type=KlantType.natuurlijk_persoon
+            subject=SUBJECT, subject_type=KlantType.natuurlijk_persoon
         )
         natuurlijkpersoon = NatuurlijkPersoonFactory.create(klant=klant)
         adres = AdresFactory.create(natuurlijkpersoon=natuurlijkpersoon)
@@ -84,9 +84,9 @@ class KlantTests(JWTAuthMixin, APITestCase):
                 "adres": klant.adres,
                 "telefoonnummer": klant.telefoonnummer,
                 "emailadres": klant.emailadres,
-                "betrokkene": BETROKKENE,
-                "betrokkeneType": KlantType.natuurlijk_persoon,
-                "betrokkeneIdentificatie": {
+                "subject": SUBJECT,
+                "subjectType": KlantType.natuurlijk_persoon,
+                "subjectIdentificatie": {
                     "inpBsn": natuurlijkpersoon.inp_bsn,
                     "anpIdentificatie": natuurlijkpersoon.anp_identificatie,
                     "inpANummer": natuurlijkpersoon.inp_a_nummer,
@@ -118,9 +118,7 @@ class KlantTests(JWTAuthMixin, APITestCase):
         )
 
     def test_read_klant_vestiging(self):
-        klant = KlantFactory.create(
-            betrokkene=BETROKKENE, betrokkene_type=KlantType.vestiging
-        )
+        klant = KlantFactory.create(subject=SUBJECT, subject_type=KlantType.vestiging)
         vestiging = VestigingFactory.create(klant=klant)
         adres = AdresFactory.create(vestiging=vestiging)
         buitenland = SubVerblijfBuitenlandFactory.create(vestiging=vestiging)
@@ -141,9 +139,9 @@ class KlantTests(JWTAuthMixin, APITestCase):
                 "adres": klant.adres,
                 "telefoonnummer": klant.telefoonnummer,
                 "emailadres": klant.emailadres,
-                "betrokkene": BETROKKENE,
-                "betrokkeneType": KlantType.vestiging,
-                "betrokkeneIdentificatie": {
+                "subject": SUBJECT,
+                "subjectType": KlantType.vestiging,
+                "subjectIdentificatie": {
                     "vestigingsNummer": vestiging.vestigings_nummer,
                     "handelsnaam": vestiging.handelsnaam,
                     "verblijfsadres": {
@@ -173,8 +171,8 @@ class KlantTests(JWTAuthMixin, APITestCase):
             "voornaam": "Xavier",
             "achternaam": "Jackson",
             "emailadres": "test@gmail.com",
-            "betrokkeneType": KlantType.natuurlijk_persoon,
-            "betrokkene": BETROKKENE,
+            "subjectType": KlantType.natuurlijk_persoon,
+            "subject": SUBJECT,
         }
 
         response = self.client.post(list_url, data)
@@ -186,7 +184,7 @@ class KlantTests(JWTAuthMixin, APITestCase):
         self.assertEqual(klant.voornaam, "Xavier")
         self.assertEqual(klant.achternaam, "Jackson")
         self.assertEqual(klant.emailadres, "test@gmail.com")
-        self.assertEqual(klant.betrokkene, BETROKKENE)
+        self.assertEqual(klant.subject, SUBJECT)
 
     def test_create_klant_natuurlijkpersoon(self):
         list_url = reverse(Klant)
@@ -194,8 +192,8 @@ class KlantTests(JWTAuthMixin, APITestCase):
             "voornaam": "Samuel",
             "achternaam": "Jackson",
             "emailadres": "samuel@jackson.com",
-            "betrokkeneType": KlantType.natuurlijk_persoon,
-            "betrokkeneIdentificatie": {
+            "subjectType": KlantType.natuurlijk_persoon,
+            "subjectIdentificatie": {
                 "anpIdentificatie": "123",
                 "geslachtsnaam": "Jackson2",
                 "voornamen": "Samuel2",
@@ -222,8 +220,8 @@ class KlantTests(JWTAuthMixin, APITestCase):
         self.assertEqual(klant.voornaam, "Samuel")
         self.assertEqual(klant.achternaam, "Jackson")
         self.assertEqual(klant.emailadres, "samuel@jackson.com")
-        self.assertEqual(klant.betrokkene, "")
-        self.assertEqual(klant.betrokkene_type, KlantType.natuurlijk_persoon)
+        self.assertEqual(klant.subject, "")
+        self.assertEqual(klant.subject_type, KlantType.natuurlijk_persoon)
 
         natuurlijkpersoon = klant.natuurlijk_persoon
 
@@ -250,8 +248,8 @@ class KlantTests(JWTAuthMixin, APITestCase):
             "voornaam": "Samuel",
             "achternaam": "Jackson",
             "emailadres": "samuel@jackson.com",
-            "betrokkeneType": KlantType.vestiging,
-            "betrokkeneIdentificatie": {
+            "subjectType": KlantType.vestiging,
+            "subjectIdentificatie": {
                 "vestigingsNummer": "123",
                 "handelsnaam": ["WB"],
                 "verblijfsadres": {
@@ -276,8 +274,8 @@ class KlantTests(JWTAuthMixin, APITestCase):
         self.assertEqual(klant.voornaam, "Samuel")
         self.assertEqual(klant.achternaam, "Jackson")
         self.assertEqual(klant.emailadres, "samuel@jackson.com")
-        self.assertEqual(klant.betrokkene, "")
-        self.assertEqual(klant.betrokkene_type, KlantType.vestiging)
+        self.assertEqual(klant.subject, "")
+        self.assertEqual(klant.subject_type, KlantType.vestiging)
 
         vestiging = klant.vestiging
 
@@ -297,7 +295,7 @@ class KlantTests(JWTAuthMixin, APITestCase):
         self.assertEqual(buitenland.lnd_landnaam, "Hollywood")
 
     def test_partial_update_klant_url(self):
-        klant = KlantFactory.create(betrokkene=BETROKKENE, voornaam="old name")
+        klant = KlantFactory.create(subject=SUBJECT, voornaam="old name")
         detail_url = reverse(klant)
 
         response = self.client.patch(detail_url, {"voornaam": "new name"})
@@ -310,7 +308,7 @@ class KlantTests(JWTAuthMixin, APITestCase):
 
     def test_partial_update_klant_naturlijkpersoon(self):
         klant = KlantFactory.create(
-            betrokkene_type=KlantType.natuurlijk_persoon, betrokkene=BETROKKENE
+            subject_type=KlantType.natuurlijk_persoon, subject=SUBJECT
         )
         natuurlijkpersoon = NatuurlijkPersoonFactory.create(klant=klant)
         adres = AdresFactory.create(natuurlijkpersoon=natuurlijkpersoon)
@@ -321,8 +319,8 @@ class KlantTests(JWTAuthMixin, APITestCase):
 
         data = {
             "voornaam": "New name",
-            "betrokkene": "",
-            "betrokkeneIdentificatie": {
+            "subject": "",
+            "subjectIdentificatie": {
                 "geslachtsnaam": "New name2",
                 "verblijfsadres": {
                     "aoaIdentificatie": "1234",
@@ -343,7 +341,7 @@ class KlantTests(JWTAuthMixin, APITestCase):
 
         klant.refresh_from_db()
         self.assertEqual(klant.voornaam, "New name")
-        self.assertEqual(klant.betrokkene, "")
+        self.assertEqual(klant.subject, "")
 
         natuurlijkpersoon.refresh_from_db()
         self.assertEqual(natuurlijkpersoon.geslachtsnaam, "New name2")
@@ -355,14 +353,14 @@ class KlantTests(JWTAuthMixin, APITestCase):
         self.assertEqual(buitenland.lnd_landnaam, "New land")
 
     def test_partial_update_klant_vestiging(self):
-        klant = KlantFactory.create(betrokkene_type=KlantType.vestiging)
+        klant = KlantFactory.create(subject_type=KlantType.vestiging)
         detail_url = reverse(klant)
 
         response = self.client.patch(
             detail_url,
             {
-                "betrokkene": "",
-                "betrokkeneIdentificatie": {
+                "subject": "",
+                "subjectIdentificatie": {
                     "vestigingsNummer": "123",
                     "handelsnaam": ["WB"],
                     "verblijfsadres": {
@@ -383,7 +381,7 @@ class KlantTests(JWTAuthMixin, APITestCase):
 
         klant.refresh_from_db()
 
-        self.assertEqual(klant.betrokkene, "")
+        self.assertEqual(klant.subject, "")
 
         vestiging = klant.vestiging
 
@@ -402,27 +400,25 @@ class KlantTests(JWTAuthMixin, APITestCase):
         self.assertEqual(buitenland.lnd_landcode, "ABCD")
         self.assertEqual(buitenland.lnd_landnaam, "Hollywood")
 
-    def test_partial_update_klant_betrokkene_type_fail(self):
+    def test_partial_update_klant_subject_type_fail(self):
         klant = KlantFactory.create(
-            betrokkene=BETROKKENE, betrokkene_type=KlantType.natuurlijk_persoon
+            subject=SUBJECT, subject_type=KlantType.natuurlijk_persoon
         )
         detail_url = reverse(klant)
 
-        response = self.client.patch(
-            detail_url, {"betrokkeneType": KlantType.vestiging}
-        )
+        response = self.client.patch(detail_url, {"subjectType": KlantType.vestiging})
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-        validation_error = get_validation_errors(response, "betrokkeneType")
+        validation_error = get_validation_errors(response, "subjectType")
         self.assertEqual(validation_error["code"], "wijzigen-niet-toegelaten")
 
     def test_update_klant_url(self):
-        klant = KlantFactory.create(betrokkene=BETROKKENE, voornaam="old name")
+        klant = KlantFactory.create(subject=SUBJECT, voornaam="old name")
         detail_url = reverse(klant)
         data = self.client.get(detail_url).json()
         del data["url"]
-        del data["betrokkeneIdentificatie"]
+        del data["subjectIdentificatie"]
         data["voornaam"] = "new name"
 
         response = self.client.put(detail_url, data)
@@ -435,7 +431,7 @@ class KlantTests(JWTAuthMixin, APITestCase):
 
     def test_update_klant_naturlijkpersoon(self):
         klant = KlantFactory.create(
-            betrokkene_type=KlantType.natuurlijk_persoon, betrokkene=BETROKKENE
+            subject_type=KlantType.natuurlijk_persoon, subject=SUBJECT
         )
         natuurlijkpersoon = NatuurlijkPersoonFactory.create(klant=klant)
         adres = AdresFactory.create(natuurlijkpersoon=natuurlijkpersoon)
@@ -448,8 +444,8 @@ class KlantTests(JWTAuthMixin, APITestCase):
         data.update(
             {
                 "voornaam": "New name",
-                "betrokkene": "",
-                "betrokkeneIdentificatie": {
+                "subject": "",
+                "subjectIdentificatie": {
                     "geslachtsnaam": "New name2",
                     "verblijfsadres": {
                         "aoaIdentificatie": "1234",
@@ -471,7 +467,7 @@ class KlantTests(JWTAuthMixin, APITestCase):
 
         klant.refresh_from_db()
         self.assertEqual(klant.voornaam, "New name")
-        self.assertEqual(klant.betrokkene, "")
+        self.assertEqual(klant.subject, "")
 
         natuurlijkpersoon.refresh_from_db()
         self.assertEqual(natuurlijkpersoon.geslachtsnaam, "New name2")
@@ -483,14 +479,14 @@ class KlantTests(JWTAuthMixin, APITestCase):
         self.assertEqual(buitenland.lnd_landnaam, "New land")
 
     def test_update_klant_vestiging(self):
-        klant = KlantFactory.create(betrokkene_type=KlantType.vestiging)
+        klant = KlantFactory.create(subject_type=KlantType.vestiging)
         detail_url = reverse(klant)
         data = self.client.get(detail_url).json()
         del data["url"]
         data.update(
             {
-                "betrokkene": "",
-                "betrokkeneIdentificatie": {
+                "subject": "",
+                "subjectIdentificatie": {
                     "vestigingsNummer": "123",
                     "handelsnaam": ["WB"],
                     "verblijfsadres": {
@@ -513,7 +509,7 @@ class KlantTests(JWTAuthMixin, APITestCase):
 
         klant.refresh_from_db()
 
-        self.assertEqual(klant.betrokkene, "")
+        self.assertEqual(klant.subject, "")
 
         vestiging = klant.vestiging
 

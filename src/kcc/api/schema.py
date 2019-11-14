@@ -2,7 +2,11 @@ from django.conf import settings
 
 from drf_yasg import openapi
 
-description = """Een API om een klantcontactcomponent (KCC) te benaderen.
+description = """Een API om een contactmoment component (CMC) te benaderen.
+
+Het CONTACTMOMENT is het kernobject in deze API, waaraan verschillende andere
+resources gerelateerd zijn. De Contactmomenten API kan zelfstandig of met 
+andere API's samen werken om tot volledige functionaliteit te komen.
 
 **Afhankelijkheden**
 

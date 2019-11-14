@@ -10,7 +10,6 @@ from ..constants import GeslachtsAanduiding
 
 __all__ = ["NatuurlijkPersoon", "Vestiging", "SubVerblijfBuitenland", "Adres"]
 
-
 # Klant models
 class NatuurlijkPersoon(models.Model):
     klant = models.OneToOneField(

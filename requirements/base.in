@@ -8,7 +8,6 @@ markdown
 uwsgi
 
 Django
-django-axes
 django-choices
 django-cors-middleware
 django-markup
