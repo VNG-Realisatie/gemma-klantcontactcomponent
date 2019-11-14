@@ -4,11 +4,15 @@ from django.utils.timezone import make_aware
 
 from rest_framework import status
 from rest_framework.test import APITestCase
-from vng_api_common.tests import JWTAuthMixin, reverse, get_validation_errors
+from vng_api_common.tests import JWTAuthMixin, get_validation_errors, reverse
 
 from kcc.datamodel.constants import InitiatiefNemer
 from kcc.datamodel.models import ContactMoment
-from kcc.datamodel.tests.factories import ContactMomentFactory, KlantFactory, MedewerkerFactory
+from kcc.datamodel.tests.factories import (
+    ContactMomentFactory,
+    KlantFactory,
+    MedewerkerFactory,
+)
 
 
 class ContactMomentTests(JWTAuthMixin, APITestCase):
@@ -50,8 +54,8 @@ class ContactMomentTests(JWTAuthMixin, APITestCase):
                 "kanaal": contactmoment.kanaal,
                 "tekst": contactmoment.tekst,
                 "initiatiefnemer": InitiatiefNemer.gemeente,
-                'medewerker': contactmoment.medewerker,
-                'medewerkerIdentificatie': None,
+                "medewerker": contactmoment.medewerker,
+                "medewerkerIdentificatie": None,
             },
         )
 
@@ -62,7 +66,7 @@ class ContactMomentTests(JWTAuthMixin, APITestCase):
             klant=klant,
             datumtijd=make_aware(datetime(2019, 1, 1)),
             initiatiefnemer=InitiatiefNemer.gemeente,
-            medewerker='',
+            medewerker="",
         )
         medewerker = MedewerkerFactory.create(contactmoment=contactmoment)
         detail_url = reverse(contactmoment)
@@ -82,12 +86,12 @@ class ContactMomentTests(JWTAuthMixin, APITestCase):
                 "kanaal": contactmoment.kanaal,
                 "tekst": contactmoment.tekst,
                 "initiatiefnemer": InitiatiefNemer.gemeente,
-                'medewerker': '',
-                'medewerkerIdentificatie': {
-                    'identificatie': medewerker.identificatie,
-                    'achternaam': medewerker.achternaam,
-                    'voorletters': medewerker.voorletters,
-                    'voorvoegselAchternaam': medewerker.voorvoegsel_achternaam
+                "medewerker": "",
+                "medewerkerIdentificatie": {
+                    "identificatie": medewerker.identificatie,
+                    "achternaam": medewerker.achternaam,
+                    "voorletters": medewerker.voorletters,
+                    "voorvoegselAchternaam": medewerker.voorvoegsel_achternaam,
                 },
             },
         )
@@ -101,7 +105,7 @@ class ContactMomentTests(JWTAuthMixin, APITestCase):
             "kanaal": "telephone",
             "tekst": "some text",
             "initiatiefnemer": InitiatiefNemer.gemeente,
-            "medewerker": "http://example.com/medewerker/1"
+            "medewerker": "http://example.com/medewerker/1",
         }
 
         response = self.client.post(list_url, data)
@@ -125,10 +129,10 @@ class ContactMomentTests(JWTAuthMixin, APITestCase):
             "kanaal": "telephone",
             "tekst": "some text",
             "initiatiefnemer": InitiatiefNemer.gemeente,
-            'medewerkerIdentificatie': {
-                'identificatie': '12345',
-                'achternaam': 'Buurman',
-                'voorletters': 'B B',
+            "medewerkerIdentificatie": {
+                "identificatie": "12345",
+                "achternaam": "Buurman",
+                "voorletters": "B B",
             },
         }
 
@@ -164,9 +168,9 @@ class ContactMomentTests(JWTAuthMixin, APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-        error = get_validation_errors(response, 'nonFieldErrors')
+        error = get_validation_errors(response, "nonFieldErrors")
 
-        self.assertEqual(error['code'], 'invalid-medewerker')
+        self.assertEqual(error["code"], "invalid-medewerker")
 
     def test_update_contactmoment(self):
         klant = KlantFactory.create()
@@ -186,11 +190,11 @@ class ContactMomentTests(JWTAuthMixin, APITestCase):
         contactmoment = ContactMomentFactory.create()
         detail_url = reverse(contactmoment)
         data = {
-            "medewerker": '',
-            'medewerkerIdentificatie': {
-                'identificatie': '12345',
-                'achternaam': 'Buurman',
-                'voorletters': 'B B',
+            "medewerker": "",
+            "medewerkerIdentificatie": {
+                "identificatie": "12345",
+                "achternaam": "Buurman",
+                "voorletters": "B B",
             },
         }
 
@@ -200,7 +204,7 @@ class ContactMomentTests(JWTAuthMixin, APITestCase):
 
         contactmoment.refresh_from_db()
 
-        self.assertEqual(contactmoment.medewerker, '')
+        self.assertEqual(contactmoment.medewerker, "")
 
         medewerker = contactmoment.medewerker_identificatie
 

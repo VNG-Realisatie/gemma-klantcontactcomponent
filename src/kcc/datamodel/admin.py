@@ -4,11 +4,11 @@ from .models import (
     Adres,
     ContactMoment,
     Klant,
+    Medewerker,
     NatuurlijkPersoon,
     ObjectContactMoment,
     SubVerblijfBuitenland,
     Vestiging,
-    Medewerker,
 )
 
 

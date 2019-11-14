@@ -13,11 +13,11 @@ from kcc.datamodel.models import (
     Adres,
     ContactMoment,
     Klant,
+    Medewerker,
     NatuurlijkPersoon,
     ObjectContactMoment,
     SubVerblijfBuitenland,
     Vestiging,
-    Medewerker,
 )
 
 from .validators import ObjectContactMomentCreateValidator
@@ -302,7 +302,14 @@ class ContactMomentSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = ContactMoment
         fields = (
-            "url", "klant", "datumtijd", "kanaal", "tekst", "initiatiefnemer", "medewerker", "medewerker_identificatie"
+            "url",
+            "klant",
+            "datumtijd",
+            "kanaal",
+            "tekst",
+            "initiatiefnemer",
+            "medewerker",
+            "medewerker_identificatie",
         )
         extra_kwargs = {
             "url": {"lookup_field": "uuid"},
@@ -317,8 +324,8 @@ class ContactMomentSerializer(serializers.HyperlinkedModelSerializer):
 
         if self.instance:
             medewerker = medewerker or self.instance.medewerker
-            medewerker_identificatie = (
-                medewerker_identificatie or getattr(self.instance, 'medewerker_identificatie', None)
+            medewerker_identificatie = medewerker_identificatie or getattr(
+                self.instance, "medewerker_identificatie", None
             )
 
         if not medewerker and not medewerker_identificatie:
@@ -330,7 +337,9 @@ class ContactMomentSerializer(serializers.HyperlinkedModelSerializer):
         return validated_attrs
 
     def create(self, validated_data):
-        medewerker_identificatie_data = validated_data.pop("medewerker_identificatie", None)
+        medewerker_identificatie_data = validated_data.pop(
+            "medewerker_identificatie", None
+        )
         contactmoment = super().create(validated_data)
 
         if medewerker_identificatie_data:
@@ -340,13 +349,16 @@ class ContactMomentSerializer(serializers.HyperlinkedModelSerializer):
         return contactmoment
 
     def update(self, instance, validated_data):
-        medewerker_identificatie_data = validated_data.pop("medewerker_identificatie", None)
+        medewerker_identificatie_data = validated_data.pop(
+            "medewerker_identificatie", None
+        )
         contactmoment = super().update(instance, validated_data)
 
         if medewerker_identificatie_data:
             if hasattr(contactmoment, "medewerker_identificatie"):
                 MedewerkerSerializer().update(
-                    contactmoment.medewerker_identificatie, medewerker_identificatie_data
+                    contactmoment.medewerker_identificatie,
+                    medewerker_identificatie_data,
                 )
             else:
                 medewerker_identificatie_data["contactmoment"] = contactmoment

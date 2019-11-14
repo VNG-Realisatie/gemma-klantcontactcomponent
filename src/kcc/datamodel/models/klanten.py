@@ -8,7 +8,6 @@ from vng_api_common.fields import BSNField
 
 from ..constants import GeslachtsAanduiding
 
-
 __all__ = ["NatuurlijkPersoon", "Vestiging", "SubVerblijfBuitenland", "Adres"]
 
 

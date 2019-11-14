@@ -5,7 +5,9 @@ __all__ = ["Medewerker"]
 
 class Medewerker(models.Model):
     contactmoment = models.OneToOneField(
-        "datamodel.ContactMoment", on_delete=models.CASCADE, related_name="medewerker_identificatie"
+        "datamodel.ContactMoment",
+        on_delete=models.CASCADE,
+        related_name="medewerker_identificatie",
     )
     identificatie = models.CharField(
         max_length=24,

@@ -8,7 +8,6 @@ from vng_api_common.models import APIMixin
 
 from ..constants import InitiatiefNemer, KlantType, ObjectTypes
 
-
 __all__ = ["Klant", "ContactMoment", "ObjectContactMoment"]
 
 
