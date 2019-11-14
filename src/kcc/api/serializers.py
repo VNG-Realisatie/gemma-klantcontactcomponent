@@ -17,6 +17,7 @@ from kcc.datamodel.models import (
     ObjectContactMoment,
     SubVerblijfBuitenland,
     Vestiging,
+    Medewerker,
 )
 
 from .validators import ObjectContactMomentCreateValidator
@@ -185,6 +186,18 @@ class VestigingSerializer(serializers.ModelSerializer):
         return vestiging
 
 
+# ContactMoment models
+class MedewerkerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Medewerker
+        fields = (
+            "identificatie",
+            "achternaam",
+            "voorletters",
+            "voorvoegsel_achternaam",
+        )
+
+
 # main models
 class KlantSerializer(PolymorphicSerializer):
     discriminator = Discriminator(
@@ -284,13 +297,62 @@ class KlantSerializer(PolymorphicSerializer):
 
 
 class ContactMomentSerializer(serializers.HyperlinkedModelSerializer):
+    medewerker_identificatie = MedewerkerSerializer(required=False, allow_null=True)
+
     class Meta:
         model = ContactMoment
-        fields = ("url", "klant", "datumtijd", "kanaal", "tekst", "initiatiefnemer")
+        fields = (
+            "url", "klant", "datumtijd", "kanaal", "tekst", "initiatiefnemer", "medewerker", "medewerker_identificatie"
+        )
         extra_kwargs = {
             "url": {"lookup_field": "uuid"},
             "klant": {"lookup_field": "uuid"},
         }
+
+    def validate(self, attrs):
+        validated_attrs = super().validate(attrs)
+
+        medewerker = validated_attrs.get("medewerker", None)
+        medewerker_identificatie = validated_attrs.get("medewerker_identificatie", None)
+
+        if self.instance:
+            medewerker = medewerker or self.instance.betrokkene
+            medewerker_identificatie = (
+                medewerker_identificatie or self.instance.medewerker_identificatie
+            )
+
+        if not medewerker and not medewerker_identificatie:
+            raise serializers.ValidationError(
+                _("medewerker or medewerkerIdentificatie must be provided"),
+                code="invalid-medewerker",
+            )
+
+        return validated_attrs
+
+    def create(self, validated_data):
+        medewerker_identificatie_data = validated_data.pop("medewerker_identificatie", None)
+        contactmoment = super().create(validated_data)
+
+        if medewerker_identificatie_data:
+            medewerker_identificatie_data["contactmoment"] = contactmoment
+            MedewerkerSerializer().create(medewerker_identificatie_data)
+
+        return contactmoment
+
+    def update(self, instance, validated_data):
+        medewerker_identificatie_data = validated_data.pop("medewerker_identificatie", None)
+        contactmoment = super().update(instance, validated_data)
+
+        if medewerker_identificatie_data:
+            if hasattr(contactmoment, "medewerker_identificatie"):
+                MedewerkerSerializer().update(
+                    contactmoment.medewerker_identificatie, medewerker_identificatie_data
+                )
+            else:
+                medewerker_identificatie_data["vestiging"] = contactmoment
+                MedewerkerSerializer().create(medewerker_identificatie_data)
+
+        return contactmoment
 
 
 class ObjectContactMomentSerializer(serializers.HyperlinkedModelSerializer):
