@@ -1,5 +1,5 @@
 # Stage 1 - Compile needed python dependencies
-FROM python:3.6-alpine AS build
+FROM python:3.7-alpine AS build
 RUN apk --no-cache add \
     gcc \
     musl-dev \
@@ -7,14 +7,8 @@ RUN apk --no-cache add \
     linux-headers \
     postgresql-dev \
     python3-dev \
-    # libraries installed using git
-    git \
     # lxml dependencies
-    libxslt-dev \
-    # pillow dependencies
-    jpeg-dev \
-    openjpeg-dev \
-    zlib-dev
+    libxslt-dev
 
 WORKDIR /app
 
@@ -34,36 +28,11 @@ RUN npm install
 COPY ./Gulpfile.js /app/
 COPY ./build /app/build/
 
-COPY src/{{ project_name|lower }}/sass/ /app/src/{{ project_name|lower }}/sass/
+COPY src/kcc/sass/ /app/src/kcc/sass/
 RUN npm run build
 
-
-# Stage 3 - Prepare jenkins tests image
-FROM build AS jenkins
-
-RUN apk --no-cache add \
-    postgresql-client
-
-# Stage 3.1 - Set up the needed testing/development dependencies
-COPY --from=build /usr/local/lib/python3.6 /usr/local/lib/python3.6
-COPY --from=build /app/requirements /app/requirements
-
-RUN pip install -r requirements/jenkins.txt --exists-action=s
-
-# Stage 3.2 - Set up testing config
-COPY ./setup.cfg /app/setup.cfg
-COPY ./bin/runtests.sh /runtests.sh
-
-# Stage 3.3 - Copy source code
-COPY --from=frontend-build /app/src/{{ project_name|lower }}/static/fonts /app/src/{{ project_name|lower }}/static/fonts
-COPY --from=frontend-build /app/src/{{ project_name|lower }}/static/css /app/src/{{ project_name|lower }}/static/css
-COPY ./src /app/src
-RUN mkdir /app/log && rm /app/src/{{ project_name|lower }}/conf/test.py
-CMD ["/runtests.sh"]
-
-
-# Stage 4 - Build docker image suitable for execution and deployment
-FROM python:3.6-alpine AS production
+# Stage 3 - Build docker image suitable for execution and deployment
+FROM python:3.7-alpine AS production
 RUN apk --no-cache add \
     ca-certificates \
     mailcap \
@@ -77,23 +46,22 @@ RUN apk --no-cache add \
     openjpeg \
     zlib
 
-# Stage 4.1 - Set up dependencies
-COPY --from=build /usr/local/lib/python3.6 /usr/local/lib/python3.6
+# Stage 3.1 - Set up dependencies
+COPY --from=build /usr/local/lib/python3.7 /usr/local/lib/python3.7
 COPY --from=build /usr/local/bin/uwsgi /usr/local/bin/uwsgi
 
 # required for fonts,styles etc.
 COPY --from=frontend-build /app/node_modules/font-awesome /app/node_modules/font-awesome
 
-# Stage 4.2 - Copy source code
+# Stage 3.2 - Copy source code
 WORKDIR /app
 COPY ./bin/docker_start.sh /start.sh
 RUN mkdir /app/log
 
-COPY --from=frontend-build /app/src/{{ project_name|lower }}/static/fonts /app/src/{{ project_name|lower }}/static/fonts
-COPY --from=frontend-build /app/src/{{ project_name|lower }}/static/css /app/src/{{ project_name|lower }}/static/css
+COPY --from=frontend-build /app/src/kcc/static/css /app/src/kcc/static/css
 COPY ./src /app/src
 
-ENV DJANGO_SETTINGS_MODULE={{ project_name|lower }}.conf.docker
+ENV DJANGO_SETTINGS_MODULE=kcc.conf.docker
 
 ARG SECRET_KEY=dummy
 
