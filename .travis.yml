@@ -43,3 +43,11 @@ jobs:
         - pip install black
       script: black --check src
 
+    - stage: Docker images
+      name: Test docker image build
+      services:
+        - docker
+      script:
+        - bash bin/release-docker-image.sh
+
+
