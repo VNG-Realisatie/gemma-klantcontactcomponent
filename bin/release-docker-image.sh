@@ -47,6 +47,7 @@ if [[ -n "$git_tag" ]]; then
     echo "Building image for git tag $git_tag"
 fi
 
-release_tag=$(get_release_tag)
+_release_tag=$(get_release_tag)
+release_tag=${1:-$_release_tag}
 build_image $release_tag
 push_image $release_tag

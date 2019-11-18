@@ -49,5 +49,14 @@ jobs:
         - docker
       script:
         - bash bin/release-docker-image.sh
+      deploy:
+        - provider: script
+          script: bash bin/push-docker-image.sh latest
+          on:
+            branch: master
 
+        - provider: script
+          script: bash bin/push-docker-image.sh $TRAVIS_TAG
+          on:
+            tags: true
 
