@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     "drf_yasg",
     "rest_framework",
     "django_markup",
+    "solo",
     # Project applications.
     "kcc.accounts",
     "kcc.api",
