@@ -16,21 +16,23 @@ env:
     - SECRET_KEY=dummy
     - DB_USER=postgres
     - DB_PASSWORD=
-
-install:
-  - pip install -r requirements/dev.txt
-  - pip install codecov
-  - npm ci
-  - npm run build
+    - DEPLOYMENT=cmc
 
 jobs:
   include:
     # Run jobs in parallel in stage Tests
     - stage: Tests
       name: "Django tests"
+      install:
+        - pip install -r requirements/dev.txt
+        - pip install codecov
+        - npm ci
+        - npm run build
       script:
         - python src/manage.py collectstatic --noinput --link
         - coverage run src/manage.py test src
+      after_success:
+        - codecov
 
     - name: isort
       install:
@@ -42,5 +44,20 @@ jobs:
         - pip install black
       script: black --check src
 
-after_success:
-  - codecov
+    - stage: Docker images
+      name: Test docker image build
+      services:
+        - docker
+      script:
+        - bash bin/release-docker-image.sh
+      deploy:
+        - provider: script
+          script: bash bin/cicd.sh latest no
+          on:
+            branch: master
+
+        - provider: script
+          script: bash bin/cicd.sh $TRAVIS_TAG yes
+          on:
+            tags: true
+
