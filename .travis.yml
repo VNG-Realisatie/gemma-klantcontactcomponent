@@ -16,6 +16,7 @@ env:
     - SECRET_KEY=dummy
     - DB_USER=postgres
     - DB_PASSWORD=
+    - DEPLOYMENT=cmc
 
 jobs:
   include:
@@ -51,12 +52,12 @@ jobs:
         - bash bin/release-docker-image.sh
       deploy:
         - provider: script
-          script: bash bin/push-docker-image.sh latest
+          script: bash bin/cicd.sh latest no
           on:
             branch: master
 
         - provider: script
-          script: bash bin/push-docker-image.sh $TRAVIS_TAG
+          script: bash bin/cicd.sh $TRAVIS_TAG yes
           on:
             tags: true
 
