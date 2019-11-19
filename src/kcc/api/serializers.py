@@ -17,10 +17,12 @@ from kcc.datamodel.models import (
     NatuurlijkPersoon,
     ObjectContactMoment,
     SubVerblijfBuitenland,
+    Verzoek,
     Vestiging,
 )
+from kcc.datamodel.models.core import ObjectVerzoek
 
-from .validators import ObjectContactMomentCreateValidator
+from .validators import ObjectContactMomentCreateValidator, ObjectVerzoekCreateValidator
 
 logger = logging.getLogger(__name__)
 
@@ -296,7 +298,11 @@ class KlantSerializer(PolymorphicSerializer):
         return klant
 
 
-class ContactMomentSerializer(serializers.HyperlinkedModelSerializer):
+class KlantInteractieSerializer(serializers.HyperlinkedModelSerializer):
+    pass
+
+
+class ContactMomentSerializer(KlantInteractieSerializer):
     medewerker_identificatie = MedewerkerSerializer(required=False, allow_null=True)
 
     class Meta:
@@ -367,6 +373,21 @@ class ContactMomentSerializer(serializers.HyperlinkedModelSerializer):
         return contactmoment
 
 
+class VerzoekSerializer(KlantInteractieSerializer):
+    class Meta:
+        model = Verzoek
+        fields = (
+            "url",
+            "klant",
+            "datumtijd",
+            "tekst",
+        )
+        extra_kwargs = {
+            "url": {"lookup_field": "uuid"},
+            "klant": {"lookup_field": "uuid"},
+        }
+
+
 class ObjectContactMomentSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = ObjectContactMoment
@@ -381,6 +402,31 @@ class ObjectContactMomentSerializer(serializers.HyperlinkedModelSerializer):
             "object_type": {"validators": [IsImmutableValidator()]},
         }
         validators = [ObjectContactMomentCreateValidator()]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        value_display_mapping = add_choice_values_help_text(ObjectTypes)
+        self.fields["object_type"].help_text += f"\n\n{value_display_mapping}"
+
+        if not hasattr(self, "initial_data"):
+            return
+
+
+class ObjectVerzoekSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = ObjectVerzoek
+        fields = ("url", "verzoek", "object", "object_type")
+        extra_kwargs = {
+            "url": {"lookup_field": "uuid"},
+            "verzoek": {
+                "lookup_field": "uuid",
+                "validators": [IsImmutableValidator()],
+            },
+            "object": {"validators": [IsImmutableValidator()],},
+            "object_type": {"validators": [IsImmutableValidator()]},
+        }
+        validators = [ObjectVerzoekCreateValidator()]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
