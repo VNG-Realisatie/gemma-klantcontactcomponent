@@ -30,13 +30,21 @@ DEBUG = getenv("DEBUG", False)
 ADMINS = getenv("ADMINS", split=True)
 MANAGERS = ADMINS
 
+CACHES = {
+    "default": {"BACKEND": "django.core.cache.backends.locmem.LocMemCache"},
+    "drc_sync": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": f"redis://{getenv('REDIS_CACHE')}",  # NOTE: watch out for multiple projects using the same cache!
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "IGNORE_EXCEPTIONS": True,
+        },
+    },
+}
+
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = getenv("ALLOWED_HOSTS", "*", split=True)
-
-CACHES = {
-    "default": {"BACKEND": "django.core.cache.backends.locmem.LocMemCache"},
-}
 
 # Deal with being hosted on a subpath
 subpath = getenv("SUBPATH")

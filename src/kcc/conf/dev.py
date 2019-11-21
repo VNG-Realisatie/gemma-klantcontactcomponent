@@ -20,6 +20,11 @@ EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 ADMINS = ()
 MANAGERS = ADMINS
 
+CACHES = {
+    "default": {"BACKEND": "django.core.cache.backends.locmem.LocMemCache"},
+    "drc_sync": {"BACKEND": "django.core.cache.backends.locmem.LocMemCache"},
+}
+
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
@@ -60,10 +65,6 @@ INSTALLED_APPS += ["debug_toolbar"]
 MIDDLEWARE += ["debug_toolbar.middleware.DebugToolbarMiddleware"]
 INTERNAL_IPS = ("127.0.0.1",)
 DEBUG_TOOLBAR_CONFIG = {"INTERCEPT_REDIRECTS": False}
-
-CACHES = {
-    "default": {"BACKEND": "django.core.cache.backends.locmem.LocMemCache"},
-}
 
 REST_FRAMEWORK["DEFAULT_RENDERER_CLASSES"] += (
     "rest_framework.renderers.BrowsableAPIRenderer",

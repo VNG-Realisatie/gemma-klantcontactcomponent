@@ -133,5 +133,15 @@ Objecttype op [GEMMA Online](https://www.gemmaonline.nl/index.php/Rgbz_1.0/doc/o
 | datumtijd | De datum en het tijdstip waarop het CONTACTMOMENT begint | string | nee | C​R​U​D |
 | tekst | Een toelichting die inhoudelijk het contact met de klant beschrijft. | string | nee | C​R​U​D |
 
+## VerzoekInformatieObject
+
+Objecttype op [GEMMA Online](https://www.gemmaonline.nl/index.php/Rgbz_1.0/doc/objecttype/verzoekinformatieobject)
+
+| Attribuut | Omschrijving | Type | Verplicht | CRUD* |
+| --- | --- | --- | --- | --- |
+| url | URL-referentie naar dit object. Dit is de unieke identificatie en locatie van dit object. | string | nee | ~~C~~​R​~~U~~​~~D~~ |
+| informatieobject | URL-referentie naar het INFORMATIEOBJECT (in de Documenten API) waarin (een deel van) het verzoek beschreven is of aanvullende informatie biedt bij het VERZOEK. | string | ja | C​R​U​D |
+| verzoek | URL-referentie naar het VERZOEK. | string | ja | C​R​U​D |
+
 
 * Create, Read, Update, Delete

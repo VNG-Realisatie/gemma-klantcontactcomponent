@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     "kcc.accounts",
     "kcc.api",
     "kcc.datamodel",
+    "kcc.sync",
     "kcc.utils",
 ]
 

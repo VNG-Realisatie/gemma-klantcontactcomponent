@@ -1,6 +1,12 @@
+import logging
+import uuid as _uuid
+
 from django.db import models
 
-__all__ = ["Medewerker"]
+logger = logging.getLogger(__name__)
+
+
+__all__ = ["Medewerker", "VerzoekInformatieObject"]
 
 
 class Medewerker(models.Model):
@@ -35,3 +41,39 @@ class Medewerker(models.Model):
 
     class Meta:
         verbose_name = "medewerker"
+
+
+class VerzoekInformatieObject(models.Model):
+    uuid = models.UUIDField(
+        unique=True, default=_uuid.uuid4, help_text="Unieke resource identifier (UUID4)"
+    )
+    verzoek = models.ForeignKey(
+        "datamodel.Verzoek",
+        on_delete=models.CASCADE,
+        help_text="URL-referentie naar het VERZOEK.",
+    )
+    informatieobject = models.URLField(
+        "informatieobject",
+        help_text="URL-referentie naar het INFORMATIEOBJECT (in de Documenten "
+        "API) waarin (een deel van) het verzoek beschreven is of "
+        "aanvullende informatie biedt bij het VERZOEK.",
+        max_length=1000,
+    )
+
+    class Meta:
+        verbose_name = "verzoekinformatieobject"
+        verbose_name_plural = "verzoekinformatieobjecten"
+        unique_together = (("verzoek", "informatieobject"),)
+
+    def __str__(self):
+        return str(self.uuid)
+
+    # def unique_representation(self):
+    #     if not hasattr(self, "_unique_representation"):
+    #         io_id = request_object_attribute(
+    #             self.informatieobject, "identificatie", "enkelvoudiginformatieobject"
+    #         )
+    #         self._unique_representation = (
+    #             f"({self.verzoek.unique_representation()}) - {io_id}"
+    #         )
+    #     return self._unique_representation

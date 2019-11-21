@@ -1,6 +1,6 @@
 from vng_api_common.filtersets import FilterSet
 
-from kcc.datamodel.models import ObjectContactMoment
+from kcc.datamodel.models import ObjectContactMoment, VerzoekInformatieObject
 from kcc.datamodel.models.core import ObjectVerzoek
 
 
@@ -14,3 +14,9 @@ class ObjectVerzoekFilter(FilterSet):
     class Meta:
         model = ObjectVerzoek
         fields = ("object", "verzoek")
+
+
+class VerzoekInformatieObjectFilter(FilterSet):
+    class Meta:
+        model = VerzoekInformatieObject
+        fields = ("verzoek", "informatieobject")

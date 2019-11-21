@@ -1,15 +1,26 @@
 import logging
 
+from django.core.cache import caches
+
 from rest_framework import mixins, viewsets
 from rest_framework.serializers import ValidationError
 from rest_framework.settings import api_settings
 from vng_api_common.permissions import AuthScopesRequired
 from vng_api_common.viewsets import CheckQueryParamsMixin
 
-from kcc.datamodel.models import ContactMoment, Klant, ObjectContactMoment
+from kcc.datamodel.models import (
+    ContactMoment,
+    Klant,
+    ObjectContactMoment,
+    VerzoekInformatieObject,
+)
 from kcc.datamodel.models.core import ObjectVerzoek, Verzoek
 
-from .filters import ObjectContactMomentFilter, ObjectVerzoekFilter
+from .filters import (
+    ObjectContactMomentFilter,
+    ObjectVerzoekFilter,
+    VerzoekInformatieObjectFilter,
+)
 from .scopes import (
     SCOPE_KLANTEN_AANMAKEN,
     SCOPE_KLANTEN_ALLES_LEZEN,
@@ -21,6 +32,7 @@ from .serializers import (
     KlantSerializer,
     ObjectContactMomentSerializer,
     ObjectVerzoekSerializer,
+    VerzoekInformatieObjectSerializer,
     VerzoekSerializer,
 )
 from .validators import (
@@ -323,3 +335,88 @@ class ObjectVerzoekViewSet(
             )
         else:
             super().perform_destroy(instance)
+
+
+class VerzoekInformatieObjectViewSet(
+    CheckQueryParamsMixin,
+    mixins.CreateModelMixin,
+    mixins.DestroyModelMixin,
+    viewsets.ReadOnlyModelViewSet,
+):
+    """
+    Opvragen en bewerken van VERZOEK-INFORMATIEOBJECT relaties.
+
+    create:
+    Maak een VERZOEK-INFORMATIEOBJECT relatie aan.
+
+    Registreer een INFORMATIEOBJECT bij een VERZOEK. Er worden twee types van
+    relaties met andere objecten gerealiseerd:
+
+    **Er wordt gevalideerd op**
+    - geldigheid `verzoek` URL
+    - geldigheid `informatieobject` URL
+    - de combinatie `informatieobject` en `verzoek` moet uniek zijn
+
+    **Opmerkingen**
+    - Bij het aanmaken wordt ook in de Documenten API de gespiegelde relatie
+      aangemaakt, echter zonder de relatie-informatie.
+
+    list:
+    Alle VERZOEK-INFORMATIEOBJECT relaties opvragen.
+
+    Deze lijst kan gefilterd wordt met query-string parameters.
+
+    retrieve:
+    Een specifieke VERZOEK-INFORMATIEOBJECT relatie opvragen.
+
+    Een specifieke VERZOEK-INFORMATIEOBJECT relatie opvragen.
+
+    update:
+    Werk een VERZOEK-INFORMATIEOBJECT relatie in zijn geheel bij.
+
+    Je mag enkel de gegevens van de relatie bewerken, en niet de relatie zelf
+    aanpassen.
+
+    **Er wordt gevalideerd op**
+    - `informatieobject` URL en `verzoek` URL mogen niet veranderen
+
+    partial_update:
+    Werk een VERZOEK-INFORMATIEOBJECT relatie deels bij.
+
+    Je mag enkel de gegevens van de relatie bewerken, en niet de relatie zelf
+    aanpassen.
+
+    **Er wordt gevalideerd op**
+    - `informatieobject` URL en `verzoek` URL mogen niet veranderen
+
+    destroy:
+    Verwijder een VERZOEK-INFORMATIEOBJECT relatie.
+
+    Verwijder een VERZOEK-INFORMATIEOBJECT relatie.
+    """
+
+    queryset = VerzoekInformatieObject.objects.all()
+    serializer_class = VerzoekInformatieObjectSerializer
+    filterset_class = VerzoekInformatieObjectFilter
+    lookup_field = "uuid"
+    permission_classes = (AuthScopesRequired,)
+    required_scopes = {
+        "list": SCOPE_KLANTEN_ALLES_LEZEN,
+        "retrieve": SCOPE_KLANTEN_ALLES_LEZEN,
+        "create": SCOPE_KLANTEN_AANMAKEN,
+        "destroy": SCOPE_KLANTEN_ALLES_VERWIJDEREN,
+        "update": SCOPE_KLANTEN_BIJWERKEN,
+        "partial_update": SCOPE_KLANTEN_BIJWERKEN,
+    }
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+
+        # Do not display BesluitInformatieObjecten that are marked to be deleted
+        cache = caches["drc_sync"]
+
+        # TODO: Store cachekeys somewhere central.
+        marked_vios = cache.get("vios_marked_for_delete")
+        if marked_vios:
+            return qs.exclude(uuid__in=marked_vios)
+        return qs
