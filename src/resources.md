@@ -26,6 +26,7 @@ Objecttype op [GEMMA Online](https://www.gemmaonline.nl/index.php/Rgbz_1.0/doc/o
 | datumtijd | De datum en het tijdstip waarop het CONTACTMOMENT begint | string | nee | C​R​U​D |
 | kanaal | Het communicatiekanaal waarlangs het CONTACTMOMENT gevoerd wordt | string | nee | C​R​U​D |
 | tekst | Een toelichting die inhoudelijk het contact met de klant beschrijft. | string | nee | C​R​U​D |
+| onderwerpLinks | Eén of meerdere links naar een product, webpagina of andere entiteit zodat contactmomenten gegroepeerd kunnen worden op onderwerp. | array | nee | C​R​U​D |
 | initiatiefnemer | De partij die het contact heeft geïnitieerd. | string | nee | C​R​U​D |
 | medewerker | URL-referentie naar een medewerker | string | nee | C​R​U​D |
 

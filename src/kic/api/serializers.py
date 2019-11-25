@@ -319,6 +319,7 @@ class ContactMomentSerializer(KlantInteractieSerializer):
             "datumtijd",
             "kanaal",
             "tekst",
+            "onderwerp_links",
             "initiatiefnemer",
             "medewerker",
             "medewerker_identificatie",
