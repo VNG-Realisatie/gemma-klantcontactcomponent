@@ -8,7 +8,7 @@ from vng_api_common.models import APIMixin
 
 from ..constants import InitiatiefNemer, KlantType, ObjectTypes
 
-__all__ = ["Klant", "ContactMoment", "ObjectContactMoment"]
+__all__ = ["Klant", "ContactMoment", "ObjectContactMoment", "Verzoek", "ObjectVerzoek"]
 
 
 class Klant(APIMixin, models.Model):
@@ -56,7 +56,7 @@ class Klant(APIMixin, models.Model):
         return None
 
 
-class ContactMoment(APIMixin, models.Model):
+class KlantInteractie(models.Model):
     uuid = models.UUIDField(
         unique=True, default=uuid.uuid4, help_text="Unieke resource identifier (UUID4)"
     )
@@ -73,16 +73,22 @@ class ContactMoment(APIMixin, models.Model):
         default=timezone.now,
         help_text=_("De datum en het tijdstip waarop het CONTACTMOMENT begint"),
     )
-    kanaal = models.CharField(
-        blank=True,
-        max_length=50,
-        help_text=_("Het communicatiekanaal waarlangs het CONTACTMOMENT gevoerd wordt"),
-    )
     tekst = models.TextField(
         blank=True,
         help_text=_(
             "Een toelichting die inhoudelijk het contact met de klant beschrijft."
         ),
+    )
+
+    class Meta:
+        abstract = True
+
+
+class ContactMoment(APIMixin, KlantInteractie):
+    kanaal = models.CharField(
+        blank=True,
+        max_length=50,
+        help_text=_("Het communicatiekanaal waarlangs het CONTACTMOMENT gevoerd wordt"),
     )
     initiatiefnemer = models.CharField(
         max_length=20,
@@ -99,18 +105,19 @@ class ContactMoment(APIMixin, models.Model):
         verbose_name_plural = "contactmomenten"
 
 
-class ObjectContactMoment(APIMixin, models.Model):
+class Verzoek(APIMixin, KlantInteractie):
     """
-    Modelleer een CONTACTMOMENT horend bij een OBJECT.
+    Verzoek is een speciaal contactmoment.
     """
 
+    class Meta:
+        verbose_name = "verzoek"
+        verbose_name_plural = "verzoeken"
+
+
+class ObjectKlantInteractie(models.Model):
     uuid = models.UUIDField(
         unique=True, default=uuid.uuid4, help_text="Unieke resource identifier (UUID4)"
-    )
-    contactmoment = models.ForeignKey(
-        "datamodel.ContactMoment",
-        on_delete=models.CASCADE,
-        help_text="URL-referentie naar het CONTACTMOMENT.",
     )
     object = models.URLField(
         help_text="URL-referentie naar het gerelateerde OBJECT (in een andere API)."
@@ -123,6 +130,34 @@ class ObjectContactMoment(APIMixin, models.Model):
     )
 
     class Meta:
+        abstract = True
+
+
+class ObjectContactMoment(APIMixin, ObjectKlantInteractie):
+    """
+    Modelleer een CONTACTMOMENT horend bij een OBJECT.
+    """
+
+    contactmoment = models.ForeignKey(
+        "datamodel.ContactMoment",
+        on_delete=models.CASCADE,
+        help_text="URL-referentie naar het CONTACTMOMENT.",
+    )
+
+    class Meta:
         verbose_name = "object-contactmoment"
         verbose_name_plural = "object-contactmomenten"
         unique_together = ("contactmoment", "object")
+
+
+class ObjectVerzoek(APIMixin, ObjectKlantInteractie):
+    verzoek = models.ForeignKey(
+        "datamodel.Verzoek",
+        on_delete=models.CASCADE,
+        help_text="URL-referentie naar het VERZOEK.",
+    )
+
+    class Meta:
+        verbose_name = "object-verzoek"
+        verbose_name_plural = "object-verzoeken"
+        unique_together = ("verzoek", "object")

@@ -1,13 +1,17 @@
 import logging
 
+from django.conf import settings
 from django.db import transaction
 from django.utils.translation import ugettext_lazy as _
 
 from rest_framework import serializers
+from rest_framework.settings import api_settings
+from rest_framework.validators import UniqueTogetherValidator
 from vng_api_common.polymorphism import Discriminator, PolymorphicSerializer
 from vng_api_common.serializers import add_choice_values_help_text
-from vng_api_common.validators import IsImmutableValidator
+from vng_api_common.validators import IsImmutableValidator, ResourceValidator
 
+from kcc.api.auth import get_auth
 from kcc.datamodel.constants import GeslachtsAanduiding, KlantType, ObjectTypes
 from kcc.datamodel.models import (
     Adres,
@@ -17,10 +21,14 @@ from kcc.datamodel.models import (
     NatuurlijkPersoon,
     ObjectContactMoment,
     SubVerblijfBuitenland,
+    Verzoek,
+    VerzoekInformatieObject,
     Vestiging,
 )
+from kcc.datamodel.models.core import ObjectVerzoek
+from kcc.sync.signals import SyncError
 
-from .validators import ObjectContactMomentCreateValidator
+from .validators import ObjectContactMomentCreateValidator, ObjectVerzoekCreateValidator
 
 logger = logging.getLogger(__name__)
 
@@ -296,7 +304,11 @@ class KlantSerializer(PolymorphicSerializer):
         return klant
 
 
-class ContactMomentSerializer(serializers.HyperlinkedModelSerializer):
+class KlantInteractieSerializer(serializers.HyperlinkedModelSerializer):
+    pass
+
+
+class ContactMomentSerializer(KlantInteractieSerializer):
     medewerker_identificatie = MedewerkerSerializer(required=False, allow_null=True)
 
     class Meta:
@@ -367,6 +379,21 @@ class ContactMomentSerializer(serializers.HyperlinkedModelSerializer):
         return contactmoment
 
 
+class VerzoekSerializer(KlantInteractieSerializer):
+    class Meta:
+        model = Verzoek
+        fields = (
+            "url",
+            "klant",
+            "datumtijd",
+            "tekst",
+        )
+        extra_kwargs = {
+            "url": {"lookup_field": "uuid"},
+            "klant": {"lookup_field": "uuid"},
+        }
+
+
 class ObjectContactMomentSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = ObjectContactMoment
@@ -390,3 +417,69 @@ class ObjectContactMomentSerializer(serializers.HyperlinkedModelSerializer):
 
         if not hasattr(self, "initial_data"):
             return
+
+
+class ObjectVerzoekSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = ObjectVerzoek
+        fields = ("url", "verzoek", "object", "object_type")
+        extra_kwargs = {
+            "url": {"lookup_field": "uuid"},
+            "verzoek": {
+                "lookup_field": "uuid",
+                "validators": [IsImmutableValidator()],
+            },
+            "object": {"validators": [IsImmutableValidator()],},
+            "object_type": {"validators": [IsImmutableValidator()]},
+        }
+        validators = [ObjectVerzoekCreateValidator()]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        value_display_mapping = add_choice_values_help_text(ObjectTypes)
+        self.fields["object_type"].help_text += f"\n\n{value_display_mapping}"
+
+        if not hasattr(self, "initial_data"):
+            return
+
+
+class VerzoekInformatieObjectSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = VerzoekInformatieObject
+        fields = ("url", "informatieobject", "verzoek")
+        validators = [
+            UniqueTogetherValidator(
+                queryset=VerzoekInformatieObject.objects.all(),
+                fields=["verzoek", "informatieobject"],
+            ),
+        ]
+        extra_kwargs = {
+            "url": {"lookup_field": "uuid"},
+            "informatieobject": {
+                "validators": [
+                    ResourceValidator(
+                        "EnkelvoudigInformatieObject",
+                        settings.DRC_API_SPEC,
+                        get_auth=get_auth,
+                    ),
+                    IsImmutableValidator(),
+                ]
+            },
+            "verzoek": {"lookup_field": "uuid", "validators": [IsImmutableValidator()]},
+        }
+
+    def save(self, **kwargs):
+        # can't slap a transaction atomic on this, since DRC/KCC query for the
+        # relation!
+        try:
+            return super().save(**kwargs)
+        except SyncError as sync_error:
+            # delete the object again
+            VerzoekInformatieObject.objects.filter(
+                informatieobject=self.validated_data["informatieobject"],
+                verzoek=self.validated_data["verzoek"],
+            )._raw_delete("default")
+            raise serializers.ValidationError(
+                {api_settings.NON_FIELD_ERRORS_KEY: sync_error.args[0]}
+            ) from sync_error

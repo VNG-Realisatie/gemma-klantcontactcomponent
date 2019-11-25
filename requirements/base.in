@@ -10,7 +10,8 @@ uwsgi
 Django
 django-choices
 django-cors-middleware
-django-markup
+django-markup==1.3
+django-redis
 
 djangorestframework
 vng-api-common

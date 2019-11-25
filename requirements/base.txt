@@ -13,6 +13,7 @@ django-choices==1.7.0
 django-cors-middleware==1.4.0
 django-filter==2.2.0      # via vng-api-common
 django-markup==1.4.1
+django-redis==4.10.0
 django-rest-framework-condition==0.1.1  # via vng-api-common
 django-solo==1.1.3        # via vng-api-common
 django==2.2.6
@@ -38,6 +39,7 @@ python-dotenv==0.10.3
 pytz==2019.3
 pyyaml==5.1.2             # via gemma-zds-client, oyaml, vng-api-common
 raven==6.10.0
+redis==3.3.11             # via django-redis
 requests==2.22.0          # via coreapi, gemma-zds-client, vng-api-common
 ruamel.yaml.clib==0.2.0   # via ruamel.yaml
 ruamel.yaml==0.16.5       # via drf-yasg

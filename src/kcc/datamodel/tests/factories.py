@@ -34,6 +34,23 @@ class ObjectContactMomentFactory(factory.django.DjangoModelFactory):
         model = "datamodel.ObjectContactMoment"
 
 
+class VerzoekFactory(factory.django.DjangoModelFactory):
+    klant = factory.SubFactory(KlantFactory)
+    tekst = factory.Faker("word")
+
+    class Meta:
+        model = "datamodel.Verzoek"
+
+
+class ObjectVerzoekFactory(factory.django.DjangoModelFactory):
+    verzoek = factory.SubFactory(VerzoekFactory)
+    object_type = factory.fuzzy.FuzzyChoice(ObjectTypes.values)
+    object = factory.Faker("url")
+
+    class Meta:
+        model = "datamodel.ObjectVerzoek"
+
+
 # klant factories
 class NatuurlijkPersoonFactory(factory.django.DjangoModelFactory):
     klant = factory.SubFactory(KlantFactory)
