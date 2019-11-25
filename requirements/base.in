@@ -8,6 +8,7 @@ markdown
 uwsgi
 
 Django
+django-better-admin-arrayfield
 django-choices
 django-cors-middleware
 django-markup==1.3
