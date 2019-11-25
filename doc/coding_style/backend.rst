@@ -35,7 +35,7 @@ Example:
 
     import django.contrib.admin
 
-    import kcc.other_app.models
+    import kic.other_app.models
 
     from .models import SomeModel
 
@@ -50,7 +50,7 @@ Example:
 
 .. code-block::
 
-    from kcc.accounts.models import Account
+    from kic.accounts.models import Account
 
     class Idea(models.Model):
         pass

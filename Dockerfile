@@ -28,7 +28,7 @@ RUN npm install
 COPY ./Gulpfile.js /app/
 COPY ./build /app/build/
 
-COPY src/kcc/sass/ /app/src/kcc/sass/
+COPY src/kic/sass/ /app/src/kic/sass/
 RUN npm run build
 
 # Stage 3 - Build docker image suitable for execution and deployment
@@ -58,10 +58,10 @@ WORKDIR /app
 COPY ./bin/docker_start.sh /start.sh
 RUN mkdir /app/log
 
-COPY --from=frontend-build /app/src/kcc/static/css /app/src/kcc/static/css
+COPY --from=frontend-build /app/src/kic/static/css /app/src/kic/static/css
 COPY ./src /app/src
 
-ENV DJANGO_SETTINGS_MODULE=kcc.conf.docker
+ENV DJANGO_SETTINGS_MODULE=kic.conf.docker
 
 ARG SECRET_KEY=dummy
 

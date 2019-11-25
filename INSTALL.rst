@@ -44,8 +44,8 @@ development machine.
 
    .. code-block:: bash
 
-       $ git clone git@github.com:VNG-Realisatie/gemma-kcc
-       $ cd kcc
+       $ git clone git@github.com:VNG-Realisatie/gemma-kic
+       $ cd kic
 
 3. Install all required libraries.
 
@@ -83,7 +83,7 @@ development machine.
        $ python src/manage.py runserver
 
 **Note:** If you are making local, machine specific, changes, add them to
-``src/kcc/conf/local.py``. You can base this file on the
+``src/kic/conf/local.py``. You can base this file on the
 example file included in the same directory.
 
 **Note:** You can run watch-tasks to compile `Sass`_ to CSS and `ECMA`_ to JS
@@ -103,7 +103,7 @@ When updating an existing installation:
 
    .. code-block:: bash
 
-       $ cd kcc
+       $ cd kic
        $ source env/bin/activate
 
 2. Update the code and libraries:
@@ -129,7 +129,7 @@ To run the test suite:
 
 .. code-block:: bash
 
-    $ python src/manage.py test kcc
+    $ python src/manage.py test kic
 
 
 Docker
@@ -138,23 +138,23 @@ Docker
 The easiest way to get the project started is by using `Docker Compose`_.
 
 1. Clone or download the code from `Github`_ in a folder like
-   ``kcc``:
+   ``kic``:
 
    .. code-block:: bash
 
-       $ git clone git@bitbucket.org:VNG-Realisatie/gemma-kcc kcc
-       Cloning into 'kcc'...
+       $ git clone git@bitbucket.org:VNG-Realisatie/gemma-kic kic
+       Cloning into 'kic'...
        ...
 
-       $ cd kcc
+       $ cd kic
 
 2. Start the database and web services:
 
    .. code-block:: bash
 
        $ docker-compose up -d
-       Starting kcc_db_1 ... done
-       Starting kcc_web_1 ... done
+       Starting kic_db_1 ... done
+       Starting kic_web_1 ... done
 
    It can take a while before everything is done. Even after starting the web
    container, the database might still be migrating. You can always check the
@@ -162,19 +162,19 @@ The easiest way to get the project started is by using `Docker Compose`_.
 
    .. code-block:: bash
 
-       $ docker logs -f kcc_web_1
+       $ docker logs -f kic_web_1
 
 3. Create an admin user and load initial data. If different container names
    are shown above, use the container name ending with ``_web_1``:
 
    .. code-block:: bash
 
-       $ docker exec -it kcc_web_1 /app/src/manage.py createsuperuser
+       $ docker exec -it kic_web_1 /app/src/manage.py createsuperuser
        Username: admin
        ...
        Superuser created successfully.
 
-       $ docker exec -it kcc_web_1 /app/src/manage.py loaddata admin_index groups
+       $ docker exec -it kic_web_1 /app/src/manage.py loaddata admin_index groups
        Installed 5 object(s) from 2 fixture(s)
 
 4. Point your browser to ``http://localhost:8000/`` to access the project's
@@ -196,7 +196,7 @@ The easiest way to get the project started is by using `Docker Compose`_.
    system you can run ``docker system prune``.
 
 .. _Docker Compose: https://docs.docker.com/compose/install/
-.. _Github: https://github.com/maykinmedia/kcc/
+.. _Github: https://github.com/maykinmedia/kic/
 
 
 More Docker
@@ -204,26 +204,26 @@ More Docker
 
 If you just want to run the project as a Docker container and connect to an
 external database, you can build and run the ``Dockerfile`` and pass several
-environment variables. See ``src/kcc/conf/docker.py`` for
+environment variables. See ``src/kic/conf/docker.py`` for
 all settings.
 
 .. code-block:: bash
 
     $ docker build . && docker run \
         -p 8000:8000 \
-        -e DJANGO_SETTINGS_MODULE=kcc.conf.docker \
+        -e DJANGO_SETTINGS_MODULE=kic.conf.docker \
         -e DATABASE_USERNAME=... \
         -e DATABASE_PASSWORD=... \
         -e DATABASE_HOST=... \
-        --name kcc
+        --name kic
 
-    $ docker exec -it kcc /app/src/manage.py createsuperuser
+    $ docker exec -it kic /app/src/manage.py createsuperuser
 
 Settings
 ========
 
 All settings for the project can be found in
-``src/kcc/conf``.
+``src/kic/conf``.
 The file ``local.py`` overwrites settings from the base configuration.
 
 Generating the API spec

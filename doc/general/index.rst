@@ -38,7 +38,7 @@ JavaScript
 
 JavaScript code is written in ECMAScript 2015 (ES6) and transpiled using webpack
 and babel. Therefore, all non-compiled code is placed outside the static directory
-into ``src/kcc/js/``.
+into ``src/kic/js/``.
 
 We write modules for every component/view matching the BEM structure provides by
 SASS.
@@ -70,4 +70,4 @@ After installing libraries can be included using ES6 imports::
 **Exceptions**
 
 When you need to override third-party JavaScript you still need to manually place
-files into ``src/kcc/static/``.
+files into ``src/kic/static/``.
