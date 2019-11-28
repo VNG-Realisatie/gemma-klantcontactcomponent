@@ -38,6 +38,7 @@ jobs:
       install: skip
       script:
         - bash bin/release-docker-image.sh
+      after_success: echo "deploying..."
       deploy:
         - provider: script
           script: bash bin/cicd.sh latest yes
@@ -48,7 +49,6 @@ jobs:
           script: bash bin/cicd.sh $TRAVIS_TAG yes
           on:
             tags: true
-      after_success: skip
 
 after_success:
   - pip install codecov
