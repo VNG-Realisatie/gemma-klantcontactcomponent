@@ -53,6 +53,7 @@ class ContactMomentTests(JWTAuthMixin, APITestCase):
                 "datumtijd": "2019-01-01T00:00:00Z",
                 "kanaal": contactmoment.kanaal,
                 "tekst": contactmoment.tekst,
+                "onderwerpLinks": [],
                 "initiatiefnemer": InitiatiefNemer.gemeente,
                 "medewerker": contactmoment.medewerker,
                 "medewerkerIdentificatie": None,
@@ -85,6 +86,7 @@ class ContactMomentTests(JWTAuthMixin, APITestCase):
                 "datumtijd": "2019-01-01T00:00:00Z",
                 "kanaal": contactmoment.kanaal,
                 "tekst": contactmoment.tekst,
+                "onderwerpLinks": [],
                 "initiatiefnemer": InitiatiefNemer.gemeente,
                 "medewerker": "",
                 "medewerkerIdentificatie": {
@@ -104,6 +106,7 @@ class ContactMomentTests(JWTAuthMixin, APITestCase):
             "klant": klant_url,
             "kanaal": "telephone",
             "tekst": "some text",
+            "onderwerpLinks": [],
             "initiatiefnemer": InitiatiefNemer.gemeente,
             "medewerker": "http://example.com/medewerker/1",
         }
@@ -128,6 +131,7 @@ class ContactMomentTests(JWTAuthMixin, APITestCase):
             "klant": klant_url,
             "kanaal": "telephone",
             "tekst": "some text",
+            "onderwerpLinks": [],
             "initiatiefnemer": InitiatiefNemer.gemeente,
             "medewerkerIdentificatie": {
                 "identificatie": "12345",

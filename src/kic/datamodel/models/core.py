@@ -4,6 +4,7 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
+from django_better_admin_arrayfield.models.fields import ArrayField
 from vng_api_common.models import APIMixin
 
 from ..constants import InitiatiefNemer, KlantType, ObjectTypes
@@ -99,10 +100,31 @@ class ContactMoment(APIMixin, KlantInteractie):
     medewerker = models.URLField(
         help_text="URL-referentie naar een medewerker", max_length=1000, blank=True
     )
+    onderwerp_links = ArrayField(
+        models.URLField(
+            _("onderwerp link"),
+            max_length=1000,
+            help_text=_(
+                "URL naar een product, webpagina of andere entiteit zodat contactmomenten gegroepeerd kunnen worden."
+            ),
+        ),
+        help_text=_(
+            "Eén of meerdere links naar een product, webpagina of andere entiteit "
+            "zodat contactmomenten gegroepeerd kunnen worden op onderwerp."
+        ),
+        blank=True,
+        default=list,
+    )
 
     class Meta:
         verbose_name = "contactmoment"
         verbose_name_plural = "contactmomenten"
+
+    def save(self, *args, **kwargs):
+        # workaround for https://github.com/gradam/django-better-admin-arrayfield/issues/17
+        if self.onderwerp_links is None:
+            self.onderwerp_links = []
+        super().save(*args, **kwargs)
 
 
 class Verzoek(APIMixin, KlantInteractie):

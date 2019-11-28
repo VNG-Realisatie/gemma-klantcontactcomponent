@@ -5307,6 +5307,18 @@
                     "description": "Een toelichting die inhoudelijk het contact met de klant beschrijft.",
                     "type": "string"
                 },
+                "onderwerpLinks": {
+                    "description": "E\u00e9n of meerdere links naar een product, webpagina of andere entiteit zodat contactmomenten gegroepeerd kunnen worden op onderwerp.",
+                    "type": "array",
+                    "items": {
+                        "title": "Onderwerp link",
+                        "description": "URL naar een product, webpagina of andere entiteit zodat contactmomenten gegroepeerd kunnen worden.",
+                        "type": "string",
+                        "format": "uri",
+                        "maxLength": 1000,
+                        "minLength": 1
+                    }
+                },
                 "initiatiefnemer": {
                     "title": "Initiatiefnemer",
                     "description": "De partij die het contact heeft ge\u00efnitieerd.",
