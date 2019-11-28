@@ -17,42 +17,30 @@ env:
     - DB_USER=postgres
     - DB_PASSWORD=
     - DEPLOYMENT=cmc
+  matrix:
+    - TOXENV=django_tests
+    - TOXENV=isort
+    - TOXENV=black
+
+install:
+  - pip install tox tox-travis
+
+script: tox
 
 jobs:
   include:
-    # Run jobs in parallel in stage Tests
-    - stage: Tests
-      name: "Django tests"
-      install:
-        - pip install -r requirements/dev.txt
-        - pip install codecov
-        - npm ci
-        - npm run build
-      script:
-        - python src/manage.py collectstatic --noinput --link
-        - coverage run src/manage.py test src
-      after_success:
-        - codecov
-
-    - name: isort
-      install:
-        - pip install isort
-      script: isort --recursive --check-only --diff .
-
-    - name: black
-      install:
-        - pip install black
-      script: black --check src
-
+    # First stage is 'Tests' by default and populated from env matrix
+    # expansion
     - stage: Docker images
       name: Test docker image build
       services:
         - docker
+      install: skip
       script:
         - bash bin/release-docker-image.sh
       deploy:
         - provider: script
-          script: bash bin/cicd.sh latest no
+          script: bash bin/cicd.sh latest yes
           on:
             branch: master
 
@@ -60,4 +48,8 @@ jobs:
           script: bash bin/cicd.sh $TRAVIS_TAG yes
           on:
             tags: true
+      after_success: skip
 
+after_success:
+  - pip install codecov
+  - codecov
