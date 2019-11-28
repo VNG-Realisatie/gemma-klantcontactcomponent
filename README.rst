@@ -5,7 +5,7 @@ Klantcontactcomponent
 :Version: 0.1.0
 :Source: https://github.com/VNG-Realisatie/klantinteracties-api
 :Keywords: zaken, zaakgericht werken, GEMMA, KIC
-:PythonVersion: 3.6
+:PythonVersion: 3.7
 
 |build-status| |black|
 
