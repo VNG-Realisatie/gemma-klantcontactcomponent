@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import sys
 
-from kcc.setup import setup_env
+from kic.setup import setup_env
 
 if __name__ == "__main__":
     setup_env()

@@ -287,7 +287,7 @@ Selectors
 
   .. code-block:: scss
 
-    // file src/kcc/sass/components/blocks/_block.scss
+    // file src/kic/sass/components/blocks/_block.scss
 
     .block {  // That's it, no more blocks in this file
       // ...

@@ -1,10 +1,10 @@
 .. _index:
 
 ======================================
-kcc Documentation
+kic Documentation
 ======================================
 
-Welcome to the documentation for kcc.
+Welcome to the documentation for kic.
 
 
 Documentation

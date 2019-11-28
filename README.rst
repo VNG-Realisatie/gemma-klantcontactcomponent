@@ -3,13 +3,13 @@ Klantcontactcomponent
 ========================
 
 :Version: 0.1.0
-:Source: https://github.com/VNG-Realisatie/gemma-klantcontactcomponent
-:Keywords: zaken, zaakgericht werken, GEMMA, KCC
+:Source: https://github.com/VNG-Realisatie/klantinteracties-api
+:Keywords: zaken, zaakgericht werken, GEMMA, KIC
 :PythonVersion: 3.6
 
 |build-status| |black|
 
-Referentieimplementatie van de klantcontactcomponent (KCC).
+Referentieimplementatie van de klantinteractiecomponent (KIC).
 
 Inleiding
 =========
@@ -19,7 +19,7 @@ Om dit mogelijk te maken is er gegevensuitwisseling nodig. De kerngegevens van
 zaken moeten ergens geregistreerd worden en opvraagbaar zijn.
 
 Deze referentieimplementatie toont aan dat de API specificatie voor de
-klantcontactcomponent (hierna KCC) implementeerbaar is, en vormt een
+klantinteractiecomponent (hierna KIC) implementeerbaar is, en vormt een
 voorbeeld voor andere implementaties indien ergens twijfel bestaat.
 
 Documentatie
@@ -40,11 +40,10 @@ Copyright © VNG Realisatie 2019
 Licensed under the EUPL_
 
 .. _EUPL: LICENCE.md
-.. _Maykin Media B.V.: https://www.maykinmedia.nl
 
-.. |build-status| image:: https://travis-ci.org/VNG-Realisatie/gemma-klantcontactcomponent.svg?branch=master
+.. |build-status| image:: https://travis-ci.org/VNG-Realisatie/klantinteracties-api.svg?branch=master
     :alt: Build status
-    :target: https://travis-ci.org/VNG-Realisatie/gemma-klantcontactcomponent
+    :target: https://travis-ci.org/VNG-Realisatie/klantinteracties-api
 
 .. |black| image:: https://img.shields.io/badge/code%20style-black-000000.svg
     :target: https://github.com/psf/black

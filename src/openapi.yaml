@@ -1,15 +1,49 @@
 openapi: 3.0.0
 info:
-  title: Contactmomenten API
-  description: "Een API om een contactmoment component (CMC) te benaderen.\n\nHet\
-    \ CONTACTMOMENT is het kernobject in deze API, waaraan verschillende andere\n\
-    resources gerelateerd zijn. De Contactmomenten API kan zelfstandig of met \nandere\
-    \ API's samen werken om tot volledige functionaliteit te komen.\n\n**Afhankelijkheden**\n\
-    \nDeze API is afhankelijk van:\n\n* Zaken API *(optioneel)*\n* Autorisaties API\
-    \ *(optioneel)*\n\n**Autorisatie**\n\nDeze API vereist autorisatie. Je kan de\n\
-    [token-tool](https://zaken-auth.vng.cloud/) gebruiken om JWT-tokens te\ngenereren.\n\
-    \n**Handige links**\n\n* [Documentatie](https://zaakgerichtwerken.vng.cloud/standaard)\n\
-    * [Zaakgericht werken](https://zaakgerichtwerken.vng.cloud)\n"
+  title: Klantinteracties API
+  description: 'Een API om een klantinteractiecomponent (KIC) te benaderen.
+
+
+    Een KLANTINTERACTIEMOMENT is het abstracte kernobject wat zich concreet
+
+    voordoet als CONTACTMOMENT of VERZOEK. Hieraan zijn verschillende andere
+
+    resources gerelateerd. De Klantinteracties API kan zelfstandig of met
+
+    andere API''s samen werken om tot volledige functionaliteit te komen.
+
+
+    **Afhankelijkheden**
+
+
+    Deze API is afhankelijk van:
+
+
+    * Autorisaties API
+
+    * Zaken API *(optioneel)*
+
+    * Documenten API *(optioneel)*
+
+
+    **Autorisatie**
+
+
+    Deze API vereist autorisatie. Je kan de
+
+    [token-tool](https://zaken-auth.vng.cloud/) gebruiken om JWT-tokens te
+
+    genereren.
+
+
+    **Handige links**
+
+
+    * [Documentatie](https://zaakgerichtwerken.vng.cloud/standaard)
+
+    * [Zaakgericht werken](https://zaakgerichtwerken.vng.cloud)
+
+    '
   contact:
     url: https://zaakgerichtwerken.vng.cloud
     email: standaarden.ondersteuning@vng.nl

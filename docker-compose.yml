@@ -5,12 +5,13 @@ services:
   db:
     image: postgres:11-alpine
     # environment:
-    #   - POSTGRES_USER=${PG_USER:kcc}
-    #   - POSTGRES_PASSWORD=${PG_PASSWORD:kcc}
+    #   - POSTGRES_USER=${PG_USER:kic}
+    #   - POSTGRES_PASSWORD=${PG_PASSWORD:kic}
   web:
-    image: vngr/gemma-kcc
+    build: .
+    image: vngr/klantinteracties-api
     environment:
-      - DJANGO_SETTINGS_MODULE=kcc.conf.docker
+      - DJANGO_SETTINGS_MODULE=kic.conf.docker
       - SECRET_KEY=${SECRET_KEY}
     ports:
       - 8000:8000
