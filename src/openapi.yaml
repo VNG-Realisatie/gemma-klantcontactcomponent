@@ -4344,6 +4344,38 @@ paths:
       schema:
         type: string
         format: uuid
+tags:
+- name: contactmomenten
+  description: ''
+- name: klanten
+  description: 'Een KLANT is een eenvoudige weergave van een NATUURLIJK PERSOON of
+
+    VESTIGING waarbij het gaat om niet geverifieerde gegevens. Om deze reden
+
+    zijn ook alle attributen optioneel.
+
+
+    Indien de KLANT geverifieerd is mag een relatie gelegd worden met een
+
+    NATUURLIJK PERSOON of VESTIGING  middels het attribuut `subject` of, indien
+
+    er geen API beschikbaar is voor deze objecten, middels
+
+    `subjectIdentificatie`.'
+- name: objectcontactmomenten
+  description: 'Het betreft een relatie tussen een willekeurig OBJECT, bijvoorbeeld
+    een
+
+    ZAAK in de Zaken API, en een CONTACTMOMENT.'
+- name: objectverzoeken
+  description: 'Het betreft een relatie tussen een willekeurig OBJECT, bijvoorbeeld
+    een
+
+    ZAAK in de Zaken API, en een VERZOEK.'
+- name: verzoeken
+  description: ''
+- name: verzoekinformatieobjecten
+  description: ''
 servers:
 - url: /api/v1
 components:
