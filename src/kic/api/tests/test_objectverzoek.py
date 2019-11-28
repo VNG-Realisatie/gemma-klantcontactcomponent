@@ -166,12 +166,16 @@ class ObjectVerzoekFilterTests(JWTAuthMixin, APITestCase):
         verzoek_url = reverse(oio.verzoek)
 
         response = self.client.get(
-            self.list_url, {"verzoek": f"http://testserver{verzoek_url}"}
+            self.list_url,
+            {"verzoek": f"http://testserver.com{verzoek_url}"},
+            HTTP_HOST="testserver.com",
         )
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.data), 1)
-        self.assertEqual(response.data[0]["verzoek"], f"http://testserver{verzoek_url}")
+        self.assertEqual(
+            response.data[0]["verzoek"], f"http://testserver.com{verzoek_url}"
+        ),
 
     def test_filter_object(self):
         oio = ObjectVerzoekFactory.create()

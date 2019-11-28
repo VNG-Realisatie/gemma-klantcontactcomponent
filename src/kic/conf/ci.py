@@ -15,7 +15,7 @@ CACHES = {
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/stable/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["testserver.com"]
 
 LOGGING["loggers"].update(
     {"django": {"handlers": ["django"], "level": "WARNING", "propagate": True}}
@@ -26,12 +26,4 @@ LOGGING["loggers"].update(
 #
 
 # Show active environment in admin.
-ENVIRONMENT = "jenkins"
-
-#
-# Jenkins settings
-#
-INSTALLED_APPS += ["kic.tests", "django_jenkins"]
-PROJECT_APPS = [app for app in INSTALLED_APPS if app.startswith("kic.")]
-
-JENKINS_TASKS = ("django_jenkins.tasks.run_pylint", "django_jenkins.tasks.run_pep8")
+ENVIRONMENT = "ci"

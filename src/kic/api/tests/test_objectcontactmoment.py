@@ -9,7 +9,7 @@ from vng_api_common.tests import JWTAuthMixin, get_validation_errors, reverse
 from zds_client.tests.mocks import mock_client
 
 from kic.datamodel.constants import ObjectTypes
-from kic.datamodel.models import ContactMoment, ObjectContactMoment
+from kic.datamodel.models import ObjectContactMoment
 from kic.datamodel.tests.factories import (
     ContactMomentFactory,
     ObjectContactMomentFactory,
@@ -175,13 +175,16 @@ class ObjectContactMomentFilterTests(JWTAuthMixin, APITestCase):
         contactmoment_url = reverse(oio.contactmoment)
 
         response = self.client.get(
-            self.list_url, {"contactmoment": f"http://testserver{contactmoment_url}"}
+            self.list_url,
+            {"contactmoment": f"http://testserver.com{contactmoment_url}"},
+            HTTP_HOST="testserver.com",
         )
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.data), 1)
         self.assertEqual(
-            response.data[0]["contactmoment"], f"http://testserver{contactmoment_url}"
+            response.data[0]["contactmoment"],
+            f"http://testserver.com{contactmoment_url}",
         )
 
     def test_filter_object(self):
