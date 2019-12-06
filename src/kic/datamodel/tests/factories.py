@@ -72,6 +72,14 @@ class VestigingFactory(factory.django.DjangoModelFactory):
         model = "datamodel.Vestiging"
 
 
+class VerzoekProductFactory(factory.django.DjangoModelFactory):
+    verzoek = factory.SubFactory(VerzoekFactory)
+    product = factory.Faker("url")
+
+    class Meta:
+        model = "datamodel.VerzoekProduct"
+
+
 # factories for nested objects
 class SubVerblijfBuitenlandFactory(factory.django.DjangoModelFactory):
     natuurlijkpersoon = factory.SubFactory(NatuurlijkPersoonFactory)

@@ -10,6 +10,7 @@ from .viewsets import (
     ObjectContactMomentViewSet,
     ObjectVerzoekViewSet,
     VerzoekInformatieObjectViewSet,
+    VerzoekProductViewSet,
     VerzoekViewSet,
 )
 
@@ -20,6 +21,7 @@ router.register("objectcontactmomenten", ObjectContactMomentViewSet)
 router.register("verzoeken", VerzoekViewSet)
 router.register("objectverzoeken", ObjectVerzoekViewSet)
 router.register("verzoekinformatieobjecten", VerzoekInformatieObjectViewSet)
+router.register("verzoekproducten", VerzoekProductViewSet)
 
 # TODO: the EndpointEnumerator seems to choke on path and re_path
 
