@@ -5,11 +5,19 @@ from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
 from django_better_admin_arrayfield.models.fields import ArrayField
+from vng_api_common.descriptors import GegevensGroepType
 from vng_api_common.models import APIMixin
 
 from ..constants import InitiatiefNemer, KlantType, ObjectTypes
 
-__all__ = ["Klant", "ContactMoment", "ObjectContactMoment", "Verzoek", "ObjectVerzoek"]
+__all__ = [
+    "Klant",
+    "ContactMoment",
+    "ObjectContactMoment",
+    "Verzoek",
+    "ObjectVerzoek",
+    "VerzoekProduct",
+]
 
 
 class Klant(APIMixin, models.Model):
@@ -142,7 +150,8 @@ class ObjectKlantInteractie(models.Model):
         unique=True, default=uuid.uuid4, help_text="Unieke resource identifier (UUID4)"
     )
     object = models.URLField(
-        help_text="URL-referentie naar het gerelateerde OBJECT (in een andere API)."
+        help_text="URL-referentie naar het gerelateerde OBJECT (in een andere API).",
+        max_length=1000,
     )
     object_type = models.CharField(
         "objecttype",
@@ -183,3 +192,22 @@ class ObjectVerzoek(APIMixin, ObjectKlantInteractie):
         verbose_name = "object-verzoek"
         verbose_name_plural = "object-verzoeken"
         unique_together = ("verzoek", "object")
+
+
+class VerzoekProduct(APIMixin, models.Model):
+    uuid = models.UUIDField(
+        unique=True, default=uuid.uuid4, help_text="Unieke resource identifier (UUID4)"
+    )
+    verzoek = models.ForeignKey(
+        "datamodel.Verzoek",
+        on_delete=models.CASCADE,
+        help_text="URL-referentie naar het VERZOEK.",
+    )
+    product = models.URLField(
+        max_length=1000,
+        blank=True,
+        help_text="URL-referentie naar het PRODUCT (in de Producten en Diensten API).",
+    )
+    product_code = models.CharField(
+        max_length=20, help_text="De unieke code van het PRODUCT."
+    )
