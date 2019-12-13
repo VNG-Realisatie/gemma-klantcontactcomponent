@@ -13,10 +13,19 @@ from vng_api_common.serializers import (
     add_choice_values_help_text,
 )
 from vng_api_common.utils import get_help_text
-from vng_api_common.validators import IsImmutableValidator, ResourceValidator
+from vng_api_common.validators import (
+    IsImmutableValidator,
+    ResourceValidator,
+    UniekeIdentificatieValidator,
+)
 
 from kic.api.auth import get_auth
-from kic.datamodel.constants import GeslachtsAanduiding, KlantType, ObjectTypes
+from kic.datamodel.constants import (
+    GeslachtsAanduiding,
+    KlantType,
+    ObjectTypes,
+    VerzoekStatus,
+)
 from kic.datamodel.models import (
     Adres,
     ContactMoment,
@@ -232,6 +241,7 @@ class KlantSerializer(PolymorphicSerializer):
             "adres",
             "telefoonnummer",
             "emailadres",
+            "functie",
             "subject",
             "subject_type",
         )
@@ -320,8 +330,9 @@ class ContactMomentSerializer(KlantInteractieSerializer):
         model = ContactMoment
         fields = (
             "url",
+            "bronorganisatie",
             "klant",
-            "datumtijd",
+            "interactiedatum",
             "kanaal",
             "tekst",
             "onderwerp_links",
@@ -390,14 +401,27 @@ class VerzoekSerializer(KlantInteractieSerializer):
         model = Verzoek
         fields = (
             "url",
+            "identificatie",
+            "bronorganisatie",
+            "externe_identificatie",
             "klant",
-            "datumtijd",
+            "interactiedatum",
             "tekst",
+            "status",
         )
         extra_kwargs = {
             "url": {"lookup_field": "uuid"},
             "klant": {"lookup_field": "uuid"},
+            "identificatie": {"validators": [IsImmutableValidator()]},
         }
+        # Replace a default "unique together" constraint.
+        validators = [UniekeIdentificatieValidator("bronorganisatie", "identificatie")]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        value_display_mapping = add_choice_values_help_text(VerzoekStatus)
+        self.fields["status"].help_text += f"\n\n{value_display_mapping}"
 
 
 class ObjectContactMomentSerializer(serializers.HyperlinkedModelSerializer):

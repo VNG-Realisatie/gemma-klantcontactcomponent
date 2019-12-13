@@ -51,6 +51,7 @@ class KlantTests(JWTAuthMixin, APITestCase):
                 "achternaam": klant.achternaam,
                 "adres": klant.adres,
                 "emailadres": klant.emailadres,
+                "functie": klant.functie,
                 "telefoonnummer": klant.telefoonnummer,
                 "subject": SUBJECT,
                 "subjectType": KlantType.natuurlijk_persoon,
@@ -84,6 +85,7 @@ class KlantTests(JWTAuthMixin, APITestCase):
                 "adres": klant.adres,
                 "telefoonnummer": klant.telefoonnummer,
                 "emailadres": klant.emailadres,
+                "functie": klant.functie,
                 "subject": SUBJECT,
                 "subjectType": KlantType.natuurlijk_persoon,
                 "subjectIdentificatie": {
@@ -139,6 +141,7 @@ class KlantTests(JWTAuthMixin, APITestCase):
                 "adres": klant.adres,
                 "telefoonnummer": klant.telefoonnummer,
                 "emailadres": klant.emailadres,
+                "functie": klant.functie,
                 "subject": SUBJECT,
                 "subjectType": KlantType.vestiging,
                 "subjectIdentificatie": {

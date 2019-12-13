@@ -1,6 +1,6 @@
 import factory.fuzzy
 
-from ..constants import InitiatiefNemer, KlantType, ObjectTypes
+from ..constants import InitiatiefNemer, KlantType, ObjectTypes, VerzoekStatus
 
 
 class KlantFactory(factory.django.DjangoModelFactory):
@@ -8,6 +8,7 @@ class KlantFactory(factory.django.DjangoModelFactory):
     achternaam = factory.Faker("last_name")
     adres = factory.Faker("address")
     emailadres = factory.Faker("email")
+    functie = factory.Faker("word")
     subject = factory.Faker("url")
     subject_type = factory.fuzzy.FuzzyChoice(KlantType.values)
 
@@ -16,6 +17,7 @@ class KlantFactory(factory.django.DjangoModelFactory):
 
 
 class ContactMomentFactory(factory.django.DjangoModelFactory):
+    bronorganisatie = factory.Faker("ssn", locale="nl_NL")
     klant = factory.SubFactory(KlantFactory)
     kanaal = factory.Faker("word")
     initiatiefnemer = factory.fuzzy.FuzzyChoice(InitiatiefNemer.values)
@@ -35,8 +37,10 @@ class ObjectContactMomentFactory(factory.django.DjangoModelFactory):
 
 
 class VerzoekFactory(factory.django.DjangoModelFactory):
+    bronorganisatie = factory.Faker("ssn", locale="nl_NL")
     klant = factory.SubFactory(KlantFactory)
     tekst = factory.Faker("word")
+    status = factory.fuzzy.FuzzyChoice(VerzoekStatus.values)
 
     class Meta:
         model = "datamodel.Verzoek"

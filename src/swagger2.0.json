@@ -5981,6 +5981,9 @@
             "x-nullable": true
         },
         "ContactMoment": {
+            "required": [
+                "bronorganisatie"
+            ],
             "type": "object",
             "properties": {
                 "url": {
@@ -5992,6 +5995,13 @@
                     "maxLength": 1000,
                     "minLength": 1
                 },
+                "bronorganisatie": {
+                    "title": "Bronorganisatie",
+                    "description": "Het RSIN van de Niet-natuurlijk persoon zijnde de organisatie die de klantinteractie heeft gecreeerd. Dit moet een geldig RSIN zijn van 9 nummers en voldoen aan https://nl.wikipedia.org/wiki/Burgerservicenummer#11-proef",
+                    "type": "string",
+                    "maxLength": 9,
+                    "minLength": 1
+                },
                 "klant": {
                     "title": "Klant",
                     "description": "URL-referentie naar een KLANT (in de Contactmomenten API) indien het contactmoment niet anoniem is.",
@@ -5999,8 +6009,8 @@
                     "format": "uri",
                     "x-nullable": true
                 },
-                "datumtijd": {
-                    "title": "Datumtijd",
+                "interactiedatum": {
+                    "title": "Interactiedatum",
                     "description": "De datum en het tijdstip waarop het CONTACTMOMENT begint",
                     "type": "string",
                     "format": "date-time"
@@ -6218,6 +6228,12 @@
                     "type": "string",
                     "format": "email",
                     "maxLength": 254
+                },
+                "functie": {
+                    "title": "Functie",
+                    "description": "De functie van de klant.",
+                    "type": "string",
+                    "maxLength": 200
                 },
                 "subject": {
                     "title": "Subject",
@@ -6553,6 +6569,10 @@
             }
         },
         "Verzoek": {
+            "required": [
+                "bronorganisatie",
+                "status"
+            ],
             "type": "object",
             "properties": {
                 "url": {
@@ -6564,6 +6584,25 @@
                     "maxLength": 1000,
                     "minLength": 1
                 },
+                "identificatie": {
+                    "title": "Identificatie",
+                    "description": "De unieke identificatie van het VERZOEK binnen de organisatie die verantwoordelijk is voor de behandeling van het VERZOEK.",
+                    "type": "string",
+                    "maxLength": 40
+                },
+                "bronorganisatie": {
+                    "title": "Bronorganisatie",
+                    "description": "Het RSIN van de Niet-natuurlijk persoon zijnde de organisatie die de klantinteractie heeft gecreeerd. Dit moet een geldig RSIN zijn van 9 nummers en voldoen aan https://nl.wikipedia.org/wiki/Burgerservicenummer#11-proef",
+                    "type": "string",
+                    "maxLength": 9,
+                    "minLength": 1
+                },
+                "externeIdentificatie": {
+                    "title": "Externe identificatie",
+                    "description": "De identificatie van het VERZOEK buiten de eigen organisatie.",
+                    "type": "string",
+                    "maxLength": 40
+                },
                 "klant": {
                     "title": "Klant",
                     "description": "URL-referentie naar een KLANT (in de Contactmomenten API) indien het contactmoment niet anoniem is.",
@@ -6571,8 +6610,8 @@
                     "format": "uri",
                     "x-nullable": true
                 },
-                "datumtijd": {
-                    "title": "Datumtijd",
+                "interactiedatum": {
+                    "title": "Interactiedatum",
                     "description": "De datum en het tijdstip waarop het CONTACTMOMENT begint",
                     "type": "string",
                     "format": "date-time"
@@ -6581,6 +6620,18 @@
                     "title": "Tekst",
                     "description": "Een toelichting die inhoudelijk het contact met de klant beschrijft.",
                     "type": "string"
+                },
+                "status": {
+                    "title": "Status",
+                    "description": "De waarden van de typering van de voortgang van afhandeling van een VERZOEK.\n\nUitleg bij mogelijke waarden:\n\n* `ontvangen` - (Ontvangen) Het verzoek is ingediend en door de organisatie ontvangen.\n* `in_behandeling` - (In behandeling) Het is verzoek is in behandeling.\n* `afgehandeld` - (Afgehandeld) Het verzoek zelf is afgehandeld. Eventuele vervolg acties, zoals zaken die voortkomen uit het verzoek, hebben een eigen status.\n* `afgewezen` - (Afgewezen) Het verzoek is afgewezen zonder vervolg acties.\n* `ingetrokken` - (Ingetrokken) De indiener heeft het verzoek ingetrokken.",
+                    "type": "string",
+                    "enum": [
+                        "ontvangen",
+                        "in_behandeling",
+                        "afgehandeld",
+                        "afgewezen",
+                        "ingetrokken"
+                    ]
                 }
             }
         },
