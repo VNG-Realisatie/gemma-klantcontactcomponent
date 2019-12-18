@@ -1,5 +1,6 @@
 import uuid
 
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
@@ -241,10 +242,16 @@ class VerzoekProduct(APIMixin, models.Model):
         help_text="URL-referentie naar het VERZOEK.",
     )
     product = models.URLField(
-        null=True,
         blank=True,
         help_text="URL-referentie naar het PRODUCT (in de Producten en Diensten API).",
     )
     product_code = models.CharField(
-        max_length=20, help_text="De unieke code van het PRODUCT."
+        max_length=20, blank=True, help_text="De unieke code van het PRODUCT."
     )
+
+    def clean(self):
+        if not self.product and not self.product_code:
+            raise ValidationError(
+                _("product or productIdentificatie must be provided"),
+                code="invalid-product",
+            )

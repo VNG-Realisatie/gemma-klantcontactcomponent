@@ -454,24 +454,6 @@ class VerzoekProductViewSet(
 
     Een specifieke VERZOEK-PRODUCT relatie opvragen.
 
-    update:
-    Werk een VERZOEK-PRODUCT relatie in zijn geheel bij.
-
-    Je mag enkel de gegevens van de relatie bewerken, en niet de relatie zelf
-    aanpassen.
-
-    **Er wordt gevalideerd op**
-    - `product` URL en `verzoek` URL mogen niet veranderen
-
-    partial_update:
-    Werk een VERZOEK-PRODUCT relatie deels bij.
-
-    Je mag enkel de gegevens van de relatie bewerken, en niet de relatie zelf
-    aanpassen.
-
-    **Er wordt gevalideerd op**
-    - `product` URL en `verzoek` URL mogen niet veranderen
-
     destroy:
     Verwijder een VERZOEK-PRODUCT relatie.
 

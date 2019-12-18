@@ -8,10 +8,7 @@ from rest_framework import serializers
 from rest_framework.settings import api_settings
 from rest_framework.validators import UniqueTogetherValidator
 from vng_api_common.polymorphism import Discriminator, PolymorphicSerializer
-from vng_api_common.serializers import (
-    GegevensGroepSerializer,
-    add_choice_values_help_text,
-)
+from vng_api_common.serializers import add_choice_values_help_text
 from vng_api_common.utils import get_help_text
 from vng_api_common.validators import (
     IsImmutableValidator,
@@ -529,7 +526,9 @@ class VerzoekProductSerializer(serializers.HyperlinkedModelSerializer):
         required=False,
         allow_null=True,
         help_text=_(
-            "Identificerende gegevens van het PRODUCT voor het geval er bij `product` geen URL kan worden opgenomen bij naar het PRODUCT in de Producten en Diensten API."
+            "Identificerende gegevens van het PRODUCT voor het geval er bij `product` "
+            "geen URL kan worden opgenomen naar het PRODUCT in de Producten en "
+            "Diensten API."
         ),
     )
 

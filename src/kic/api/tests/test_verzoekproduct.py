@@ -61,7 +61,7 @@ class VerzoekProductTests(JWTAuthMixin, APITestCase):
         )
 
     def test_read_verzoekproduct_with_product_id(self):
-        verzoekproduct = VerzoekProductFactory.create(product_code="test", product=None)
+        verzoekproduct = VerzoekProductFactory.create(product_code="test", product="")
         detail_url = reverse(verzoekproduct)
         verzoek_url = reverse(verzoekproduct.verzoek)
 
@@ -76,7 +76,7 @@ class VerzoekProductTests(JWTAuthMixin, APITestCase):
             {
                 "url": f"http://testserver{detail_url}",
                 "verzoek": f"http://testserver{verzoek_url}",
-                "product": None,
+                "product": "",
                 "productIdentificatie": {"code": "test",},
             },
         )
