@@ -9,10 +9,20 @@ from rest_framework.settings import api_settings
 from rest_framework.validators import UniqueTogetherValidator
 from vng_api_common.polymorphism import Discriminator, PolymorphicSerializer
 from vng_api_common.serializers import add_choice_values_help_text
-from vng_api_common.validators import IsImmutableValidator, ResourceValidator
+from vng_api_common.utils import get_help_text
+from vng_api_common.validators import (
+    IsImmutableValidator,
+    ResourceValidator,
+    UniekeIdentificatieValidator,
+)
 
 from kic.api.auth import get_auth
-from kic.datamodel.constants import GeslachtsAanduiding, KlantType, ObjectTypes
+from kic.datamodel.constants import (
+    GeslachtsAanduiding,
+    KlantType,
+    ObjectTypes,
+    VerzoekStatus,
+)
 from kic.datamodel.models import (
     Adres,
     ContactMoment,
@@ -23,6 +33,7 @@ from kic.datamodel.models import (
     SubVerblijfBuitenland,
     Verzoek,
     VerzoekInformatieObject,
+    VerzoekProduct,
     Vestiging,
 )
 from kic.datamodel.models.core import ObjectVerzoek
@@ -227,6 +238,7 @@ class KlantSerializer(PolymorphicSerializer):
             "adres",
             "telefoonnummer",
             "emailadres",
+            "functie",
             "subject",
             "subject_type",
         )
@@ -315,8 +327,9 @@ class ContactMomentSerializer(KlantInteractieSerializer):
         model = ContactMoment
         fields = (
             "url",
+            "bronorganisatie",
             "klant",
-            "datumtijd",
+            "interactiedatum",
             "kanaal",
             "tekst",
             "onderwerp_links",
@@ -385,14 +398,27 @@ class VerzoekSerializer(KlantInteractieSerializer):
         model = Verzoek
         fields = (
             "url",
+            "identificatie",
+            "bronorganisatie",
+            "externe_identificatie",
             "klant",
-            "datumtijd",
+            "interactiedatum",
             "tekst",
+            "status",
         )
         extra_kwargs = {
             "url": {"lookup_field": "uuid"},
             "klant": {"lookup_field": "uuid"},
+            "identificatie": {"validators": [IsImmutableValidator()]},
         }
+        # Replace a default "unique together" constraint.
+        validators = [UniekeIdentificatieValidator("bronorganisatie", "identificatie")]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        value_display_mapping = add_choice_values_help_text(VerzoekStatus)
+        self.fields["status"].help_text += f"\n\n{value_display_mapping}"
 
 
 class ObjectContactMomentSerializer(serializers.HyperlinkedModelSerializer):
@@ -484,3 +510,49 @@ class VerzoekInformatieObjectSerializer(serializers.HyperlinkedModelSerializer):
             raise serializers.ValidationError(
                 {api_settings.NON_FIELD_ERRORS_KEY: sync_error.args[0]}
             ) from sync_error
+
+
+class ProductSerializer(serializers.Serializer):
+    code = serializers.CharField(
+        max_length=20,
+        source="product_code",
+        help_text=get_help_text("datamodel.VerzoekProduct", "product_code"),
+    )
+
+
+class VerzoekProductSerializer(serializers.HyperlinkedModelSerializer):
+    product_identificatie = ProductSerializer(
+        source="*",
+        required=False,
+        allow_null=True,
+        help_text=_(
+            "Identificerende gegevens van het PRODUCT voor het geval er bij `product` "
+            "geen URL kan worden opgenomen naar het PRODUCT in de Producten en "
+            "Diensten API."
+        ),
+    )
+
+    class Meta:
+        model = VerzoekProduct
+        fields = ("url", "verzoek", "product", "product_identificatie")
+        extra_kwargs = {
+            "url": {"lookup_field": "uuid"},
+            "verzoek": {
+                "lookup_field": "uuid",
+                "validators": [IsImmutableValidator(),],
+            },
+            "product": {"validators": [IsImmutableValidator(),],},
+        }
+
+    def validate(self, attrs):
+        validated_attrs = super().validate(attrs)
+        product = validated_attrs.get("product", None)
+        product_code = validated_attrs.get("product_code", None)
+
+        if not product and not product_code:
+            raise serializers.ValidationError(
+                _("product or productIdentificatie must be provided"),
+                code="invalid-product",
+            )
+
+        return validated_attrs

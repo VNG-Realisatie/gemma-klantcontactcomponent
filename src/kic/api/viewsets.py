@@ -13,6 +13,7 @@ from kic.datamodel.models import (
     Klant,
     ObjectContactMoment,
     VerzoekInformatieObject,
+    VerzoekProduct,
 )
 from kic.datamodel.models.core import ObjectVerzoek, Verzoek
 
@@ -20,6 +21,7 @@ from .filters import (
     ObjectContactMomentFilter,
     ObjectVerzoekFilter,
     VerzoekInformatieObjectFilter,
+    VerzoekProductFilter,
 )
 from .scopes import (
     SCOPE_KLANTEN_AANMAKEN,
@@ -33,6 +35,7 @@ from .serializers import (
     ObjectContactMomentSerializer,
     ObjectVerzoekSerializer,
     VerzoekInformatieObjectSerializer,
+    VerzoekProductSerializer,
     VerzoekSerializer,
 )
 from .validators import (
@@ -420,3 +423,53 @@ class VerzoekInformatieObjectViewSet(
         if marked_vios:
             return qs.exclude(uuid__in=marked_vios)
         return qs
+
+
+class VerzoekProductViewSet(
+    CheckQueryParamsMixin,
+    mixins.CreateModelMixin,
+    mixins.DestroyModelMixin,
+    viewsets.ReadOnlyModelViewSet,
+):
+    """
+    Opvragen en bewerken van VERZOEK-PRODUCT relaties.
+
+    create:
+    Maak een VERZOEK-PRODUCT relatie aan.
+
+    Registreer een PRODUCT bij een VERZOEK. Er worden twee types van
+    relaties met andere objecten gerealiseerd:
+
+    **Er wordt gevalideerd op**
+    - geldigheid `verzoek` URL
+    - geldigheid `product` URL
+
+    list:
+    Alle VERZOEK-PRODUCT relaties opvragen.
+
+    Deze lijst kan gefilterd wordt met query-string parameters.
+
+    retrieve:
+    Een specifieke VERZOEK-PRODUCT relatie opvragen.
+
+    Een specifieke VERZOEK-PRODUCT relatie opvragen.
+
+    destroy:
+    Verwijder een VERZOEK-PRODUCT relatie.
+
+    Verwijder een VERZOEK-PRODUCT relatie.
+    """
+
+    queryset = VerzoekProduct.objects.all()
+    serializer_class = VerzoekProductSerializer
+    filterset_class = VerzoekProductFilter
+    lookup_field = "uuid"
+    permission_classes = (AuthScopesRequired,)
+    required_scopes = {
+        "list": SCOPE_KLANTEN_ALLES_LEZEN,
+        "retrieve": SCOPE_KLANTEN_ALLES_LEZEN,
+        "create": SCOPE_KLANTEN_AANMAKEN,
+        "destroy": SCOPE_KLANTEN_ALLES_VERWIJDEREN,
+        "update": SCOPE_KLANTEN_BIJWERKEN,
+        "partial_update": SCOPE_KLANTEN_BIJWERKEN,
+    }

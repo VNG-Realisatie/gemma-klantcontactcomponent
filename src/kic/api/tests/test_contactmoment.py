@@ -34,7 +34,7 @@ class ContactMomentTests(JWTAuthMixin, APITestCase):
         klant_url = reverse(klant)
         contactmoment = ContactMomentFactory.create(
             klant=klant,
-            datumtijd=make_aware(datetime(2019, 1, 1)),
+            interactiedatum=make_aware(datetime(2019, 1, 1)),
             initiatiefnemer=InitiatiefNemer.gemeente,
         )
         detail_url = reverse(contactmoment)
@@ -49,8 +49,9 @@ class ContactMomentTests(JWTAuthMixin, APITestCase):
             data,
             {
                 "url": f"http://testserver{detail_url}",
+                "bronorganisatie": contactmoment.bronorganisatie,
                 "klant": f"http://testserver{klant_url}",
-                "datumtijd": "2019-01-01T00:00:00Z",
+                "interactiedatum": "2019-01-01T00:00:00Z",
                 "kanaal": contactmoment.kanaal,
                 "tekst": contactmoment.tekst,
                 "onderwerpLinks": [],
@@ -65,7 +66,7 @@ class ContactMomentTests(JWTAuthMixin, APITestCase):
         klant_url = reverse(klant)
         contactmoment = ContactMomentFactory.create(
             klant=klant,
-            datumtijd=make_aware(datetime(2019, 1, 1)),
+            interactiedatum=make_aware(datetime(2019, 1, 1)),
             initiatiefnemer=InitiatiefNemer.gemeente,
             medewerker="",
         )
@@ -82,8 +83,9 @@ class ContactMomentTests(JWTAuthMixin, APITestCase):
             data,
             {
                 "url": f"http://testserver{detail_url}",
+                "bronorganisatie": contactmoment.bronorganisatie,
                 "klant": f"http://testserver{klant_url}",
-                "datumtijd": "2019-01-01T00:00:00Z",
+                "interactiedatum": "2019-01-01T00:00:00Z",
                 "kanaal": contactmoment.kanaal,
                 "tekst": contactmoment.tekst,
                 "onderwerpLinks": [],
@@ -103,6 +105,7 @@ class ContactMomentTests(JWTAuthMixin, APITestCase):
         klant_url = reverse(klant)
         list_url = reverse(ContactMoment)
         data = {
+            "bronorganisatie": "423182687",
             "klant": klant_url,
             "kanaal": "telephone",
             "tekst": "some text",
@@ -128,6 +131,7 @@ class ContactMomentTests(JWTAuthMixin, APITestCase):
         klant_url = reverse(klant)
         list_url = reverse(ContactMoment)
         data = {
+            "bronorganisatie": "423182687",
             "klant": klant_url,
             "kanaal": "telephone",
             "tekst": "some text",
@@ -162,6 +166,7 @@ class ContactMomentTests(JWTAuthMixin, APITestCase):
         klant_url = reverse(klant)
         list_url = reverse(ContactMoment)
         data = {
+            "bronorganisatie": "423182687",
             "klant": klant_url,
             "kanaal": "telephone",
             "tekst": "some text",

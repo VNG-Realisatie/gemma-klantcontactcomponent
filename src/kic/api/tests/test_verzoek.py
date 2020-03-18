@@ -6,6 +6,7 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 from vng_api_common.tests import JWTAuthMixin, reverse
 
+from kic.datamodel.constants import VerzoekStatus
 from kic.datamodel.models import Verzoek
 from kic.datamodel.tests.factories import KlantFactory, VerzoekFactory
 
@@ -28,7 +29,7 @@ class VerzoekTests(JWTAuthMixin, APITestCase):
         klant = KlantFactory.create()
         klant_url = reverse(klant)
         verzoek = VerzoekFactory.create(
-            klant=klant, datumtijd=make_aware(datetime(2019, 1, 1)),
+            klant=klant, interactiedatum=make_aware(datetime(2019, 1, 1)),
         )
         detail_url = reverse(verzoek)
 
@@ -42,8 +43,12 @@ class VerzoekTests(JWTAuthMixin, APITestCase):
             data,
             {
                 "url": f"http://testserver{detail_url}",
+                "bronorganisatie": verzoek.bronorganisatie,
+                "externeIdentificatie": verzoek.externe_identificatie,
+                "identificatie": "VERZOEK-2019-0000000001",
                 "klant": f"http://testserver{klant_url}",
-                "datumtijd": "2019-01-01T00:00:00Z",
+                "interactiedatum": "2019-01-01T00:00:00Z",
+                "status": verzoek.status,
                 "tekst": verzoek.tekst,
             },
         )
@@ -53,7 +58,9 @@ class VerzoekTests(JWTAuthMixin, APITestCase):
         klant_url = reverse(klant)
         list_url = reverse(Verzoek)
         data = {
+            "bronorganisatie": "423182687",
             "klant": klant_url,
+            "status": VerzoekStatus.ontvangen,
             "tekst": "some text",
         }
 
@@ -65,6 +72,7 @@ class VerzoekTests(JWTAuthMixin, APITestCase):
 
         self.assertEqual(verzoek.klant, klant)
         self.assertEqual(verzoek.tekst, "some text")
+        self.assertGreater(len(verzoek.identificatie), 0)
 
     def test_update_verzoek(self):
         klant = KlantFactory.create()
