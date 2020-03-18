@@ -5054,14 +5054,14 @@ components:
           minLength: 1
         klant:
           title: Klant
-          description: URL-referentie naar een KLANT indien het verzoek niet anoniem
-            is.
+          description: URL-referentie naar een KLANT indien de klantinteractie niet
+            anoniem is.
           type: string
           format: uri
           nullable: true
         interactiedatum:
           title: Interactiedatum
-          description: De datum en het tijdstip waarop het verzoek is ingediend.
+          description: De datum en het tijdstip waarop de klantinteractie heeft plaatsgevonden.
           type: string
           format: date-time
         kanaal:
@@ -5070,9 +5070,16 @@ components:
             wordt
           type: string
           maxLength: 50
+        voorkeurskanaal:
+          title: Voorkeurskanaal
+          description: Het communicatiekanaal dat voor opvolging van de klantinteractie
+            de voorkeur heeft van de KLANT.
+          type: string
+          maxLength: 50
         tekst:
           title: Tekst
-          description: Een toelichting die inhoudelijk het verzoek van de klant beschrijft.
+          description: Een toelichting die inhoudelijk de klantinteractie van de klant
+            beschrijft.
           type: string
         onderwerpLinks:
           description: "E\xE9n of meerdere links naar een product, webpagina of andere\
@@ -5579,19 +5586,26 @@ components:
           maxLength: 40
         klant:
           title: Klant
-          description: URL-referentie naar een KLANT indien het verzoek niet anoniem
-            is.
+          description: URL-referentie naar een KLANT indien de klantinteractie niet
+            anoniem is.
           type: string
           format: uri
           nullable: true
         interactiedatum:
           title: Interactiedatum
-          description: De datum en het tijdstip waarop het verzoek is ingediend.
+          description: De datum en het tijdstip waarop de klantinteractie heeft plaatsgevonden.
           type: string
           format: date-time
+        voorkeurskanaal:
+          title: Voorkeurskanaal
+          description: Het communicatiekanaal dat voor opvolging van de klantinteractie
+            de voorkeur heeft van de KLANT.
+          type: string
+          maxLength: 50
         tekst:
           title: Tekst
-          description: Een toelichting die inhoudelijk het verzoek van de klant beschrijft.
+          description: Een toelichting die inhoudelijk de klantinteractie van de klant
+            beschrijft.
           type: string
         status:
           title: Status
