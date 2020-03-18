@@ -4666,12 +4666,12 @@ paths:
           \ voor meer informatie."
         required: false
         examples:
-          multipleValues:
-            summary: Meerdere ETag-waardes
-            value: '"79054025255fb1a26e4bc422aef54eb4", "e4d909c290d0fb1ca068ffaddf22cbd0"'
           oneValue:
             summary: "E\xE9n ETag-waarde"
             value: '"79054025255fb1a26e4bc422aef54eb4"'
+          multipleValues:
+            summary: Meerdere ETag-waardes
+            value: '"79054025255fb1a26e4bc422aef54eb4", "e4d909c290d0fb1ca068ffaddf22cbd0"'
         schema:
           type: string
       responses:
@@ -4998,9 +4998,9 @@ components:
       required: true
   securitySchemes:
     JWT-Claims:
-      bearerFormat: JWT
-      scheme: bearer
       type: http
+      scheme: bearer
+      bearerFormat: JWT
   schemas:
     Medewerker:
       title: Medewerker identificatie
@@ -5054,14 +5054,14 @@ components:
           minLength: 1
         klant:
           title: Klant
-          description: URL-referentie naar een KLANT (in de Contactmomenten API) indien
-            het contactmoment niet anoniem is.
+          description: URL-referentie naar een KLANT indien het verzoek niet anoniem
+            is.
           type: string
           format: uri
           nullable: true
         interactiedatum:
           title: Interactiedatum
-          description: De datum en het tijdstip waarop het CONTACTMOMENT begint
+          description: De datum en het tijdstip waarop het verzoek is ingediend.
           type: string
           format: date-time
         kanaal:
@@ -5072,7 +5072,7 @@ components:
           maxLength: 50
         tekst:
           title: Tekst
-          description: Een toelichting die inhoudelijk het contact met de klant beschrijft.
+          description: Een toelichting die inhoudelijk het verzoek van de klant beschrijft.
           type: string
         onderwerpLinks:
           description: "E\xE9n of meerdere links naar een product, webpagina of andere\
@@ -5579,19 +5579,19 @@ components:
           maxLength: 40
         klant:
           title: Klant
-          description: URL-referentie naar een KLANT (in de Contactmomenten API) indien
-            het contactmoment niet anoniem is.
+          description: URL-referentie naar een KLANT indien het verzoek niet anoniem
+            is.
           type: string
           format: uri
           nullable: true
         interactiedatum:
           title: Interactiedatum
-          description: De datum en het tijdstip waarop het CONTACTMOMENT begint
+          description: De datum en het tijdstip waarop het verzoek is ingediend.
           type: string
           format: date-time
         tekst:
           title: Tekst
-          description: Een toelichting die inhoudelijk het contact met de klant beschrijft.
+          description: Een toelichting die inhoudelijk het verzoek van de klant beschrijft.
           type: string
         status:
           title: Status
@@ -5653,8 +5653,8 @@ components:
     Product:
       title: Product identificatie
       description: Identificerende gegevens van het PRODUCT voor het geval er bij
-        `product` geen URL kan worden opgenomen bij naar het PRODUCT in de Producten
-        en Diensten API.
+        `product` geen URL kan worden opgenomen naar het PRODUCT in de Producten en
+        Diensten API.
       required:
       - code
       type: object
@@ -5691,6 +5691,5 @@ components:
           type: string
           format: uri
           maxLength: 200
-          nullable: true
         productIdentificatie:
           $ref: '#/components/schemas/Product'
