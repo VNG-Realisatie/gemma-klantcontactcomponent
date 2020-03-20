@@ -33,8 +33,8 @@ from kic.datamodel.models import (
     ObjectContactMoment,
     SubVerblijfBuitenland,
     Verzoek,
-    VerzoekInformatieObject,
     VerzoekContactMoment,
+    VerzoekInformatieObject,
     VerzoekProduct,
     Vestiging,
 )
@@ -190,7 +190,9 @@ class NietNatuurlijkPersoonSerializer(serializers.ModelSerializer):
                     sub_verblijf_buitenland_data,
                 )
             else:
-                sub_verblijf_buitenland_data["nietnatuurlijkpersoon"] = nietnatuurlijkpersoon
+                sub_verblijf_buitenland_data[
+                    "nietnatuurlijkpersoon"
+                ] = nietnatuurlijkpersoon
                 SubVerblijfBuitenlandSerializer().create(sub_verblijf_buitenland_data)
 
         return nietnatuurlijkpersoon

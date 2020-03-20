@@ -8,7 +8,13 @@ from vng_api_common.fields import BSNField, RSINField
 
 from ..constants import GeslachtsAanduiding, SoortRechtsvorm
 
-__all__ = ["NatuurlijkPersoon", "NietNatuurlijkPersoon", "Vestiging", "SubVerblijfBuitenland", "Adres"]
+__all__ = [
+    "NatuurlijkPersoon",
+    "NietNatuurlijkPersoon",
+    "Vestiging",
+    "SubVerblijfBuitenland",
+    "Adres",
+]
 
 # Klant models
 class NatuurlijkPersoon(models.Model):
@@ -67,7 +73,9 @@ class NatuurlijkPersoon(models.Model):
 
 class NietNatuurlijkPersoon(models.Model):
     klant = models.OneToOneField(
-        "datamodel.Klant", on_delete=models.CASCADE, related_name="niet_natuurlijk_persoon"
+        "datamodel.Klant",
+        on_delete=models.CASCADE,
+        related_name="niet_natuurlijk_persoon",
     )
 
     inn_nnp_id = RSINField(

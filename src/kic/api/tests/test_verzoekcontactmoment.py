@@ -4,9 +4,9 @@ from vng_api_common.tests import JWTAuthMixin, reverse
 
 from kic.datamodel.models import VerzoekContactMoment
 from kic.datamodel.tests.factories import (
-    VerzoekFactory,
     ContactMomentFactory,
     VerzoekContactMomentFactory,
+    VerzoekFactory,
 )
 
 

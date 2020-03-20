@@ -16,7 +16,9 @@ class GeslachtsAanduiding(DjangoChoices):
 
 class KlantType(DjangoChoices):
     natuurlijk_persoon = ChoiceItem("natuurlijk_persoon", "Natuurlijk persoon")
-    niet_natuurlijk_persoon = ChoiceItem("niet_natuurlijk_persoon", "Niet-natuurlijk persoon")
+    niet_natuurlijk_persoon = ChoiceItem(
+        "niet_natuurlijk_persoon", "Niet-natuurlijk persoon"
+    )
     vestiging = ChoiceItem("vestiging", "Vestiging")
 
 
@@ -53,6 +55,7 @@ class VerzoekStatus(DjangoChoices):
         _("Ingetrokken"),
         description=_("De indiener heeft het verzoek ingetrokken."),
     )
+
 
 # TODO: Copied from Zaken API, move to common
 class SoortRechtsvorm(DjangoChoices):

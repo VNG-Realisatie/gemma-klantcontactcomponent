@@ -327,7 +327,10 @@ class KlantTests(JWTAuthMixin, APITestCase):
         self.assertEqual(nietnatuurlijkpersoon.inn_nnp_id, "314273268")
         self.assertEqual(nietnatuurlijkpersoon.ann_identificatie, "")
         self.assertEqual(nietnatuurlijkpersoon.statutaire_naam, "ACME")
-        self.assertEqual(nietnatuurlijkpersoon.inn_rechtsvorm, SoortRechtsvorm.europese_naamloze_vennootschap)
+        self.assertEqual(
+            nietnatuurlijkpersoon.inn_rechtsvorm,
+            SoortRechtsvorm.europese_naamloze_vennootschap,
+        )
         self.assertEqual(nietnatuurlijkpersoon.bezoekadres, "Somewhere")
 
         buitenland = nietnatuurlijkpersoon.sub_verblijf_buitenland

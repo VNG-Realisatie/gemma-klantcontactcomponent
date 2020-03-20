@@ -1,6 +1,12 @@
 import factory.fuzzy
 
-from ..constants import InitiatiefNemer, KlantType, ObjectTypes, SoortRechtsvorm, VerzoekStatus
+from ..constants import (
+    InitiatiefNemer,
+    KlantType,
+    ObjectTypes,
+    SoortRechtsvorm,
+    VerzoekStatus,
+)
 
 
 class KlantFactory(factory.django.DjangoModelFactory):
@@ -65,6 +71,7 @@ class NatuurlijkPersoonFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = "datamodel.NatuurlijkPersoon"
+
 
 class NietNatuurlijkPersoonFactory(factory.django.DjangoModelFactory):
     klant = factory.SubFactory(KlantFactory)

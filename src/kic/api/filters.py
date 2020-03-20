@@ -4,8 +4,8 @@ from vng_api_common.utils import get_help_text
 
 from kic.datamodel.models import (
     ObjectContactMoment,
-    VerzoekInformatieObject,
     VerzoekContactMoment,
+    VerzoekInformatieObject,
     VerzoekProduct,
 )
 from kic.datamodel.models.core import ObjectVerzoek

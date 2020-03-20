@@ -9,8 +9,8 @@ from .viewsets import (
     KlantViewSet,
     ObjectContactMomentViewSet,
     ObjectVerzoekViewSet,
-    VerzoekInformatieObjectViewSet,
     VerzoekContactMomentViewSet,
+    VerzoekInformatieObjectViewSet,
     VerzoekProductViewSet,
     VerzoekViewSet,
 )

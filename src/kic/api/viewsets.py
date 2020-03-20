@@ -12,8 +12,8 @@ from kic.datamodel.models import (
     ContactMoment,
     Klant,
     ObjectContactMoment,
-    VerzoekInformatieObject,
     VerzoekContactMoment,
+    VerzoekInformatieObject,
     VerzoekProduct,
 )
 from kic.datamodel.models.core import ObjectVerzoek, Verzoek
@@ -21,8 +21,8 @@ from kic.datamodel.models.core import ObjectVerzoek, Verzoek
 from .filters import (
     ObjectContactMomentFilter,
     ObjectVerzoekFilter,
-    VerzoekInformatieObjectFilter,
     VerzoekContactMomentFilter,
+    VerzoekInformatieObjectFilter,
     VerzoekProductFilter,
 )
 from .scopes import (
@@ -36,8 +36,8 @@ from .serializers import (
     KlantSerializer,
     ObjectContactMomentSerializer,
     ObjectVerzoekSerializer,
-    VerzoekInformatieObjectSerializer,
     VerzoekContactMomentSerializer,
+    VerzoekInformatieObjectSerializer,
     VerzoekProductSerializer,
     VerzoekSerializer,
 )
