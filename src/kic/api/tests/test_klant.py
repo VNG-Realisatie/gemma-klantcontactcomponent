@@ -1,15 +1,14 @@
-from datetime import date
-
 from rest_framework import status
 from rest_framework.test import APITestCase
 from vng_api_common.tests import JWTAuthMixin, get_validation_errors, reverse
 
-from kic.datamodel.constants import KlantType
+from kic.datamodel.constants import KlantType, SoortRechtsvorm
 from kic.datamodel.models import Klant
 from kic.datamodel.tests.factories import (
     AdresFactory,
     KlantFactory,
     NatuurlijkPersoonFactory,
+    NietNatuurlijkPersoonFactory,
     SubVerblijfBuitenlandFactory,
     VestigingFactory,
 )
@@ -19,6 +18,7 @@ SUBJECT = "http://example.com/subject/1"
 
 class KlantTests(JWTAuthMixin, APITestCase):
     heeft_alle_autorisaties = True
+    maxDiff = None
 
     def test_list_klanten(self):
         list_url = reverse(Klant)
@@ -108,6 +108,51 @@ class KlantTests(JWTAuthMixin, APITestCase):
                         "aoaHuisnummertoevoeging": adres.aoa_huisnummertoevoeging,
                         "inpLocatiebeschrijving": adres.inp_locatiebeschrijving,
                     },
+                    "subVerblijfBuitenland": {
+                        "lndLandcode": buitenland.lnd_landcode,
+                        "lndLandnaam": buitenland.lnd_landnaam,
+                        "subAdresBuitenland1": buitenland.sub_adres_buitenland_1,
+                        "subAdresBuitenland2": buitenland.sub_adres_buitenland_2,
+                        "subAdresBuitenland3": buitenland.sub_adres_buitenland_3,
+                    },
+                },
+            },
+        )
+
+    def test_read_klant_nietnatuurlijkpersoon(self):
+        klant = KlantFactory.create(
+            subject=SUBJECT, subject_type=KlantType.niet_natuurlijk_persoon
+        )
+        nietnatuurlijkpersoon = NietNatuurlijkPersoonFactory.create(klant=klant)
+        buitenland = SubVerblijfBuitenlandFactory.create(
+            nietnatuurlijkpersoon=nietnatuurlijkpersoon
+        )
+        detail_url = reverse(klant)
+
+        response = self.client.get(detail_url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        data = response.json()
+
+        self.assertEqual(
+            data,
+            {
+                "url": f"http://testserver{detail_url}",
+                "voornaam": klant.voornaam,
+                "achternaam": klant.achternaam,
+                "adres": klant.adres,
+                "telefoonnummer": klant.telefoonnummer,
+                "emailadres": klant.emailadres,
+                "functie": klant.functie,
+                "subject": SUBJECT,
+                "subjectType": KlantType.niet_natuurlijk_persoon,
+                "subjectIdentificatie": {
+                    "innNnpId": nietnatuurlijkpersoon.inn_nnp_id,
+                    "annIdentificatie": nietnatuurlijkpersoon.ann_identificatie,
+                    "statutaireNaam": nietnatuurlijkpersoon.statutaire_naam,
+                    "innRechtsvorm": nietnatuurlijkpersoon.inn_rechtsvorm,
+                    "bezoekadres": nietnatuurlijkpersoon.bezoekadres,
                     "subVerblijfBuitenland": {
                         "lndLandcode": buitenland.lnd_landcode,
                         "lndLandnaam": buitenland.lnd_landnaam,
@@ -241,6 +286,51 @@ class KlantTests(JWTAuthMixin, APITestCase):
         self.assertEqual(adres.aoa_huisnummer, 21)
 
         buitenland = natuurlijkpersoon.sub_verblijf_buitenland
+
+        self.assertEqual(buitenland.lnd_landcode, "ABCD")
+        self.assertEqual(buitenland.lnd_landnaam, "Hollywood")
+
+    def test_create_klant_nietnatuurlijkpersoon(self):
+        list_url = reverse(Klant)
+        data = {
+            "voornaam": "Samuel",
+            "achternaam": "Jackson",
+            "emailadres": "samuel@jackson.com",
+            "subjectType": KlantType.niet_natuurlijk_persoon,
+            "subjectIdentificatie": {
+                "innNnpId": "314273268",
+                "annIdentificatie": "",
+                "statutaireNaam": "ACME",
+                "innRechtsvorm": SoortRechtsvorm.europese_naamloze_vennootschap,
+                "bezoekadres": "Somewhere",
+                "subVerblijfBuitenland": {
+                    "lndLandcode": "ABCD",
+                    "lndLandnaam": "Hollywood",
+                },
+            },
+        }
+
+        response = self.client.post(list_url, data)
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        klant = Klant.objects.get()
+
+        self.assertEqual(klant.voornaam, "Samuel")
+        self.assertEqual(klant.achternaam, "Jackson")
+        self.assertEqual(klant.emailadres, "samuel@jackson.com")
+        self.assertEqual(klant.subject, "")
+        self.assertEqual(klant.subject_type, KlantType.niet_natuurlijk_persoon)
+
+        nietnatuurlijkpersoon = klant.niet_natuurlijk_persoon
+
+        self.assertEqual(nietnatuurlijkpersoon.inn_nnp_id, "314273268")
+        self.assertEqual(nietnatuurlijkpersoon.ann_identificatie, "")
+        self.assertEqual(nietnatuurlijkpersoon.statutaire_naam, "ACME")
+        self.assertEqual(nietnatuurlijkpersoon.inn_rechtsvorm, SoortRechtsvorm.europese_naamloze_vennootschap)
+        self.assertEqual(nietnatuurlijkpersoon.bezoekadres, "Somewhere")
+
+        buitenland = nietnatuurlijkpersoon.sub_verblijf_buitenland
 
         self.assertEqual(buitenland.lnd_landcode, "ABCD")
         self.assertEqual(buitenland.lnd_landnaam, "Hollywood")
@@ -477,6 +567,45 @@ class KlantTests(JWTAuthMixin, APITestCase):
 
         adres.refresh_from_db()
         self.assertEqual(adres.wpl_woonplaats_naam, "New place")
+
+        buitenland.refresh_from_db()
+        self.assertEqual(buitenland.lnd_landnaam, "New land")
+
+    def test_update_klant_nietnaturlijkpersoon(self):
+        klant = KlantFactory.create(
+            subject_type=KlantType.niet_natuurlijk_persoon, subject=SUBJECT
+        )
+        nietnatuurlijkpersoon = NietNatuurlijkPersoonFactory.create(klant=klant)
+        buitenland = SubVerblijfBuitenlandFactory.create(
+            nietnatuurlijkpersoon=nietnatuurlijkpersoon
+        )
+        detail_url = reverse(klant)
+        data = self.client.get(detail_url).json()
+        del data["url"]
+        data.update(
+            {
+                "voornaam": "New name",
+                "subject": "",
+                "subjectIdentificatie": {
+                    "statutaireNaam": "New name2",
+                    "subVerblijfBuitenland": {
+                        "lndLandcode": "XXXX",
+                        "lndLandnaam": "New land",
+                    },
+                },
+            }
+        )
+
+        response = self.client.put(detail_url, data)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        klant.refresh_from_db()
+        self.assertEqual(klant.voornaam, "New name")
+        self.assertEqual(klant.subject, "")
+
+        nietnatuurlijkpersoon.refresh_from_db()
+        self.assertEqual(nietnatuurlijkpersoon.statutaire_naam, "New name2")
 
         buitenland.refresh_from_db()
         self.assertEqual(buitenland.lnd_landnaam, "New land")

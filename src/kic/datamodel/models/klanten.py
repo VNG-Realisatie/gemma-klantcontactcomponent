@@ -4,11 +4,11 @@ from django.core.validators import MaxValueValidator, RegexValidator
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from vng_api_common.fields import BSNField
+from vng_api_common.fields import BSNField, RSINField
 
-from ..constants import GeslachtsAanduiding
+from ..constants import GeslachtsAanduiding, SoortRechtsvorm
 
-__all__ = ["NatuurlijkPersoon", "Vestiging", "SubVerblijfBuitenland", "Adres"]
+__all__ = ["NatuurlijkPersoon", "NietNatuurlijkPersoon", "Vestiging", "SubVerblijfBuitenland", "Adres"]
 
 # Klant models
 class NatuurlijkPersoon(models.Model):
@@ -65,6 +65,46 @@ class NatuurlijkPersoon(models.Model):
         verbose_name = "natuurlijk persoon"
 
 
+class NietNatuurlijkPersoon(models.Model):
+    klant = models.OneToOneField(
+        "datamodel.Klant", on_delete=models.CASCADE, related_name="niet_natuurlijk_persoon"
+    )
+
+    inn_nnp_id = RSINField(
+        blank=True,
+        help_text="Het door een kamer toegekend uniek nummer voor de INGESCHREVEN NIET-NATUURLIJK PERSOON",
+    )
+
+    ann_identificatie = models.CharField(
+        max_length=17,
+        blank=True,
+        help_text="Het door de gemeente uitgegeven unieke nummer voor een ANDER NIET-NATUURLIJK PERSOON",
+    )
+
+    statutaire_naam = models.TextField(
+        max_length=500,
+        blank=True,
+        help_text="Naam van de niet-natuurlijke persoon zoals deze is vastgelegd in de statuten (rechtspersoon) of "
+        "in de vennootschapsovereenkomst is overeengekomen (Vennootschap onder firma of Commanditaire "
+        "vennootschap).",
+    )
+
+    inn_rechtsvorm = models.CharField(
+        max_length=50,
+        choices=SoortRechtsvorm.choices,
+        blank=True,
+        help_text="De juridische vorm van de NIET-NATUURLIJK PERSOON.",
+    )
+    bezoekadres = models.CharField(
+        max_length=1000,
+        blank=True,
+        help_text="De gegevens over het adres van de NIET-NATUURLIJK PERSOON",
+    )
+
+    class Meta:
+        verbose_name = "niet-natuurlijk persoon"
+
+
 class Vestiging(models.Model):
     """
     Een gebouw of complex van gebouwen waar duurzame uitoefening van de activiteiten
@@ -100,6 +140,12 @@ class SubVerblijfBuitenland(models.Model):
         null=True,
         related_name="sub_verblijf_buitenland",
     )
+    nietnatuurlijkpersoon = models.OneToOneField(
+        NietNatuurlijkPersoon,
+        on_delete=models.CASCADE,
+        null=True,
+        related_name="sub_verblijf_buitenland",
+    )
     vestiging = models.OneToOneField(
         Vestiging,
         on_delete=models.CASCADE,
@@ -120,9 +166,14 @@ class SubVerblijfBuitenland(models.Model):
 
     def clean(self):
         super().clean()
-        if self.natuurlijkpersoon is None and self.vestiging is None:
+        if (
+            self.natuurlijkpersoon is None
+            and self.nietnatuurlijkpersoon is None
+            and self.vestiging is None
+        ):
             raise ValidationError(
-                "Relations to NatuurlijkPersoon or Vestiging models should be set"
+                "Relations to NatuurlijkPersoon, NietNatuurlijkPersoon or Vestiging "
+                "models should be set"
             )
 
 

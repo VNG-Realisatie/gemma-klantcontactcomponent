@@ -1,6 +1,6 @@
 import factory.fuzzy
 
-from ..constants import InitiatiefNemer, KlantType, ObjectTypes, VerzoekStatus
+from ..constants import InitiatiefNemer, KlantType, ObjectTypes, SoortRechtsvorm, VerzoekStatus
 
 
 class KlantFactory(factory.django.DjangoModelFactory):
@@ -66,6 +66,16 @@ class NatuurlijkPersoonFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = "datamodel.NatuurlijkPersoon"
 
+class NietNatuurlijkPersoonFactory(factory.django.DjangoModelFactory):
+    klant = factory.SubFactory(KlantFactory)
+    inn_nnp_id = factory.Faker("ssn", locale="nl_NL")
+    statutaire_naam = factory.Faker("word")
+    inn_rechtsvorm = factory.fuzzy.FuzzyChoice(SoortRechtsvorm.values)
+    bezoekadres = factory.Faker("address", locale="nl_NL")
+
+    class Meta:
+        model = "datamodel.NietNatuurlijkPersoon"
+
 
 class VestigingFactory(factory.django.DjangoModelFactory):
     klant = factory.SubFactory(KlantFactory)
@@ -95,6 +105,7 @@ class VerzoekContactMomentFactory(factory.django.DjangoModelFactory):
 # factories for nested objects
 class SubVerblijfBuitenlandFactory(factory.django.DjangoModelFactory):
     natuurlijkpersoon = factory.SubFactory(NatuurlijkPersoonFactory)
+    # nietnatuurlijkpersoon = factory.SubFactory(NietNatuurlijkPersoonFactory)
     # vestiging = factory.SubFactory(VestigingFactory)
     lnd_landcode = factory.fuzzy.FuzzyText(length=4)
     lnd_landnaam = factory.Faker("word")
