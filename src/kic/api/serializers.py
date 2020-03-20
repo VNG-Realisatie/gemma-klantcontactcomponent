@@ -29,9 +29,11 @@ from kic.datamodel.models import (
     Klant,
     Medewerker,
     NatuurlijkPersoon,
+    NietNatuurlijkPersoon,
     ObjectContactMoment,
     SubVerblijfBuitenland,
     Verzoek,
+    VerzoekContactMoment,
     VerzoekInformatieObject,
     VerzoekProduct,
     Vestiging,
@@ -146,6 +148,56 @@ class NatuurlijkPersoonSerializer(serializers.ModelSerializer):
         return natuurlijkpersoon
 
 
+class NietNatuurlijkPersoonSerializer(serializers.ModelSerializer):
+    sub_verblijf_buitenland = SubVerblijfBuitenlandSerializer(
+        required=False, allow_null=True
+    )
+
+    class Meta:
+        model = NietNatuurlijkPersoon
+        fields = (
+            "inn_nnp_id",
+            "ann_identificatie",
+            "statutaire_naam",
+            "inn_rechtsvorm",
+            "bezoekadres",
+            "sub_verblijf_buitenland",
+        )
+
+    def create(self, validated_data):
+        sub_verblijf_buitenland_data = validated_data.pop(
+            "sub_verblijf_buitenland", None
+        )
+        nietnatuurlijkpersoon = super().create(validated_data)
+
+        if sub_verblijf_buitenland_data:
+            sub_verblijf_buitenland_data[
+                "nietnatuurlijkpersoon"
+            ] = nietnatuurlijkpersoon
+            SubVerblijfBuitenlandSerializer().create(sub_verblijf_buitenland_data)
+        return nietnatuurlijkpersoon
+
+    def update(self, instance, validated_data):
+        sub_verblijf_buitenland_data = validated_data.pop(
+            "sub_verblijf_buitenland", None
+        )
+        nietnatuurlijkpersoon = super().update(instance, validated_data)
+
+        if sub_verblijf_buitenland_data:
+            if hasattr(nietnatuurlijkpersoon, "sub_verblijf_buitenland"):
+                SubVerblijfBuitenlandSerializer().update(
+                    nietnatuurlijkpersoon.sub_verblijf_buitenland,
+                    sub_verblijf_buitenland_data,
+                )
+            else:
+                sub_verblijf_buitenland_data[
+                    "nietnatuurlijkpersoon"
+                ] = nietnatuurlijkpersoon
+                SubVerblijfBuitenlandSerializer().create(sub_verblijf_buitenland_data)
+
+        return nietnatuurlijkpersoon
+
+
 class VestigingSerializer(serializers.ModelSerializer):
     verblijfsadres = VerblijfsAdresSerializer(required=False, allow_null=True)
     sub_verblijf_buitenland = SubVerblijfBuitenlandSerializer(
@@ -223,6 +275,7 @@ class KlantSerializer(PolymorphicSerializer):
         discriminator_field="subject_type",
         mapping={
             KlantType.natuurlijk_persoon: NatuurlijkPersoonSerializer(),
+            KlantType.niet_natuurlijk_persoon: NietNatuurlijkPersoonSerializer(),
             KlantType.vestiging: VestigingSerializer(),
         },
         group_field="subject_identificatie",
@@ -512,6 +565,26 @@ class VerzoekInformatieObjectSerializer(serializers.HyperlinkedModelSerializer):
             raise serializers.ValidationError(
                 {api_settings.NON_FIELD_ERRORS_KEY: sync_error.args[0]}
             ) from sync_error
+
+
+class VerzoekContactMomentSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = VerzoekContactMoment
+        fields = ("url", "contactmoment", "verzoek")
+        validators = [
+            UniqueTogetherValidator(
+                queryset=VerzoekContactMoment.objects.all(),
+                fields=["verzoek", "contactmoment"],
+            ),
+        ]
+        extra_kwargs = {
+            "url": {"lookup_field": "uuid"},
+            "verzoek": {"lookup_field": "uuid", "validators": [IsImmutableValidator()]},
+            "contactmoment": {
+                "lookup_field": "uuid",
+                "validators": [IsImmutableValidator()],
+            },
+        }
 
 
 class ProductSerializer(serializers.Serializer):

@@ -2,7 +2,7 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 from vng_api_common.tests import JWTAuthMixin, get_validation_errors, reverse
 
-from kic.datamodel.models import Verzoek, VerzoekProduct
+from kic.datamodel.models import VerzoekProduct
 from kic.datamodel.tests.factories import VerzoekFactory, VerzoekProductFactory
 
 

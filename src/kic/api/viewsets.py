@@ -12,6 +12,7 @@ from kic.datamodel.models import (
     ContactMoment,
     Klant,
     ObjectContactMoment,
+    VerzoekContactMoment,
     VerzoekInformatieObject,
     VerzoekProduct,
 )
@@ -20,6 +21,7 @@ from kic.datamodel.models.core import ObjectVerzoek, Verzoek
 from .filters import (
     ObjectContactMomentFilter,
     ObjectVerzoekFilter,
+    VerzoekContactMomentFilter,
     VerzoekInformatieObjectFilter,
     VerzoekProductFilter,
 )
@@ -34,6 +36,7 @@ from .serializers import (
     KlantSerializer,
     ObjectContactMomentSerializer,
     ObjectVerzoekSerializer,
+    VerzoekContactMomentSerializer,
     VerzoekInformatieObjectSerializer,
     VerzoekProductSerializer,
     VerzoekSerializer,
@@ -423,6 +426,75 @@ class VerzoekInformatieObjectViewSet(
         if marked_vios:
             return qs.exclude(uuid__in=marked_vios)
         return qs
+
+
+class VerzoekContactMomentViewSet(
+    CheckQueryParamsMixin,
+    mixins.CreateModelMixin,
+    mixins.DestroyModelMixin,
+    viewsets.ReadOnlyModelViewSet,
+):
+    """
+    Opvragen en bewerken van VERZOEK-CONTACTMOMENT relaties.
+
+    create:
+    Maak een VERZOEK-CONTACTMOMENT relatie aan.
+
+    Registreer een CONTACTMOMENT bij een VERZOEK. Er worden twee types van
+    relaties met andere objecten gerealiseerd:
+
+    **Er wordt gevalideerd op**
+    - geldigheid `verzoek` URL
+    - geldigheid `contactmoment` URL
+    - de combinatie `contactmoment` en `verzoek` moet uniek zijn
+
+    list:
+    Alle VERZOEK-CONTACTMOMENT relaties opvragen.
+
+    Deze lijst kan gefilterd wordt met query-string parameters.
+
+    retrieve:
+    Een specifieke VERZOEK-CONTACTMOMENT relatie opvragen.
+
+    Een specifieke VERZOEK-CONTACTMOMENT relatie opvragen.
+
+    update:
+    Werk een VERZOEK-CONTACTMOMENT relatie in zijn geheel bij.
+
+    Je mag enkel de gegevens van de relatie bewerken, en niet de relatie zelf
+    aanpassen.
+
+    **Er wordt gevalideerd op**
+    - `contactmoment` URL en `verzoek` URL mogen niet veranderen
+
+    partial_update:
+    Werk een VERZOEK-CONTACTMOMENT relatie deels bij.
+
+    Je mag enkel de gegevens van de relatie bewerken, en niet de relatie zelf
+    aanpassen.
+
+    **Er wordt gevalideerd op**
+    - `contactmoment` URL en `verzoek` URL mogen niet veranderen
+
+    destroy:
+    Verwijder een VERZOEK-CONTACTMOMENT relatie.
+
+    Verwijder een VERZOEK-CONTACTMOMENT relatie.
+    """
+
+    queryset = VerzoekContactMoment.objects.all()
+    serializer_class = VerzoekContactMomentSerializer
+    filterset_class = VerzoekContactMomentFilter
+    lookup_field = "uuid"
+    permission_classes = (AuthScopesRequired,)
+    required_scopes = {
+        "list": SCOPE_KLANTEN_ALLES_LEZEN,
+        "retrieve": SCOPE_KLANTEN_ALLES_LEZEN,
+        "create": SCOPE_KLANTEN_AANMAKEN,
+        "destroy": SCOPE_KLANTEN_ALLES_VERWIJDEREN,
+        "update": SCOPE_KLANTEN_BIJWERKEN,
+        "partial_update": SCOPE_KLANTEN_BIJWERKEN,
+    }
 
 
 class VerzoekProductViewSet(

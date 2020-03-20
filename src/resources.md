@@ -51,6 +51,7 @@ Objecttype op [GEMMA Online](https://www.gemmaonline.nl/index.php/Rgbz_1.0/doc/o
 Uitleg bij mogelijke waarden:
 
 * `natuurlijk_persoon` - Natuurlijk persoon
+* `niet_natuurlijk_persoon` - Niet-natuurlijk persoon
 * `vestiging` - Vestiging | string | nee | C​R​U​D |
 
 ## SubVerblijfBuitenland
@@ -86,6 +87,18 @@ Uitleg bij mogelijke waarden:
 * `v` - Vrouw
 * `o` - Onbekend | string | nee | C​R​U​D |
 | geboortedatum |  | string | nee | C​R​U​D |
+
+## NietNatuurlijkPersoon
+
+Objecttype op [GEMMA Online](https://www.gemmaonline.nl/index.php/Rgbz_1.0/doc/objecttype/nietnatuurlijkpersoon)
+
+| Attribuut | Omschrijving | Type | Verplicht | CRUD* |
+| --- | --- | --- | --- | --- |
+| innNnpId | Het door een kamer toegekend uniek nummer voor de INGESCHREVEN NIET-NATUURLIJK PERSOON | string | nee | C​R​U​D |
+| annIdentificatie | Het door de gemeente uitgegeven unieke nummer voor een ANDER NIET-NATUURLIJK PERSOON | string | nee | C​R​U​D |
+| statutaireNaam | Naam van de niet-natuurlijke persoon zoals deze is vastgelegd in de statuten (rechtspersoon) of in de vennootschapsovereenkomst is overeengekomen (Vennootschap onder firma of Commanditaire vennootschap). | string | nee | C​R​U​D |
+| innRechtsvorm | De juridische vorm van de NIET-NATUURLIJK PERSOON. | string | nee | C​R​U​D |
+| bezoekadres | De gegevens over het adres van de NIET-NATUURLIJK PERSOON | string | nee | C​R​U​D |
 
 ## Vestiging
 
@@ -125,6 +138,16 @@ Objecttype op [GEMMA Online](https://www.gemmaonline.nl/index.php/Rgbz_1.0/doc/o
 Uitleg bij mogelijke waarden:
 
 * `zaak` - Zaak | string | ja | C​R​U​D |
+
+## VerzoekContactMoment
+
+Objecttype op [GEMMA Online](https://www.gemmaonline.nl/index.php/Rgbz_1.0/doc/objecttype/verzoekcontactmoment)
+
+| Attribuut | Omschrijving | Type | Verplicht | CRUD* |
+| --- | --- | --- | --- | --- |
+| url | URL-referentie naar dit object. Dit is de unieke identificatie en locatie van dit object. | string | nee | ~~C~~​R​~~U~~​~~D~~ |
+| contactmoment | URL-referentie naar het CONTACTMOMENT. | string | ja | C​R​U​D |
+| verzoek | URL-referentie naar het VERZOEK. | string | ja | C​R​U​D |
 
 ## Verzoek
 
