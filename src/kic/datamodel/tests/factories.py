@@ -84,6 +84,14 @@ class VerzoekProductFactory(factory.django.DjangoModelFactory):
         model = "datamodel.VerzoekProduct"
 
 
+class VerzoekContactMomentFactory(factory.django.DjangoModelFactory):
+    verzoek = factory.SubFactory(VerzoekFactory)
+    contactmoment = factory.SubFactory(ContactMomentFactory)
+
+    class Meta:
+        model = "datamodel.VerzoekContactMoment"
+
+
 # factories for nested objects
 class SubVerblijfBuitenlandFactory(factory.django.DjangoModelFactory):
     natuurlijkpersoon = factory.SubFactory(NatuurlijkPersoonFactory)

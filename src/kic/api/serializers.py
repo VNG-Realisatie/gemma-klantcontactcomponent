@@ -33,6 +33,7 @@ from kic.datamodel.models import (
     SubVerblijfBuitenland,
     Verzoek,
     VerzoekInformatieObject,
+    VerzoekContactMoment,
     VerzoekProduct,
     Vestiging,
 )
@@ -512,6 +513,26 @@ class VerzoekInformatieObjectSerializer(serializers.HyperlinkedModelSerializer):
             raise serializers.ValidationError(
                 {api_settings.NON_FIELD_ERRORS_KEY: sync_error.args[0]}
             ) from sync_error
+
+
+class VerzoekContactMomentSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = VerzoekContactMoment
+        fields = ("url", "contactmoment", "verzoek")
+        validators = [
+            UniqueTogetherValidator(
+                queryset=VerzoekContactMoment.objects.all(),
+                fields=["verzoek", "contactmoment"],
+            ),
+        ]
+        extra_kwargs = {
+            "url": {"lookup_field": "uuid"},
+            "verzoek": {"lookup_field": "uuid", "validators": [IsImmutableValidator()]},
+            "contactmoment": {
+                "lookup_field": "uuid",
+                "validators": [IsImmutableValidator()],
+            },
+        }
 
 
 class ProductSerializer(serializers.Serializer):

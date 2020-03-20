@@ -6,7 +6,7 @@ from django.db import models
 logger = logging.getLogger(__name__)
 
 
-__all__ = ["Medewerker", "VerzoekInformatieObject"]
+__all__ = ["Medewerker", "VerzoekInformatieObject", "VerzoekContactMoment"]
 
 
 class Medewerker(models.Model):
@@ -77,3 +77,27 @@ class VerzoekInformatieObject(models.Model):
     #             f"({self.verzoek.unique_representation()}) - {io_id}"
     #         )
     #     return self._unique_representation
+
+
+class VerzoekContactMoment(models.Model):
+    uuid = models.UUIDField(
+        unique=True, default=_uuid.uuid4, help_text="Unieke resource identifier (UUID4)"
+    )
+    verzoek = models.ForeignKey(
+        "datamodel.Verzoek",
+        on_delete=models.CASCADE,
+        help_text="URL-referentie naar het VERZOEK.",
+    )
+    contactmoment = models.ForeignKey(
+        "datamodel.ContactMoment",
+        on_delete=models.CASCADE,
+        help_text="URL-referentie naar het CONTACTMOMENT.",
+    )
+
+    class Meta:
+        verbose_name = "verzoekcontactmoment"
+        verbose_name_plural = "verzoekcontactmomenten"
+        unique_together = (("verzoek", "contactmoment"),)
+
+    def __str__(self):
+        return str(self.uuid)

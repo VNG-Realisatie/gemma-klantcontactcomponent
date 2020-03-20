@@ -32,7 +32,7 @@ class VerzoekTests(JWTAuthMixin, APITestCase):
             klant=klant, interactiedatum=make_aware(datetime(2019, 1, 1)),
         )
         detail_url = reverse(verzoek)
-
+        
         response = self.client.get(detail_url)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)

@@ -126,6 +126,16 @@ Uitleg bij mogelijke waarden:
 
 * `zaak` - Zaak | string | ja | C​R​U​D |
 
+## VerzoekContactMoment
+
+Objecttype op [GEMMA Online](https://www.gemmaonline.nl/index.php/Rgbz_1.0/doc/objecttype/verzoekcontactmoment)
+
+| Attribuut | Omschrijving | Type | Verplicht | CRUD* |
+| --- | --- | --- | --- | --- |
+| url | URL-referentie naar dit object. Dit is de unieke identificatie en locatie van dit object. | string | nee | ~~C~~​R​~~U~~​~~D~~ |
+| contactmoment | URL-referentie naar het CONTACTMOMENT. | string | ja | C​R​U​D |
+| verzoek | URL-referentie naar het VERZOEK. | string | ja | C​R​U​D |
+
 ## Verzoek
 
 Objecttype op [GEMMA Online](https://www.gemmaonline.nl/index.php/Rgbz_1.0/doc/objecttype/verzoek)

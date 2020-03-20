@@ -5,6 +5,7 @@ from vng_api_common.utils import get_help_text
 from kic.datamodel.models import (
     ObjectContactMoment,
     VerzoekInformatieObject,
+    VerzoekContactMoment,
     VerzoekProduct,
 )
 from kic.datamodel.models.core import ObjectVerzoek
@@ -26,6 +27,12 @@ class VerzoekInformatieObjectFilter(FilterSet):
     class Meta:
         model = VerzoekInformatieObject
         fields = ("verzoek", "informatieobject")
+
+
+class VerzoekContactMomentFilter(FilterSet):
+    class Meta:
+        model = VerzoekContactMoment
+        fields = ("verzoek", "contactmoment")
 
 
 class VerzoekProductFilter(FilterSet):
