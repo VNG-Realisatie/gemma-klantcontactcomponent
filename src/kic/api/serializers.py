@@ -331,6 +331,7 @@ class ContactMomentSerializer(KlantInteractieSerializer):
             "klant",
             "interactiedatum",
             "kanaal",
+            "voorkeurskanaal",
             "tekst",
             "onderwerp_links",
             "initiatiefnemer",
@@ -403,6 +404,7 @@ class VerzoekSerializer(KlantInteractieSerializer):
             "externe_identificatie",
             "klant",
             "interactiedatum",
+            "voorkeurskanaal",
             "tekst",
             "status",
         )

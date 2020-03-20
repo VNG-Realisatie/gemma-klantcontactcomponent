@@ -87,17 +87,26 @@ class KlantInteractie(models.Model):
         null=True,
         blank=True,
         help_text=_(
-            "URL-referentie naar een KLANT (in de Contactmomenten API) indien het contactmoment niet anoniem is."
+            "URL-referentie naar een KLANT indien de klantinteractie niet anoniem is."
         ),
     )
     interactiedatum = models.DateTimeField(
         default=timezone.now,
-        help_text=_("De datum en het tijdstip waarop het CONTACTMOMENT begint"),
+        help_text=_(
+            "De datum en het tijdstip waarop de klantinteractie heeft plaatsgevonden."
+        ),
     )
     tekst = models.TextField(
         blank=True,
         help_text=_(
-            "Een toelichting die inhoudelijk het contact met de klant beschrijft."
+            "Een toelichting die inhoudelijk de klantinteractie van de klant beschrijft."
+        ),
+    )
+    voorkeurskanaal = models.CharField(
+        max_length=50,
+        blank=True,
+        help_text=_(
+            "Het communicatiekanaal dat voor opvolging van de klantinteractie de voorkeur heeft van de KLANT."
         ),
     )
 
