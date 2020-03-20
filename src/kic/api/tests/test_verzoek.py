@@ -50,6 +50,7 @@ class VerzoekTests(JWTAuthMixin, APITestCase):
                 "interactiedatum": "2019-01-01T00:00:00Z",
                 "status": verzoek.status,
                 "tekst": verzoek.tekst,
+                "voorkeurskanaal": verzoek.voorkeurskanaal,
             },
         )
 
