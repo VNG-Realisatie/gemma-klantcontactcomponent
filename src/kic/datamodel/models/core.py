@@ -92,7 +92,9 @@ class KlantInteractie(models.Model):
     )
     interactiedatum = models.DateTimeField(
         default=timezone.now,
-        help_text=_("De datum en het tijdstip waarop de klantinteractie heeft plaatsgevonden."),
+        help_text=_(
+            "De datum en het tijdstip waarop de klantinteractie heeft plaatsgevonden."
+        ),
     )
     tekst = models.TextField(
         blank=True,
@@ -103,7 +105,9 @@ class KlantInteractie(models.Model):
     voorkeurskanaal = models.CharField(
         max_length=50,
         blank=True,
-        help_text=_("Het communicatiekanaal dat voor opvolging van de klantinteractie de voorkeur heeft van de KLANT.")
+        help_text=_(
+            "Het communicatiekanaal dat voor opvolging van de klantinteractie de voorkeur heeft van de KLANT."
+        ),
     )
 
     class Meta:
