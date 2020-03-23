@@ -5,7 +5,6 @@ import raven
 from .api import *  # noqa
 from .environ import config
 
-
 # Build paths inside the project, so further paths can be defined relative to
 # the code root.
 DJANGO_PROJECT_DIR = os.path.abspath(
@@ -51,10 +50,10 @@ USE_THOUSAND_SEPARATOR = True
 #
 DATABASES = {
     "default": {
-        "ENGINE": "django.contrib.gis.db.backends.postgis",
-        "NAME": config("DB_NAME", "zrc"),
-        "USER": config("DB_USER", "zrc"),
-        "PASSWORD": config("DB_PASSWORD", "zrc"),
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": config("DB_NAME", "kic"),
+        "USER": config("DB_USER", "kic"),
+        "PASSWORD": config("DB_PASSWORD", "kic"),
         "HOST": config("DB_HOST", "localhost"),
         "PORT": config("DB_PORT", 5432),
     }
@@ -100,11 +99,9 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # Optional applications.
     "django.contrib.admin",
-    "django.contrib.gis",
     # 'django.contrib.admindocs',
     # 'django.contrib.humanize',
     # External applications.
-    "axes",
     "django_filters",
     "corsheaders",
     "vng_api_common",  # before drf_yasg to override the management command
@@ -113,15 +110,14 @@ INSTALLED_APPS = [
     "vng_api_common.notifications",
     "drf_yasg",
     "rest_framework",
-    "rest_framework_gis",
     "django_markup",
     "solo",
     # Project applications.
-    "zrc.accounts",
-    "zrc.api",
-    "zrc.datamodel",
-    "zrc.sync",
-    "zrc.utils",
+    "kic.accounts",
+    "kic.api",
+    "kic.datamodel",
+    "kic.sync",
+    "kic.utils",
 ]
 
 MIDDLEWARE = [
@@ -137,7 +133,7 @@ MIDDLEWARE = [
     "vng_api_common.middleware.APIVersionHeaderMiddleware",
 ]
 
-ROOT_URLCONF = "zrc.urls"
+ROOT_URLCONF = "kic.urls"
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -156,14 +152,14 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                "zrc.utils.context_processors.settings",
+                "kic.utils.context_processors.settings",
             ],
             "loaders": TEMPLATE_LOADERS,
         },
     }
 ]
 
-WSGI_APPLICATION = "zrc.wsgi.application"
+WSGI_APPLICATION = "kic.wsgi.application"
 
 # Translations
 LOCALE_PATHS = (os.path.join(DJANGO_PROJECT_DIR, "conf", "locale"),)
@@ -205,7 +201,7 @@ EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD", default="")
 EMAIL_USE_TLS = config("EMAIL_USE_TLS", default=False)
 EMAIL_TIMEOUT = 10
 
-DEFAULT_FROM_EMAIL = "zrc@example.com"
+DEFAULT_FROM_EMAIL = "kic@example.com"
 
 FIXTURE_DIRS = (os.path.join(DJANGO_PROJECT_DIR, "fixtures"),)
 
@@ -249,7 +245,7 @@ LOGGING = {
         "project": {
             "level": "DEBUG",
             "class": "logging.handlers.RotatingFileHandler",
-            "filename": os.path.join(LOGGING_DIR, "zrc.log"),
+            "filename": os.path.join(LOGGING_DIR, "kic.log"),
             "formatter": "verbose",
             "maxBytes": 1024 * 1024 * 10,  # 10 MB
             "backupCount": 10,
@@ -264,7 +260,7 @@ LOGGING = {
         },
     },
     "loggers": {
-        "zrc": {"handlers": ["project"], "level": "INFO", "propagate": True},
+        "kic": {"handlers": ["project"], "level": "INFO", "propagate": True},
         "django.request": {"handlers": ["django"], "level": "ERROR", "propagate": True},
         "django.template": {
             "handlers": ["console"],
@@ -290,32 +286,17 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Allow logging in with both username+password and email+password
 AUTHENTICATION_BACKENDS = [
-    "zrc.accounts.backends.UserModelEmailBackend",
+    "kic.accounts.backends.UserModelEmailBackend",
     "django.contrib.auth.backends.ModelBackend",
 ]
 
-SESSION_COOKIE_NAME = "zrc_sessionid"
-
-#
-# SECURITY settings
-#
-SESSION_COOKIE_SECURE = IS_HTTPS
-SESSION_COOKIE_HTTPONLY = True
-
-CSRF_COOKIE_SECURE = IS_HTTPS
-
-X_FRAME_OPTIONS = "DENY"
-
-#
-# Silenced checks
-#
-SILENCED_SYSTEM_CHECKS = ["rest_framework.W001"]
+SESSION_COOKIE_NAME = "kic_sessionid"
 
 #
 # Custom settings
 #
-PROJECT_NAME = "Zaken"
-SITE_TITLE = "Zaak Registratie Component (ZRC)"
+PROJECT_NAME = "Klantinteracties"
+SITE_TITLE = "Klantinteractiecomponent (KIC)"
 
 ENVIRONMENT = None
 SHOW_ALERT = True
@@ -324,23 +305,7 @@ SHOW_ALERT = True
 # Library settings
 #
 
-# Django-axes
-AXES_CACHE = "axes"  # refers to CACHES setting
-AXES_LOGIN_FAILURE_LIMIT = 30  # Default: 3
-AXES_LOCK_OUT_AT_FAILURE = True  # Default: True
-AXES_USE_USER_AGENT = False  # Default: False
-AXES_COOLOFF_TIME = 1  # One hour
-AXES_BEHIND_REVERSE_PROXY = IS_HTTPS  # We have either Ingress or Nginx
-AXES_ONLY_USER_FAILURES = (
-    False  # Default: False (you might want to block on username rather than IP)
-)
-AXES_LOCK_OUT_BY_COMBINATION_USER_AND_IP = (
-    False  # Default: False (you might want to block on username and IP)
-)
-
-#
-# DJANGO-CORS-MIDDLEWARE
-#
+# Django-CORS-middleware
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_HEADERS = (
     "x-requested-with",

@@ -1,29 +1,45 @@
-from .base import *  # noqa
+"""
+Continuous integration settings module.
+"""
+import logging
+import os
 
-#
-# Standard Django settings.
-#
+os.environ.setdefault("IS_HTTPS", "no")
+os.environ.setdefault("SECRET_KEY", "dummy")
+os.environ.setdefault("ALLOWED_HOSTS", "testserver.com")
 
-DEBUG = False
-
-ADMINS = ()
+from .includes.base import *  # noqa isort:skip
 
 CACHES = {
     "default": {"BACKEND": "django.core.cache.backends.locmem.LocMemCache"},
-    "drc_sync": {"BACKEND": "django.core.cache.backends.locmem.LocMemCache"},
+    # See: https://github.com/jazzband/django-axes/blob/master/docs/configuration.rst#cache-problems
+    "axes": {"BACKEND": "django.core.cache.backends.dummy.DummyCache"},
+    # Cache for ZIO removal sync with DRC
+    "drc_sync": {
+        "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
+        "LOCATION": "/var/tmp/django_cache",
+    },
 }
 
-# Hosts/domain names that are valid for this site; required if DEBUG is False
-# See https://docs.djangoproject.com/en/stable/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ["testserver.com"]
+LOGGING = None  # Quiet is nice
+logging.disable(logging.CRITICAL)
 
-LOGGING["loggers"].update(
-    {"django": {"handlers": ["django"], "level": "WARNING", "propagate": True}}
-)
+ENVIRONMENT = "CI"
 
 #
-# Custom settings
+# Django-axes
 #
+AXES_BEHIND_REVERSE_PROXY = False
 
-# Show active environment in admin.
-ENVIRONMENT = "ci"
+#
+# KIC specific settings
+#
+NOTIFICATIONS_DISABLED = True
+
+#
+# Jenkins settings
+#
+INSTALLED_APPS += ["kic.tests", "django_jenkins"]
+PROJECT_APPS = [app for app in INSTALLED_APPS if app.startswith("kic.")]
+
+JENKINS_TASKS = ("django_jenkins.tasks.run_pylint", "django_jenkins.tasks.run_pep8")
