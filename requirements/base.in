@@ -1,13 +1,14 @@
 pip-tools
 psycopg2
-python-dotenv
 python-dateutil
+python-decouple
+python-dotenv
 pytz
 raven
 markdown
 uwsgi
 
-Django
+Django<3.0
 django-better-admin-arrayfield
 django-choices
 django-cors-middleware

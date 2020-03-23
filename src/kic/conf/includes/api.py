@@ -1,11 +1,12 @@
 from vng_api_common.conf.api import *  # noqa - imports white-listed
 
+API_VERSION = "0.1.0"
+
 REST_FRAMEWORK = BASE_REST_FRAMEWORK.copy()
 
 SECURITY_DEFINITION_NAME = "JWT-Claims"
 
 SWAGGER_SETTINGS = BASE_SWAGGER_SETTINGS.copy()
-
 SWAGGER_SETTINGS.update(
     {
         "DEFAULT_INFO": "kic.api.schema.info",
@@ -28,11 +29,14 @@ SWAGGER_SETTINGS.update(
 
 GEMMA_URL_INFORMATIEMODEL_VERSIE = "1.0"
 
-
-drc_repo = "vng-realisatie/gemma-documentregistratiecomponent"
-drc_commit = "a1602ccf397527add6bc2b4b12e997accf287339"
+drc_repo = "vng-Realisatie/gemma-documentregistratiecomponent"
+drc_commit = "e82802907c24ea6a11a39c77595c29338d55e8c3"
 DRC_API_SPEC = f"https://raw.githubusercontent.com/{drc_repo}/{drc_commit}/src/openapi.yaml"  # noqa
 
-zrc_repo = "vng-realisatie/gemma-zaakregistratiecomponent"
+zrc_repo = "vng-Realisatie/gemma-zaakregistratiecomponent"
 zrc_commit = "8ea1950fe4ec2ad99504d345eba60a175eea3edf"
 ZRC_API_SPEC = f"https://raw.githubusercontent.com/{zrc_repo}/{zrc_commit}/src/openapi.yaml"  # noqa
+
+SPEC_CACHE_TIMEOUT = 60 * 60 * 24  # 24 hours
+
+# NOTIFICATIONS_KANAAL = "klantinteracties"
