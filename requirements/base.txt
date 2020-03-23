@@ -51,7 +51,7 @@ unidecode==1.1.1          # via vng-api-common
 uritemplate==3.0.1        # via coreapi, drf-yasg
 urllib3==1.25.8           # via requests
 uwsgi==2.0.18
-vng-api-common==1.5.0
+vng-api-common==1.4.5
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools==46.1.1        # via markdown

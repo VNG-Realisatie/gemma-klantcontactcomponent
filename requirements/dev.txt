@@ -93,7 +93,7 @@ unidecode==1.1.1
 uritemplate==3.0.1
 urllib3==1.25.8
 uwsgi==2.0.18
-vng-api-common==1.5.0
+vng-api-common==1.4.5
 waitress==1.4.3
 webob==1.8.6
 webtest==2.0.34
