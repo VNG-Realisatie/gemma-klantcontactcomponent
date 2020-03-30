@@ -2,9 +2,9 @@
     "swagger": "2.0",
     "info": {
         "title": "Klantinteracties API",
-        "description": "Een API om een klantinteractiecomponent (KIC) te benaderen.\n\nEen KLANTINTERACTIEMOMENT is het abstracte kernobject wat zich concreet\nvoordoet als CONTACTMOMENT of VERZOEK. Hieraan zijn verschillende andere\nresources gerelateerd. De Klantinteracties API kan zelfstandig of met\nandere API's samen werken om tot volledige functionaliteit te komen.\n\n**Afhankelijkheden**\n\nDeze API is afhankelijk van:\n\n* Autorisaties API\n* Zaken API *(optioneel)*\n* Documenten API *(optioneel)*\n\n**Autorisatie**\n\nDeze API vereist autorisatie. Je kan de\n[token-tool](https://zaken-auth.vng.cloud/) gebruiken om JWT-tokens te\ngenereren.\n\n**Handige links**\n\n* [Documentatie](https://zaakgerichtwerken.vng.cloud/standaard)\n* [Zaakgericht werken](https://zaakgerichtwerken.vng.cloud)\n",
+        "description": "Een API om een klantinteractiecomponent (KIC) te benaderen.\n\nEen KLANTINTERACTIEMOMENT is het abstracte kernobject wat zich concreet\nvoordoet als CONTACTMOMENT of VERZOEK. Hieraan zijn verschillende andere\nresources gerelateerd. De Klantinteracties API kan zelfstandig of met\nandere API's samen werken om tot volledige functionaliteit te komen.\n\n**Afhankelijkheden**\n\nDeze API is afhankelijk van:\n\n* Autorisaties API\n* Zaken API *(optioneel)*\n* Documenten API *(optioneel)*\n\n**Autorisatie**\n\nDeze API vereist autorisatie. Je kan de\n[token-tool](https://zaken-auth.vng.cloud/) gebruiken om JWT-tokens te\ngenereren.\n\n**Handige links**\n\n* [Documentatie](https://vng-realisatie.github.io/gemma-zaken/standaard)\n* [Zaakgericht werken](https://vng-realisatie.github.io/gemma-zaken)\n",
         "contact": {
-            "url": "https://zaakgerichtwerken.vng.cloud",
+            "url": "https://vng-realisatie.github.io/gemma-zaken",
             "email": "standaarden.ondersteuning@vng.nl"
         },
         "license": {

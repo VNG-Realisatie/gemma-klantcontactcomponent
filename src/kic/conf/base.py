@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     "vng_api_common",  # before drf_yasg to override the management command
     "vng_api_common.notifications",
     "vng_api_common.authorizations",
+    "vng_api_common.audittrails",
     "drf_yasg",
     "rest_framework",
     "django_markup",
@@ -301,3 +302,6 @@ if SENTRY_DSN:
     )
 
 IS_HTTPS = os.getenv("IS_HTTPS", "1").lower() in ["true", "1", "yes"]
+
+# URL for documentation that's shown in API schema
+DOCUMENTATION_URL = "https://vng-realisatie.github.io/gemma-zaken"
