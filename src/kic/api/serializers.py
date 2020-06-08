@@ -380,6 +380,8 @@ class ContactMomentSerializer(KlantInteractieSerializer):
         model = ContactMoment
         fields = (
             "url",
+            "vorig_contactmoment",
+            "volgend_contactmoment",
             "bronorganisatie",
             "klant",
             "interactiedatum",
@@ -394,6 +396,13 @@ class ContactMomentSerializer(KlantInteractieSerializer):
         extra_kwargs = {
             "url": {"lookup_field": "uuid"},
             "klant": {"lookup_field": "uuid"},
+            "vorig_contactmoment": {"lookup_field": "uuid"},
+            "volgend_contactmoment": {
+                "lookup_field": "uuid",
+                "read_only": True,
+                "allow_null": True,
+                "help_text": _("URL-referentie naar het volgende CONTACTMOMENT."),
+            },
         }
 
     def validate(self, attrs):
