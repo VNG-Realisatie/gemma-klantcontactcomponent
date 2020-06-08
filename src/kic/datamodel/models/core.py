@@ -198,7 +198,8 @@ class ObjectKlantInteractie(models.Model):
         unique=True, default=uuid.uuid4, help_text="Unieke resource identifier (UUID4)"
     )
     object = models.URLField(
-        help_text="URL-referentie naar het gerelateerde OBJECT (in een andere API)."
+        help_text="URL-referentie naar het gerelateerde OBJECT (in een andere API).",
+        max_length=1000,
     )
     object_type = models.CharField(
         "objecttype",
