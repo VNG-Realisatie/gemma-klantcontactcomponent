@@ -49,6 +49,8 @@ class ContactMomentTests(JWTAuthMixin, APITestCase):
             data,
             {
                 "url": f"http://testserver{detail_url}",
+                "vorigContactmoment": None,
+                "volgendContactmoment": None,
                 "bronorganisatie": contactmoment.bronorganisatie,
                 "klant": f"http://testserver{klant_url}",
                 "interactiedatum": "2019-01-01T00:00:00Z",
@@ -84,6 +86,8 @@ class ContactMomentTests(JWTAuthMixin, APITestCase):
             data,
             {
                 "url": f"http://testserver{detail_url}",
+                "vorigContactmoment": None,
+                "volgendContactmoment": None,
                 "bronorganisatie": contactmoment.bronorganisatie,
                 "klant": f"http://testserver{klant_url}",
                 "interactiedatum": "2019-01-01T00:00:00Z",
