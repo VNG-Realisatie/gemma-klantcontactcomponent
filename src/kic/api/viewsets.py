@@ -19,6 +19,7 @@ from kic.datamodel.models import (
 from kic.datamodel.models.core import ObjectVerzoek, Verzoek
 
 from .filters import (
+    ContactMomentFilter,
     ObjectContactMomentFilter,
     ObjectVerzoekFilter,
     VerzoekContactMomentFilter,
@@ -107,7 +108,7 @@ class KlantViewSet(viewsets.ModelViewSet):
     }
 
 
-class ContactMomentViewSet(viewsets.ModelViewSet):
+class ContactMomentViewSet(CheckQueryParamsMixin, viewsets.ModelViewSet):
     """
     Opvragen en bewerken van CONTACTMOMENTen.
 
@@ -144,6 +145,7 @@ class ContactMomentViewSet(viewsets.ModelViewSet):
 
     queryset = ContactMoment.objects.all()
     serializer_class = ContactMomentSerializer
+    filterset_class = ContactMomentFilter
     lookup_field = "uuid"
     permission_classes = (AuthScopesRequired,)
     required_scopes = {
