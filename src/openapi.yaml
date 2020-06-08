@@ -179,6 +179,15 @@ paths:
       operationId: contactmoment_create
       summary: Maak een CONTACTMOMENT aan.
       description: Maak een CONTACTMOMENT aan.
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Content type van de verzoekinhoud.
+        required: true
+        schema:
+          type: string
+          enum:
+          - application/json
       requestBody:
         $ref: '#/components/requestBodies/ContactMoment'
       responses:
@@ -324,7 +333,7 @@ paths:
         description: "Voer een voorwaardelijk verzoek uit. Deze header moet \xE9\xE9\
           n of meerdere ETag-waardes bevatten van resources die de consumer gecached\
           \ heeft. Indien de waarde van de ETag van de huidige resource voorkomt in\
-          \ deze set, dan antwoord de provider met een lege HTTP 304 request. Zie\
+          \ deze set, dan antwoordt de provider met een lege HTTP 304 request. Zie\
           \ [MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-None-Match)\
           \ voor meer informatie."
         required: false
@@ -473,6 +482,15 @@ paths:
       operationId: contactmoment_update
       summary: Werk een CONTACTMOMENT in zijn geheel bij.
       description: Werk een CONTACTMOMENT in zijn geheel bij.
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Content type van de verzoekinhoud.
+        required: true
+        schema:
+          type: string
+          enum:
+          - application/json
       requestBody:
         $ref: '#/components/requestBodies/ContactMoment'
       responses:
@@ -617,6 +635,15 @@ paths:
       operationId: contactmoment_partial_update
       summary: Werk een CONTACTMOMENT deels bij.
       description: Werk een CONTACTMOMENT deels bij.
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Content type van de verzoekinhoud.
+        required: true
+        schema:
+          type: string
+          enum:
+          - application/json
       requestBody:
         $ref: '#/components/requestBodies/ContactMoment'
       responses:
@@ -1016,6 +1043,15 @@ paths:
       operationId: klant_create
       summary: Maak een KLANT aan.
       description: Maak een KLANT aan.
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Content type van de verzoekinhoud.
+        required: true
+        schema:
+          type: string
+          enum:
+          - application/json
       requestBody:
         $ref: '#/components/requestBodies/Klant'
       responses:
@@ -1161,7 +1197,7 @@ paths:
         description: "Voer een voorwaardelijk verzoek uit. Deze header moet \xE9\xE9\
           n of meerdere ETag-waardes bevatten van resources die de consumer gecached\
           \ heeft. Indien de waarde van de ETag van de huidige resource voorkomt in\
-          \ deze set, dan antwoord de provider met een lege HTTP 304 request. Zie\
+          \ deze set, dan antwoordt de provider met een lege HTTP 304 request. Zie\
           \ [MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-None-Match)\
           \ voor meer informatie."
         required: false
@@ -1310,6 +1346,15 @@ paths:
       operationId: klant_update
       summary: Werk een KLANT in zijn geheel bij.
       description: Werk een KLANT in zijn geheel bij.
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Content type van de verzoekinhoud.
+        required: true
+        schema:
+          type: string
+          enum:
+          - application/json
       requestBody:
         $ref: '#/components/requestBodies/Klant'
       responses:
@@ -1454,6 +1499,15 @@ paths:
       operationId: klant_partial_update
       summary: Werk een KLANT deels bij.
       description: Werk een KLANT deels bij.
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Content type van de verzoekinhoud.
+        required: true
+        schema:
+          type: string
+          enum:
+          - application/json
       requestBody:
         $ref: '#/components/requestBodies/Klant'
       responses:
@@ -1888,6 +1942,15 @@ paths:
         Andere API''s, zoals de Zaken API, gebruiken dit
 
         endpoint bij het synchroniseren van relaties.'
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Content type van de verzoekinhoud.
+        required: true
+        schema:
+          type: string
+          enum:
+          - application/json
       requestBody:
         content:
           application/json:
@@ -2037,7 +2100,7 @@ paths:
         description: "Voer een voorwaardelijk verzoek uit. Deze header moet \xE9\xE9\
           n of meerdere ETag-waardes bevatten van resources die de consumer gecached\
           \ heeft. Indien de waarde van de ETag van de huidige resource voorkomt in\
-          \ deze set, dan antwoord de provider met een lege HTTP 304 request. Zie\
+          \ deze set, dan antwoordt de provider met een lege HTTP 304 request. Zie\
           \ [MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-None-Match)\
           \ voor meer informatie."
         required: false
@@ -2484,6 +2547,15 @@ paths:
         Andere API''s, zoals de Zaken API, gebruiken dit
 
         endpoint bij het synchroniseren van relaties.'
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Content type van de verzoekinhoud.
+        required: true
+        schema:
+          type: string
+          enum:
+          - application/json
       requestBody:
         content:
           application/json:
@@ -2633,7 +2705,7 @@ paths:
         description: "Voer een voorwaardelijk verzoek uit. Deze header moet \xE9\xE9\
           n of meerdere ETag-waardes bevatten van resources die de consumer gecached\
           \ heeft. Indien de waarde van de ETag van de huidige resource voorkomt in\
-          \ deze set, dan antwoord de provider met een lege HTTP 304 request. Zie\
+          \ deze set, dan antwoordt de provider met een lege HTTP 304 request. Zie\
           \ [MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-None-Match)\
           \ voor meer informatie."
         required: false
@@ -3084,6 +3156,15 @@ paths:
         - geldigheid `contactmoment` URL
 
         - de combinatie `contactmoment` en `verzoek` moet uniek zijn'
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Content type van de verzoekinhoud.
+        required: true
+        schema:
+          type: string
+          enum:
+          - application/json
       requestBody:
         content:
           application/json:
@@ -3233,7 +3314,7 @@ paths:
         description: "Voer een voorwaardelijk verzoek uit. Deze header moet \xE9\xE9\
           n of meerdere ETag-waardes bevatten van resources die de consumer gecached\
           \ heeft. Indien de waarde van de ETag van de huidige resource voorkomt in\
-          \ deze set, dan antwoord de provider met een lege HTTP 304 request. Zie\
+          \ deze set, dan antwoordt de provider met een lege HTTP 304 request. Zie\
           \ [MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-None-Match)\
           \ voor meer informatie."
         required: false
@@ -3637,6 +3718,15 @@ paths:
       operationId: verzoek_create
       summary: Maak een VERZOEK aan.
       description: Maak een VERZOEK aan.
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Content type van de verzoekinhoud.
+        required: true
+        schema:
+          type: string
+          enum:
+          - application/json
       requestBody:
         $ref: '#/components/requestBodies/Verzoek'
       responses:
@@ -3782,7 +3872,7 @@ paths:
         description: "Voer een voorwaardelijk verzoek uit. Deze header moet \xE9\xE9\
           n of meerdere ETag-waardes bevatten van resources die de consumer gecached\
           \ heeft. Indien de waarde van de ETag van de huidige resource voorkomt in\
-          \ deze set, dan antwoord de provider met een lege HTTP 304 request. Zie\
+          \ deze set, dan antwoordt de provider met een lege HTTP 304 request. Zie\
           \ [MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-None-Match)\
           \ voor meer informatie."
         required: false
@@ -3931,6 +4021,15 @@ paths:
       operationId: verzoek_update
       summary: Werk een VERZOEK in zijn geheel bij.
       description: Werk een VERZOEK in zijn geheel bij.
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Content type van de verzoekinhoud.
+        required: true
+        schema:
+          type: string
+          enum:
+          - application/json
       requestBody:
         $ref: '#/components/requestBodies/Verzoek'
       responses:
@@ -4075,6 +4174,15 @@ paths:
       operationId: verzoek_partial_update
       summary: Werk een VERZOEK deels bij.
       description: Werk een VERZOEK deels bij.
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Content type van de verzoekinhoud.
+        required: true
+        schema:
+          type: string
+          enum:
+          - application/json
       requestBody:
         $ref: '#/components/requestBodies/Verzoek'
       responses:
@@ -4508,6 +4616,15 @@ paths:
         - de combinatie `informatieobject` en `verzoek` moet uniek zijn\n\n**Opmerkingen**\n\
         - Bij het aanmaken wordt ook in de Documenten API de gespiegelde relatie\n\
         \  aangemaakt, echter zonder de relatie-informatie."
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Content type van de verzoekinhoud.
+        required: true
+        schema:
+          type: string
+          enum:
+          - application/json
       requestBody:
         content:
           application/json:
@@ -4657,7 +4774,7 @@ paths:
         description: "Voer een voorwaardelijk verzoek uit. Deze header moet \xE9\xE9\
           n of meerdere ETag-waardes bevatten van resources die de consumer gecached\
           \ heeft. Indien de waarde van de ETag van de huidige resource voorkomt in\
-          \ deze set, dan antwoord de provider met een lege HTTP 304 request. Zie\
+          \ deze set, dan antwoordt de provider met een lege HTTP 304 request. Zie\
           \ [MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-None-Match)\
           \ voor meer informatie."
         required: false
@@ -5104,6 +5221,15 @@ paths:
         - geldigheid `verzoek` URL
 
         - geldigheid `product` URL'
+      parameters:
+      - name: Content-Type
+        in: header
+        description: Content type van de verzoekinhoud.
+        required: true
+        schema:
+          type: string
+          enum:
+          - application/json
       requestBody:
         content:
           application/json:
@@ -5253,7 +5379,7 @@ paths:
         description: "Voer een voorwaardelijk verzoek uit. Deze header moet \xE9\xE9\
           n of meerdere ETag-waardes bevatten van resources die de consumer gecached\
           \ heeft. Indien de waarde van de ETag van de huidige resource voorkomt in\
-          \ deze set, dan antwoord de provider met een lege HTTP 304 request. Zie\
+          \ deze set, dan antwoordt de provider met een lege HTTP 304 request. Zie\
           \ [MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-None-Match)\
           \ voor meer informatie."
         required: false
@@ -5652,6 +5778,8 @@ components:
             anoniem is.
           type: string
           format: uri
+          maxLength: 1000
+          minLength: 1
           nullable: true
         interactiedatum:
           title: Interactiedatum
@@ -6150,13 +6278,15 @@ components:
           description: URL-referentie naar het CONTACTMOMENT.
           type: string
           format: uri
+          maxLength: 1000
+          minLength: 1
         object:
           title: Object
           description: URL-referentie naar het gerelateerde OBJECT (in een andere
             API).
           type: string
           format: uri
-          maxLength: 200
+          maxLength: 1000
           minLength: 1
         objectType:
           title: Objecttype
@@ -6191,13 +6321,15 @@ components:
           description: URL-referentie naar het VERZOEK.
           type: string
           format: uri
+          maxLength: 1000
+          minLength: 1
         object:
           title: Object
           description: URL-referentie naar het gerelateerde OBJECT (in een andere
             API).
           type: string
           format: uri
-          maxLength: 200
+          maxLength: 1000
           minLength: 1
         objectType:
           title: Objecttype
@@ -6231,11 +6363,15 @@ components:
           description: URL-referentie naar het CONTACTMOMENT.
           type: string
           format: uri
+          maxLength: 1000
+          minLength: 1
         verzoek:
           title: Verzoek
           description: URL-referentie naar het VERZOEK.
           type: string
           format: uri
+          maxLength: 1000
+          minLength: 1
     Verzoek:
       required:
       - bronorganisatie
@@ -6276,6 +6412,8 @@ components:
             anoniem is.
           type: string
           format: uri
+          maxLength: 1000
+          minLength: 1
           nullable: true
         interactiedatum:
           title: Interactiedatum
@@ -6350,6 +6488,8 @@ components:
           description: URL-referentie naar het VERZOEK.
           type: string
           format: uri
+          maxLength: 1000
+          minLength: 1
     Product:
       title: Product identificatie
       description: Identificerende gegevens van het PRODUCT voor het geval er bij
@@ -6384,6 +6524,8 @@ components:
           description: URL-referentie naar het VERZOEK.
           type: string
           format: uri
+          maxLength: 1000
+          minLength: 1
         product:
           title: Product
           description: URL-referentie naar het PRODUCT (in de Producten en Diensten
