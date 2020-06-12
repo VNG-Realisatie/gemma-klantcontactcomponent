@@ -11,11 +11,18 @@ from vng_api_common.models import APIMixin
 from vng_api_common.utils import generate_unique_identification
 from vng_api_common.validators import alphanumeric_excluding_diacritic
 
-from ..constants import InitiatiefNemer, KlantType, ObjectTypes, VerzoekStatus
+from ..constants import (
+    InitiatiefNemer,
+    KlantContactMomentRol,
+    KlantType,
+    ObjectTypes,
+    VerzoekStatus,
+)
 
 __all__ = [
     "Klant",
     "ContactMoment",
+    "KlantContactMoment",
     "ObjectContactMoment",
     "Verzoek",
     "ObjectVerzoek",
@@ -154,6 +161,31 @@ class ContactMoment(APIMixin, KlantInteractie):
         if self.onderwerp_links is None:
             self.onderwerp_links = []
         super().save(*args, **kwargs)
+
+
+class KlantContactMoment(APIMixin, models.Model):
+    uuid = models.UUIDField(
+        unique=True, default=uuid.uuid4, help_text="Unieke resource identifier (UUID4)"
+    )
+    contactmoment = models.ForeignKey(
+        ContactMoment,
+        on_delete=models.CASCADE,
+        help_text=_("URL-referentie naar het CONTACTMOMENT."),
+    )
+    klant = models.ForeignKey(
+        Klant,
+        on_delete=models.CASCADE,
+        help_text=_("URL-referentie naar de KLANT in het CONTACTMOMENT"),
+    )
+    rol = models.CharField(
+        max_length=15,
+        choices=KlantContactMomentRol,
+        help_text=_(
+            "De rol van de KLANT in het CONTACTMOMENT. Indien de KLANT zowel "
+            "gesprekspartner als belanghebbende is, dan worden er twee "
+            "KLANTCONTACTMOMENTen aangemaakt."
+        ),
+    )
 
 
 class Verzoek(APIMixin, KlantInteractie):

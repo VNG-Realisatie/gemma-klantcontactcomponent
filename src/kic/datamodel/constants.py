@@ -107,3 +107,8 @@ class SoortRechtsvorm(DjangoChoices):
     kapitaalvennootschap_buiten_eer = ChoiceItem(
         "kapitaalvennootschap_buiten_eer", "Kapitaalvennootschap buiten EER"
     )
+
+
+class KlantContactMomentRol(DjangoChoices):
+    belanghebbende = ChoiceItem("belanghebbende", "Belanghebbende")
+    gesprekspartner = ChoiceItem("gesprekspartner", "Gesprekspartner")
