@@ -30,10 +30,7 @@ class ContactMomentTests(JWTAuthMixin, APITestCase):
         self.assertEqual(len(data), 2)
 
     def test_read_contactmoment(self):
-        klant = KlantFactory.create()
-        klant_url = reverse(klant)
         contactmoment = ContactMomentFactory.create(
-            klant=klant,
             interactiedatum=make_aware(datetime(2019, 1, 1)),
             initiatiefnemer=InitiatiefNemer.gemeente,
         )
@@ -50,7 +47,6 @@ class ContactMomentTests(JWTAuthMixin, APITestCase):
             {
                 "url": f"http://testserver{detail_url}",
                 "bronorganisatie": contactmoment.bronorganisatie,
-                "klant": f"http://testserver{klant_url}",
                 "interactiedatum": "2019-01-01T00:00:00Z",
                 "kanaal": contactmoment.kanaal,
                 "voorkeurskanaal": contactmoment.voorkeurskanaal,
@@ -63,10 +59,7 @@ class ContactMomentTests(JWTAuthMixin, APITestCase):
         )
 
     def test_read_contactmoment_with_medewerker(self):
-        klant = KlantFactory.create()
-        klant_url = reverse(klant)
         contactmoment = ContactMomentFactory.create(
-            klant=klant,
             interactiedatum=make_aware(datetime(2019, 1, 1)),
             initiatiefnemer=InitiatiefNemer.gemeente,
             medewerker="",
@@ -85,7 +78,6 @@ class ContactMomentTests(JWTAuthMixin, APITestCase):
             {
                 "url": f"http://testserver{detail_url}",
                 "bronorganisatie": contactmoment.bronorganisatie,
-                "klant": f"http://testserver{klant_url}",
                 "interactiedatum": "2019-01-01T00:00:00Z",
                 "kanaal": contactmoment.kanaal,
                 "voorkeurskanaal": contactmoment.voorkeurskanaal,
@@ -103,12 +95,9 @@ class ContactMomentTests(JWTAuthMixin, APITestCase):
         )
 
     def test_create_contactmoment(self):
-        klant = KlantFactory.create()
-        klant_url = reverse(klant)
         list_url = reverse(ContactMoment)
         data = {
             "bronorganisatie": "423182687",
-            "klant": klant_url,
             "kanaal": "telephone",
             "tekst": "some text",
             "onderwerpLinks": [],
@@ -122,19 +111,15 @@ class ContactMomentTests(JWTAuthMixin, APITestCase):
 
         contactmoment = ContactMoment.objects.get()
 
-        self.assertEqual(contactmoment.klant, klant)
         self.assertEqual(contactmoment.kanaal, "telephone")
         self.assertEqual(contactmoment.tekst, "some text")
         self.assertEqual(contactmoment.initiatiefnemer, InitiatiefNemer.gemeente)
         self.assertEqual(contactmoment.medewerker, "http://example.com/medewerker/1")
 
     def test_create_contactmoment_with_medewerker(self):
-        klant = KlantFactory.create()
-        klant_url = reverse(klant)
         list_url = reverse(ContactMoment)
         data = {
             "bronorganisatie": "423182687",
-            "klant": klant_url,
             "kanaal": "telephone",
             "tekst": "some text",
             "onderwerpLinks": [],
@@ -152,7 +137,6 @@ class ContactMomentTests(JWTAuthMixin, APITestCase):
 
         contactmoment = ContactMoment.objects.get()
 
-        self.assertEqual(contactmoment.klant, klant)
         self.assertEqual(contactmoment.kanaal, "telephone")
         self.assertEqual(contactmoment.tekst, "some text")
         self.assertEqual(contactmoment.initiatiefnemer, InitiatiefNemer.gemeente)
@@ -184,18 +168,16 @@ class ContactMomentTests(JWTAuthMixin, APITestCase):
         self.assertEqual(error["code"], "invalid-medewerker")
 
     def test_update_contactmoment(self):
-        klant = KlantFactory.create()
-        klant_url = reverse(klant)
         contactmoment = ContactMomentFactory.create()
         detail_url = reverse(contactmoment)
 
-        response = self.client.patch(detail_url, {"klant": klant_url})
+        response = self.client.patch(detail_url, {"kanaal": "https://kanaal.com"})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         contactmoment.refresh_from_db()
 
-        self.assertEqual(contactmoment.klant, klant)
+        self.assertEqual(contactmoment.kanaal, "https://kanaal.com")
 
     def test_update_contactmoment_with_medewerker(self):
         contactmoment = ContactMomentFactory.create()

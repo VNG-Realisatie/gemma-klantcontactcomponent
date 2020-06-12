@@ -24,13 +24,21 @@ class KlantFactory(factory.django.DjangoModelFactory):
 
 class ContactMomentFactory(factory.django.DjangoModelFactory):
     bronorganisatie = factory.Faker("ssn", locale="nl_NL")
-    klant = factory.SubFactory(KlantFactory)
+    # klant = factory.SubFactory(KlantFactory)
     kanaal = factory.Faker("word")
     initiatiefnemer = factory.fuzzy.FuzzyChoice(InitiatiefNemer.values)
     medewerker = factory.Faker("url")
 
     class Meta:
         model = "datamodel.ContactMoment"
+
+
+class KlantContactMomentFactory(factory.django.DjangoModelFactory):
+    contactmoment = factory.SubFactory(ContactMomentFactory)
+    klant = factory.SubFactory(KlantFactory)
+
+    class Meta:
+        model = "datamodel.KlantContactMoment"
 
 
 class ObjectContactMomentFactory(factory.django.DjangoModelFactory):
