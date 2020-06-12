@@ -11,6 +11,7 @@ from vng_api_common.viewsets import CheckQueryParamsMixin
 from kic.datamodel.models import (
     ContactMoment,
     Klant,
+    KlantContactMoment,
     ObjectContactMoment,
     VerzoekContactMoment,
     VerzoekInformatieObject,
@@ -19,6 +20,7 @@ from kic.datamodel.models import (
 from kic.datamodel.models.core import ObjectVerzoek, Verzoek
 
 from .filters import (
+    KlantContactMomentFilter,
     ObjectContactMomentFilter,
     ObjectVerzoekFilter,
     VerzoekContactMomentFilter,
@@ -33,6 +35,7 @@ from .scopes import (
 )
 from .serializers import (
     ContactMomentSerializer,
+    KlantContactMomentSerializer,
     KlantSerializer,
     ObjectContactMomentSerializer,
     ObjectVerzoekSerializer,
@@ -144,6 +147,56 @@ class ContactMomentViewSet(viewsets.ModelViewSet):
 
     queryset = ContactMoment.objects.all()
     serializer_class = ContactMomentSerializer
+    lookup_field = "uuid"
+    permission_classes = (AuthScopesRequired,)
+    required_scopes = {
+        "list": SCOPE_KLANTEN_ALLES_LEZEN,
+        "retrieve": SCOPE_KLANTEN_ALLES_LEZEN,
+        "create": SCOPE_KLANTEN_AANMAKEN,
+        "update": SCOPE_KLANTEN_BIJWERKEN,
+        "partial_update": SCOPE_KLANTEN_BIJWERKEN,
+        "destroy": SCOPE_KLANTEN_ALLES_VERWIJDEREN,
+    }
+
+
+class KlantContactMomentViewSet(
+    CheckQueryParamsMixin,
+    mixins.CreateModelMixin,
+    mixins.DestroyModelMixin,
+    viewsets.ReadOnlyModelViewSet,
+):
+    """
+    Opvragen en bewerken van KLANTCONTACTMOMENTen.
+
+    create:
+    Maak een KLANTCONTACTMOMENT aan.
+
+    Maak een KLANTCONTACTMOMENT aan.
+
+    **Er wordt gevalideerd op**
+    - geldigheid `contactmoment` URL
+    - geldigheid `klant` URL
+    - de combinatie `contactmoment` en `klant` moet uniek zijn
+
+    list:
+    Alle KLANTCONTACTMOMENTen opvragen.
+
+    Alle KLANTCONTACTMOMENTen opvragen.
+
+    retrieve:
+    Een specifiek KLANTCONTACTMOMENT opvragen.
+
+    Een specifiek KLANTCONTACTMOMENT opvragen.
+
+    destroy:
+    Verwijder een KLANTCONTACTMOMENT.
+
+    Verwijder een KLANTCONTACTMOMENT.
+    """
+
+    queryset = KlantContactMoment.objects.all()
+    serializer_class = KlantContactMomentSerializer
+    filterset_class = KlantContactMomentFilter
     lookup_field = "uuid"
     permission_classes = (AuthScopesRequired,)
     required_scopes = {

@@ -6,6 +6,7 @@ from vng_api_common.schema import SchemaView
 
 from .viewsets import (
     ContactMomentViewSet,
+    KlantContactMomentViewSet,
     KlantViewSet,
     ObjectContactMomentViewSet,
     ObjectVerzoekViewSet,
@@ -18,6 +19,7 @@ from .viewsets import (
 router = routers.DefaultRouter()
 router.register("klanten", KlantViewSet)
 router.register("contactmomenten", ContactMomentViewSet)
+router.register("klantcontactmomenten", KlantContactMomentViewSet)
 router.register("objectcontactmomenten", ObjectContactMomentViewSet)
 router.register("verzoeken", VerzoekViewSet)
 router.register("objectverzoeken", ObjectVerzoekViewSet)

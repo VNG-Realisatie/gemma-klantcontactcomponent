@@ -27,6 +27,7 @@ from kic.datamodel.models import (
     Adres,
     ContactMoment,
     Klant,
+    KlantContactMoment,
     Medewerker,
     NatuurlijkPersoon,
     NietNatuurlijkPersoon,
@@ -445,6 +446,22 @@ class ContactMomentSerializer(KlantInteractieSerializer):
                 MedewerkerSerializer().create(medewerker_identificatie_data)
 
         return contactmoment
+
+
+class KlantContactMomentSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = KlantContactMoment
+        fields = (
+            "url",
+            "contactmoment",
+            "klant",
+            "rol",
+        )
+        extra_kwargs = {
+            "url": {"lookup_field": "uuid"},
+            "contactmoment": {"lookup_field": "uuid"},
+            "klant": {"lookup_field": "uuid"},
+        }
 
 
 class VerzoekSerializer(KlantInteractieSerializer):

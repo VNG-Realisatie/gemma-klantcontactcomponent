@@ -1,8 +1,12 @@
+from django.utils.translation import ugettext_lazy as _
+
 from django_filters import filters
 from vng_api_common.filtersets import FilterSet
 from vng_api_common.utils import get_help_text
 
+from kic.datamodel.constants import KlantContactMomentRol
 from kic.datamodel.models import (
+    KlantContactMoment,
     ObjectContactMoment,
     VerzoekContactMoment,
     VerzoekInformatieObject,
@@ -15,6 +19,16 @@ class ObjectContactMomentFilter(FilterSet):
     class Meta:
         model = ObjectContactMoment
         fields = ("object", "contactmoment")
+
+
+class KlantContactMomentFilter(FilterSet):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.filters["rol"].extra.update({"choices": KlantContactMomentRol.choices})
+
+    class Meta:
+        model = KlantContactMoment
+        fields = ("contactmoment", "klant", "rol")
 
 
 class ObjectVerzoekFilter(FilterSet):
