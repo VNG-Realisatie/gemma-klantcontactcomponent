@@ -23,7 +23,6 @@ Objecttype op [GEMMA Online](https://www.gemmaonline.nl/index.php/Rgbz_1.0/doc/o
 | --- | --- | --- | --- | --- |
 | url | URL-referentie naar dit object. Dit is de unieke identificatie en locatie van dit object. | string | nee | ~~C~~​R​~~U~~​~~D~~ |
 | bronorganisatie | Het RSIN van de Niet-natuurlijk persoon zijnde de organisatie die de klantinteractie heeft gecreeerd. Dit moet een geldig RSIN zijn van 9 nummers en voldoen aan https://nl.wikipedia.org/wiki/Burgerservicenummer#11-proef | string | ja | C​R​U​D |
-| klant | URL-referentie naar een KLANT indien de klantinteractie niet anoniem is. | string | nee | C​R​U​D |
 | interactiedatum | De datum en het tijdstip waarop de klantinteractie heeft plaatsgevonden. | string | nee | C​R​U​D |
 | kanaal | Het communicatiekanaal waarlangs het CONTACTMOMENT gevoerd wordt | string | nee | C​R​U​D |
 | voorkeurskanaal | Het communicatiekanaal dat voor opvolging van de klantinteractie de voorkeur heeft van de KLANT. | string | nee | C​R​U​D |
@@ -31,6 +30,17 @@ Objecttype op [GEMMA Online](https://www.gemmaonline.nl/index.php/Rgbz_1.0/doc/o
 | onderwerpLinks | Eén of meerdere links naar een product, webpagina of andere entiteit zodat contactmomenten gegroepeerd kunnen worden op onderwerp. | array | nee | C​R​U​D |
 | initiatiefnemer | De partij die het contact heeft geïnitieerd. | string | nee | C​R​U​D |
 | medewerker | URL-referentie naar een medewerker | string | nee | C​R​U​D |
+
+## KlantContactMoment
+
+Objecttype op [GEMMA Online](https://www.gemmaonline.nl/index.php/Rgbz_1.0/doc/objecttype/klantcontactmoment)
+
+| Attribuut | Omschrijving | Type | Verplicht | CRUD* |
+| --- | --- | --- | --- | --- |
+| url | URL-referentie naar dit object. Dit is de unieke identificatie en locatie van dit object. | string | nee | ~~C~~​R​~~U~~​~~D~~ |
+| contactmoment | URL-referentie naar het CONTACTMOMENT. | string | ja | C​R​U​D |
+| klant | URL-referentie naar de KLANT in het CONTACTMOMENT | string | ja | C​R​U​D |
+| rol | De rol van de KLANT in het CONTACTMOMENT. Indien de KLANT zowel gesprekspartner als belanghebbende is, dan worden er twee KLANTCONTACTMOMENTen aangemaakt. | string | ja | C​R​U​D |
 
 ## Klant
 
