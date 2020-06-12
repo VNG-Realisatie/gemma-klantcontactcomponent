@@ -51,6 +51,7 @@ class VerzoekTests(JWTAuthMixin, APITestCase):
                 "status": verzoek.status,
                 "tekst": verzoek.tekst,
                 "voorkeurskanaal": verzoek.voorkeurskanaal,
+                "voorkeurstaal": verzoek.voorkeurstaal,
             },
         )
 
