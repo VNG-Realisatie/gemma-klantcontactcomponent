@@ -88,15 +88,15 @@ class KlantInteractie(models.Model):
         "geldig RSIN zijn van 9 nummers en voldoen aan "
         "https://nl.wikipedia.org/wiki/Burgerservicenummer#11-proef"
     )
-    klant = models.ForeignKey(
-        Klant,
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True,
-        help_text=_(
-            "URL-referentie naar een KLANT indien de klantinteractie niet anoniem is."
-        ),
-    )
+    # klant = models.ForeignKey(
+    #     Klant,
+    #     on_delete=models.CASCADE,
+    #     null=True,
+    #     blank=True,
+    #     help_text=_(
+    #         "URL-referentie naar een KLANT indien de klantinteractie niet anoniem is."
+    #     ),
+    # )
     interactiedatum = models.DateTimeField(
         default=timezone.now,
         help_text=_(
@@ -211,6 +211,15 @@ class Verzoek(APIMixin, KlantInteractie):
         max_length=20,
         choices=VerzoekStatus,
         help_text="De waarden van de typering van de voortgang van afhandeling van een VERZOEK.",
+    )
+    klant = models.ForeignKey(
+        Klant,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        help_text=_(
+            "URL-referentie naar een KLANT indien de klantinteractie niet anoniem is."
+        ),
     )
 
     class Meta:

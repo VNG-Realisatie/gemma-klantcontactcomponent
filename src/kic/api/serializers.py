@@ -382,7 +382,6 @@ class ContactMomentSerializer(KlantInteractieSerializer):
         fields = (
             "url",
             "bronorganisatie",
-            "klant",
             "interactiedatum",
             "kanaal",
             "voorkeurskanaal",
@@ -394,7 +393,6 @@ class ContactMomentSerializer(KlantInteractieSerializer):
         )
         extra_kwargs = {
             "url": {"lookup_field": "uuid"},
-            "klant": {"lookup_field": "uuid"},
         }
 
     def validate(self, attrs):

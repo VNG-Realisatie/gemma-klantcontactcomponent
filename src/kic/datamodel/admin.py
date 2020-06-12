@@ -21,7 +21,7 @@ class KlantAdmin(admin.ModelAdmin):
 
 @admin.register(ContactMoment)
 class ContactMomentAdmin(DynamicArrayMixin, admin.ModelAdmin):
-    list_display = ["klant", "kanaal"]
+    list_display = ["kanaal"]
 
 
 @admin.register(ObjectContactMoment)
